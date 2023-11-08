@@ -1,0 +1,16 @@
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\bin\AnyCPU\Debug\ColorBasics-WPF.exe
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\bin\AnyCPU\Debug\ColorBasics-WPF.pdb
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\bin\AnyCPU\Debug\Microsoft.Kinect.dll
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\bin\AnyCPU\Debug\Microsoft.Kinect.xml
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.csproj.AssemblyReference.cache
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\MainWindow.baml
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\MainWindow.g.cs
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\App.g.cs
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF_MarkupCompile.cache
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.g.resources
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\Microsoft.Samples.Kinect.ColorBasics.Properties.Resources.resources
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.csproj.GenerateResource.cache
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.csproj.CoreCompileInputs.cache
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.csproj.CopyComplete
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.exe
+C:\Users\coren\OneDrive\Documents\GitHub\ColorBasics-WPF\obj\Debug\ColorBasics-WPF.pdb
