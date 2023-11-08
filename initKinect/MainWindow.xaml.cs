@@ -1,4 +1,4 @@
-﻿namespace initKinect
+﻿namespace motionRecovery
 {
     using System;
     using System.ComponentModel;

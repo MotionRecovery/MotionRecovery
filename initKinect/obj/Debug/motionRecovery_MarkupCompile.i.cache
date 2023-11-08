@@ -1,11 +1,11 @@
-﻿initKinect
+﻿motionRecovery
 
 
 winexe
 C#
 .cs
 D:\GitHub\MotionRecovery\initKinect\obj\Debug\
-initKinect
+motionRecovery
 none
 false
 DEBUG;TRACE

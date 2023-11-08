@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace initKinect.Properties {
+namespace motionRecovery.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
