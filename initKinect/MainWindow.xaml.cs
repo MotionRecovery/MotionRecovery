@@ -17,7 +17,7 @@
         // Variables
         private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application lifecycle
         private string statusText = null; // Used to notice if the Kinect is running or not
-        private string userPositionStatus = "null";
+        private string userPositionStatus = "No rules detected";
 
         // Design parameters
         private const double HandSize = 30; //Radius of drawn hand circles
