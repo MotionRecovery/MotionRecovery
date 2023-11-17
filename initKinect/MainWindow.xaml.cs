@@ -16,6 +16,9 @@ namespace motionRecovery
     using System.Windows.Media.Imaging;
     using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
+    using System.Xml.Linq;
+    using System.Xml;
+    using Microsoft.Win32;
 
 
     /// <summary>
@@ -58,7 +61,7 @@ namespace motionRecovery
 
 
         // Dans votre code principal
-        List<PositionInfo> positionList = new List<PositionInfo>();
+        List<PositionInfo> positionRules = new List<PositionInfo>();
 
         int IndexMouvement = 0;
 
@@ -72,25 +75,24 @@ namespace motionRecovery
             this.kinectSensor.Open();
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
+            ExerciseReader exerciseReader = new ExerciseReader();
+            // Utilisez OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";
 
-            positionList.Add(new PositionInfo
+            bool? result = openFileDialog.ShowDialog();
+
+            string filePath = null;
+
+            if (result == true)
             {
-                Joint1 = JointType.ElbowRight,
-                Joint2 = JointType.WristRight,
-                AngleMin = 55.0,
-                AngleMax = 80.0,
-                Description = "The right wrist should be betwen 55 and 80 degrees"
+                // L'utilisateur a sélectionné un fichier, obtenez le chemin du fichier
+                filePath = openFileDialog.FileName;
+            }
 
-            });
-            positionList.Add(new PositionInfo
-            {
-                Joint1 = JointType.Head,
-                Joint2 = JointType.Neck,
-                AngleMin = 80.0,
-                AngleMax = 100.0,
-                Description = "The head should be at 80 and 90 degrees"
-            });
 
+
+            positionRules = exerciseReader.ReadExerciseFile(filePath);
 
 
 
@@ -347,13 +349,13 @@ namespace motionRecovery
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
-                            if (body != null)
+                            if (body != null & positionRules.Count !=0) // Check if a body is detectected and if there are some rules (positionRules)
                             {
-                                Joint Joint1 = body.Joints[positionList[IndexMouvement].Joint1];
-                                Joint Joint2 = body.Joints[positionList[IndexMouvement].Joint2];
-                                Double AngleMin = positionList[IndexMouvement].AngleMin;
-                                Double AngleMax = positionList[IndexMouvement].AngleMax;
-                                String Description = positionList[IndexMouvement].Description;
+                                Joint Joint1 = body.Joints[positionRules[IndexMouvement].Joint1];
+                                Joint Joint2 = body.Joints[positionRules[IndexMouvement].Joint2];
+                                Double AngleMin = positionRules[IndexMouvement].AngleMin;
+                                Double AngleMax = positionRules[IndexMouvement].AngleMax;
+                                String Description = positionRules[IndexMouvement].Description;
 
                                 this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description);
                             }
@@ -376,7 +378,7 @@ namespace motionRecovery
             if (Math.Abs(angle) > AngleMin & Math.Abs(angle) < AngleMax)
             {
                 this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}";
-                if (IndexMouvement < positionList.Count-1)
+                if (IndexMouvement < positionRules.Count-1)
                 {
                     IndexMouvement++;
                 }
@@ -547,5 +549,57 @@ namespace motionRecovery
         public string Description { get; set; }
     }
 
+    public class ExerciseReader
+    {
+        public List<PositionInfo> ReadExerciseFile(string filePath)
+        {
+            List<PositionInfo> positionList = new List<PositionInfo>();
+
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(filePath);
+
+                XmlNodeList positionNodes = xmlDoc.SelectNodes("//Position");
+
+                foreach (XmlNode positionNode in positionNodes)
+                {
+                    PositionInfo positionInfo = new PositionInfo();
+
+                    positionInfo.Joint1 = ParseJointType(positionNode.SelectSingleNode("Membre1").InnerText.Trim());
+                    positionInfo.Joint2 = ParseJointType(positionNode.SelectSingleNode("Membre2").InnerText.Trim());
+                    positionInfo.AngleMin = Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim());
+                    positionInfo.AngleMax = Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim());
+                    positionInfo.Description = positionNode.SelectSingleNode("Description").InnerText.Trim();
+
+                    positionList.Add(positionInfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while reading the exercise file: {ex.Message}");
+            }
+
+            return positionList;
+        }
+
+        private JointType ParseJointType(string jointTypeName)
+        {
+            switch (jointTypeName)
+            {
+                case "ElbowRight":
+                    return JointType.ElbowRight;
+                case "WristRight":
+                    return JointType.WristRight;
+                case "Head":
+                    return JointType.Head;
+                case "Neck":
+                    return JointType.Neck;
+                // Add more cases as needed for other joints
+                default:
+                    throw new ArgumentException($"Unknown joint type: {jointTypeName}");
+            }
+        }
+    }
 
 }

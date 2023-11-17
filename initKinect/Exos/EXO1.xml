@@ -1,4 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ExerciseRule Name="EXO1">
-  
+  <description>"The first Exercice"</description>
+  <Position>
+    <Membre1>ElbowRight</Membre1>
+    <Membre2>WristRight</Membre2>
+    <AngleMin>55,0</AngleMin>
+    <AngleMax>80,0</AngleMax>
+    <Description>"The right wrist should be betwen 55 and 80 degrees"</Description>
+  </Position>
+  <Position>
+    <Membre1>Head</Membre1>
+    <Membre2>Neck</Membre2>
+    <AngleMin>80,0</AngleMin>
+    <AngleMax>100,0</AngleMax>
+    <Description>"The head should be at 80 and 90 degrees"</Description>
+  </Position>
 </ExerciseRule>
