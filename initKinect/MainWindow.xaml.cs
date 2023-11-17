@@ -1,23 +1,11 @@
-﻿using Microsoft.Kinect;
-using motionRecovery;
-
-namespace motionRecovery
+﻿namespace motionRecovery
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-    using System.Net.NetworkInformation;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Media.Imaging;
-    using System.Windows.Media.Media3D;
     using Microsoft.Kinect;
-    using System.Xml.Linq;
-    using System.Xml;
     using Microsoft.Win32;
 
 
@@ -61,7 +49,7 @@ namespace motionRecovery
 
 
         // Dans votre code principal
-        List<PositionInfo> positionRules = new List<PositionInfo>();
+        List<Position> positionRules = new List<Position>();
 
         int IndexMouvement = 0;
 
@@ -75,7 +63,7 @@ namespace motionRecovery
             this.kinectSensor.Open();
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
-            ExerciseReader exerciseReader = new ExerciseReader();
+            ExercicesReaderXML exerciseReader = new ExercicesReaderXML();
             // Utilisez OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";
@@ -538,68 +526,4 @@ namespace motionRecovery
 
 
     }
-
-
-    public class PositionInfo
-    {
-        public JointType Joint1 { get; set; }
-        public JointType Joint2 { get; set; }
-        public double AngleMin { get; set; }
-        public double AngleMax { get; set; }
-        public string Description { get; set; }
-    }
-
-    public class ExerciseReader
-    {
-        public List<PositionInfo> ReadExerciseFile(string filePath)
-        {
-            List<PositionInfo> positionList = new List<PositionInfo>();
-
-            try
-            {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(filePath);
-
-                XmlNodeList positionNodes = xmlDoc.SelectNodes("//Position");
-
-                foreach (XmlNode positionNode in positionNodes)
-                {
-                    PositionInfo positionInfo = new PositionInfo();
-
-                    positionInfo.Joint1 = ParseJointType(positionNode.SelectSingleNode("Membre1").InnerText.Trim());
-                    positionInfo.Joint2 = ParseJointType(positionNode.SelectSingleNode("Membre2").InnerText.Trim());
-                    positionInfo.AngleMin = Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim());
-                    positionInfo.AngleMax = Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim());
-                    positionInfo.Description = positionNode.SelectSingleNode("Description").InnerText.Trim();
-
-                    positionList.Add(positionInfo);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while reading the exercise file: {ex.Message}");
-            }
-
-            return positionList;
-        }
-
-        private JointType ParseJointType(string jointTypeName)
-        {
-            switch (jointTypeName)
-            {
-                case "ElbowRight":
-                    return JointType.ElbowRight;
-                case "WristRight":
-                    return JointType.WristRight;
-                case "Head":
-                    return JointType.Head;
-                case "Neck":
-                    return JointType.Neck;
-                // Add more cases as needed for other joints
-                default:
-                    throw new ArgumentException($"Unknown joint type: {jointTypeName}");
-            }
-        }
-    }
-
 }

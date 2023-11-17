@@ -4,9 +4,9 @@
   <Position>
     <Membre1>ElbowRight</Membre1>
     <Membre2>WristRight</Membre2>
-    <AngleMin>55,0</AngleMin>
-    <AngleMax>80,0</AngleMax>
-    <Description>"The right wrist should be betwen 55 and 80 degrees"</Description>
+    <AngleMin>75,0</AngleMin>
+    <AngleMax>100,0</AngleMax>
+    <Description>"The right wrist should be betwen 75 and 100 degrees"</Description>
   </Position>
   <Position>
     <Membre1>Head</Membre1>
