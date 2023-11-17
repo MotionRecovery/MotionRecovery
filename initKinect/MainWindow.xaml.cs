@@ -50,8 +50,7 @@
 
         // Dans votre code principal
         List<Position> positionRules = new List<Position>();
-
-        int IndexMouvement = 0;
+        int IndexPosition = 0;
 
         
 
@@ -339,11 +338,11 @@
 
                             if (body != null & positionRules.Count !=0) // Check if a body is detectected and if there are some rules (positionRules)
                             {
-                                Joint Joint1 = body.Joints[positionRules[IndexMouvement].Joint1];
-                                Joint Joint2 = body.Joints[positionRules[IndexMouvement].Joint2];
-                                Double AngleMin = positionRules[IndexMouvement].AngleMin;
-                                Double AngleMax = positionRules[IndexMouvement].AngleMax;
-                                String Description = positionRules[IndexMouvement].Description;
+                                Joint Joint1 = body.Joints[positionRules[IndexPosition].Joint1];
+                                Joint Joint2 = body.Joints[positionRules[IndexPosition].Joint2];
+                                Double AngleMin = positionRules[IndexPosition].AngleMin;
+                                Double AngleMax = positionRules[IndexPosition].AngleMax;
+                                String Description = positionRules[IndexPosition].Description;
 
                                 this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description);
                             }
@@ -366,9 +365,9 @@
             if (Math.Abs(angle) > AngleMin & Math.Abs(angle) < AngleMax)
             {
                 this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}";
-                if (IndexMouvement < positionRules.Count-1)
+                if (IndexPosition < positionRules.Count-1)
                 {
-                    IndexMouvement++;
+                    IndexPosition++;
                 }
             }
             else
