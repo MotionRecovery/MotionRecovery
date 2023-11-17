@@ -1,4 +1,7 @@
-﻿namespace motionRecovery
+﻿using Microsoft.Kinect;
+using motionRecovery;
+
+namespace motionRecovery
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +9,7 @@
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Net.NetworkInformation;
     using System.Windows;
     using System.Windows.Media;
@@ -22,6 +26,7 @@
         // Variables
         private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application lifecycle
         private string statusText = null; // Used to notice if the Kinect is running or not
+        private string userPositionStatus = "null";
 
         // Design parameters
         private const double HandSize = 30; //Radius of drawn hand circles
@@ -52,6 +57,13 @@
         private List<Pen> bodyColors; // List of colors for each body tracked
 
 
+        // Dans votre code principal
+        List<PositionInfo> positionList = new List<PositionInfo>();
+
+        int IndexMouvement = 0;
+
+        
+
 
         public MainWindow()
         {
@@ -60,6 +72,26 @@
             this.kinectSensor.Open();
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
+
+            positionList.Add(new PositionInfo
+            {
+                Joint1 = JointType.ElbowRight,
+                Joint2 = JointType.WristRight,
+                AngleMin = 55.0,
+                AngleMax = 80.0,
+                Description = "The right wrist should be betwen 55 and 80 degrees"
+
+            });
+            positionList.Add(new PositionInfo
+            {
+                Joint1 = JointType.Head,
+                Joint2 = JointType.Neck,
+                AngleMin = 80.0,
+                AngleMax = 100.0,
+                Description = "The head should be at 80 and 90 degrees"
+            });
+
+
 
 
             // Skeleton Camera
@@ -172,6 +204,25 @@
                 }
             }
         }
+
+        public string UserPositionStatus
+        {
+            get { return this.userPositionStatus; }
+            set
+            {
+                if (this.userPositionStatus != value)
+                {
+                    this.userPositionStatus = value;
+
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("UserPositionStatus"));
+                    }
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
@@ -292,12 +343,21 @@
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            // Draw the body skeleton
                             this.DrawBody(joints, jointPoints, dc, drawPen);
-
-                            // Draw visual representations of left and right hand states
                             this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+
+                            if (body != null)
+                            {
+                                Joint Joint1 = body.Joints[positionList[IndexMouvement].Joint1];
+                                Joint Joint2 = body.Joints[positionList[IndexMouvement].Joint2];
+                                Double AngleMin = positionList[IndexMouvement].AngleMin;
+                                Double AngleMax = positionList[IndexMouvement].AngleMax;
+                                String Description = positionList[IndexMouvement].Description;
+
+                                this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description);
+                            }
+                           
                         }
                     }
 
@@ -306,6 +366,38 @@
                 }
             }
         }
+
+
+        private void CheckUserPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description)
+        {
+            // Calculate the angle between the head and neck using a custom function
+            double angle = CalculateAngle(Joint1, Joint2);
+
+            if (Math.Abs(angle) > AngleMin & Math.Abs(angle) < AngleMax)
+            {
+                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}";
+                if (IndexMouvement < positionList.Count-1)
+                {
+                    IndexMouvement++;
+                }
+            }
+            else
+            {
+                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F2}, {Description}";
+            }
+        }
+
+        // Calculate the angle between two points
+        private double CalculateAngle(Joint joint1, Joint joint2)
+        {
+            double deltaY = joint2.Position.Y - joint1.Position.Y;
+            double deltaX = joint2.Position.X - joint1.Position.X;
+            double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
+            double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
+
+            return angleDegrees;
+        }
+
 
         /// <summary>
         /// Draws a body
@@ -444,4 +536,16 @@
 
 
     }
+
+
+    public class PositionInfo
+    {
+        public JointType Joint1 { get; set; }
+        public JointType Joint2 { get; set; }
+        public double AngleMin { get; set; }
+        public double AngleMax { get; set; }
+        public string Description { get; set; }
+    }
+
+
 }
