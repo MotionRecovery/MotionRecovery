@@ -231,7 +231,7 @@ namespace motionRecovery
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Page1_Loaded(object sender, RoutedEventArgs e)
+        private void ExercisePage_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.bodyFrameReader != null)
             {
@@ -245,7 +245,7 @@ namespace motionRecovery
         /// </summary>
         /// <param name="sender">object sending the event</param>
         /// <param name="e">event arguments</param>
-        private void Page1_Unloaded(object sender, RoutedEventArgs e)
+        private void ExercisePage_Unloaded(object sender, RoutedEventArgs e)
         {
 
             if (this.bodyFrameReader != null)
