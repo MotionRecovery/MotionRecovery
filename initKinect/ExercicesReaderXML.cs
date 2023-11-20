@@ -55,6 +55,8 @@ namespace motionRecovery
                     return JointType.Head;
                 case "Neck":
                     return JointType.Neck;
+
+
                 // Add more cases as needed for other joints
                 default:
                     throw new ArgumentException($"Unknown joint type: {jointTypeName}");
