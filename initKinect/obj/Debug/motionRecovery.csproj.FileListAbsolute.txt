@@ -17,3 +17,5 @@ D:\GitHub\MotionRecovery\initKinect\obj\Debug\motionRecovery.pdb
 D:\GitHub\MotionRecovery\initKinect\obj\Debug\Page1.g.cs
 D:\GitHub\MotionRecovery\initKinect\obj\Debug\motionRecovery_MarkupCompile.lref
 D:\GitHub\MotionRecovery\initKinect\obj\Debug\Page1.baml
+D:\GitHub\MotionRecovery\initKinect\obj\Debug\ExerciseList.g.cs
+D:\GitHub\MotionRecovery\initKinect\obj\Debug\ExercicePage.g.cs
