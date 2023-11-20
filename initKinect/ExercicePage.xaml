@@ -20,5 +20,7 @@
         <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="700" Height="600">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
+        <Button Content="
+Stop exercising" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="Button_Click"/>
     </Grid>
 </Page>

@@ -24,5 +24,19 @@ namespace motionRecovery
         {
             InitializeComponent();
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Cache la page précédente en la retirant de l'historique de navigation
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.RemoveBackEntry();
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ExercisePage());
+        }
     }
 }

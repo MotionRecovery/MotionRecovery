@@ -19,21 +19,25 @@
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (mainFrame.Content is ExercisePage exercicePage)
+            if (mainFrame.Content is ExerciseList exerciceList)
             {
                 // La page d'exercice est déjà chargée, donc on change le texte du bouton et ferme la page
                 mainFrame.NavigationService.Navigate(null); // Navigue vers null pour décharger la page actuelle
-                btnGoToExercices.Content = "Go to exercices";
             }
             else
             {
                 // La page d'exercice n'est pas chargée, alors on l'ouvre
-                ExercisePage myExercicePage = new ExercisePage();
-                mainFrame.NavigationService.Navigate(myExercicePage);
-                btnGoToExercices.Content = "Stop the exerice";
+                ExerciseList myExerciceList = new ExerciseList();
+                mainFrame.NavigationService.Navigate(myExerciceList);
             }
+        }
+
+        private void mainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+
         }
     }
 }

@@ -26,6 +26,8 @@ x64/
 x86/
 bld/
 [Bb]in/
+obj/
+.obj/
 [Oo]bj/
 [Ll]og/
 
