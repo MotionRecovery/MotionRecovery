@@ -7,6 +7,7 @@
     using System.Windows.Media;
     using Microsoft.Kinect;
     using Microsoft.Win32;
+    using System.Xml;
 
 
     /// <summary>
@@ -46,10 +47,13 @@
         private int displayHeight; // Height of display (depth space)
 
         private List<Pen> bodyColors; // List of colors for each body tracked
-
+            
 
         // Dans votre code principal
         List<Position> positionRules = new List<Position>();
+        Test TestLevel = new Test();
+        
+        
         int IndexPosition = 0;
 
         
@@ -480,6 +484,30 @@
                     break;
             }
         }
+
+
+        private void TestPosition(HandState handState,Point handPosition,Point ElbowPosition, Point WirstPosition) {
+        
+            if(handState == HandState.Open) {
+                this.TestLevel.getHand = handPosition;
+                this.TestLevel.getElbow = ElbowPosition;
+                this.TestLevel.getWrist = WirstPosition;
+                
+            
+            }
+            
+            //Définir amélioration selon niveau
+            
+            
+        }
+
+
+        private void DefineIntermidiateLevel()
+        {
+
+        }
+
+
 
         /// <summary>
         /// Draws indicators to show which edges are clipping body data

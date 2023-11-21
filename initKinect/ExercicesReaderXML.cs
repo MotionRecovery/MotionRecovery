@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace motionRecovery
 {
@@ -60,5 +61,26 @@ namespace motionRecovery
                     throw new ArgumentException($"Unknown joint type: {jointTypeName}");
             }
         }
+
+
+        public void WriteNewAttributes(string filePath,string attributes, string value)
+        {
+            XDocument doc = XDocument.Load(filePath);
+            XElement school = doc.Element("Position");
+            school.Add(new XElement("Intermidiate",
+                       new XElement(attributes,value)));
+            doc.Save(filePath);
+
+        }
+
+
+
+
+
     }
+
+
+
+
+
 }
