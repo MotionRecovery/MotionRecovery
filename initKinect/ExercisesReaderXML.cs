@@ -7,7 +7,7 @@ using System.Xml;
 namespace motionRecovery
 {
     // Class responsible for reading exercise data from an XML file
-    internal class ExercicesReaderXML
+    internal class ExercisesReaderXML
     {
         // Used to read exercise data from an XML file and return a list of positions
         public List<Position> ReadExerciseFile(string filePath)

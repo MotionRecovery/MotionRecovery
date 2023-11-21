@@ -22,16 +22,16 @@
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (mainFrame.Content is ExerciseList exerciceList)
+            if (mainFrame.Content is ExerciseList exerciseList)
             {
-                // La page d'exercice est déjà chargée, donc on change le texte du bouton et ferme la page
-                mainFrame.NavigationService.Navigate(null); // Navigue vers null pour décharger la page actuelle
+                // The exercise page is already loaded, so we change the text of the button and close the page
+                mainFrame.NavigationService.Navigate(null); // Navigate to null to unload current page
             }
             else
             {
-                // La page d'exercice n'est pas chargée, alors on l'ouvre
-                ExerciseList myExerciceList = new ExerciseList();
-                mainFrame.NavigationService.Navigate(myExerciceList);
+                // The exercise page is not loaded, so we open it
+                ExerciseList myExerciseList = new ExerciseList();
+                mainFrame.NavigationService.Navigate(myExerciseList);
             }
         }
 

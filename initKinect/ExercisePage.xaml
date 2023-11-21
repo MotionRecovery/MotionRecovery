@@ -17,7 +17,7 @@
         </StackPanel>
 
         <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="16" Margin="0,0,80,40" />
-        <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="700" Height="600">
+        <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="700" Height="600" Margin="10,0,0,10">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
         <Button Content="

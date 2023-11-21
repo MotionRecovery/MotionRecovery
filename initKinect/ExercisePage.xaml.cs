@@ -56,7 +56,7 @@ namespace motionRecovery
             this.kinectSensor.Open();
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
-            ExercicesReaderXML exerciseReader = new ExercicesReaderXML();
+            ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
             // Utilisez OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";

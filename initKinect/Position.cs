@@ -10,5 +10,6 @@ namespace motionRecovery
         public double AngleMin { get; set; }
         public double AngleMax { get; set; }
         public string Description { get; set; }
+
     }
 }
