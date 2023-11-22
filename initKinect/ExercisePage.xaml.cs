@@ -17,18 +17,6 @@ namespace motionRecovery
         private string statusText = null; // Used to notice if the Kinect is running or not
         private string userPositionStatus = "No rules detected";
 
-        // Design parameters
-        private const double HandSize = 30; //Radius of drawn hand circles
-        private const double JointThickness = 3; //Thickness of drawn joint lines
-        private const double ClipBoundsThickness = 10; //Thickness of clip edge rectangles (edges which tell us if we are leaving the camera)
-
-        private readonly Brush handClosedBrush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0)); //Brush used for drawing hands that are currently tracked as closed
-        private readonly Brush handOpenBrush = new SolidColorBrush(Color.FromArgb(128, 0, 255, 0)); //Brush used for drawing hands that are currently tracked as opened
-        private readonly Brush handLassoBrush = new SolidColorBrush(Color.FromArgb(128, 0, 0, 255)); // Brush used for drawing hands that are currently tracked as in lasso (pointer) position
-        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68)); // Brush used for drawing joints that are currently tracked
-        private readonly Brush inferredJointBrush = Brushes.Yellow; // Brush used for drawing joints that are currently inferred
-        private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1); // Pen used for drawing bones that are currently inferred
-
         private DrawingGroup drawingGroup; // Drawing group for body rendering output
         private DrawingImage imageSource; // Drawing image that we will display
         private CoordinateMapper coordinateMapper = null; // Coordinate mapper to map one type of point to another
@@ -37,13 +25,15 @@ namespace motionRecovery
 
         private BodyFrameReader bodyFrameReader = null; // Reader for body frames
         private Body[] bodies = null; // Array for the bodies
+        private readonly List<Tuple<JointType, JointType>> bones;
 
-        private List<Tuple<JointType, JointType>> bones; // definition of bones
 
         private int displayWidth; // Width of display (depth space)
         private int displayHeight; // Height of display (depth space)
 
         private List<Pen> bodyColors; // List of colors for each body tracked
+
+
 
 
         // Dans votre code principal
@@ -53,6 +43,7 @@ namespace motionRecovery
         private System.Timers.Timer ruleTimer = new System.Timers.Timer();
         private DateTime ruleTimerStartTime;
 
+        private SkeletonGraphicInterface skeletonGraphicInterface;
         public ExercisePage()
         {
             this.kinectSensor = KinectSensor.GetDefault(); // get the kinectSensor object
@@ -79,7 +70,7 @@ namespace motionRecovery
 
             positionRules = exerciseReader.ReadExerciseFile(filePath);
 
-
+            this.skeletonGraphicInterface = new SkeletonGraphicInterface();
 
             // Skeleton Camera
             // get the coordinate mapper
@@ -317,7 +308,7 @@ namespace motionRecovery
                         if (body.IsTracked)
                         {
                             // Draw clipped edges and obtain joint positions in depth space
-                            this.DrawClippedEdges(body, dc);
+                            this.skeletonGraphicInterface.DrawClippedEdges(body, dc, this.displayWidth, this.displayHeight);
                             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
 
                             // Convert joint positions to depth (display) space
@@ -337,9 +328,9 @@ namespace motionRecovery
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.DrawBody(joints, jointPoints, dc, drawPen);
-                            this.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
-                            this.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
+                            this.skeletonGraphicInterface.DrawBody(joints, jointPoints, drawPen, bones, dc);
+                            this.skeletonGraphicInterface.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
+                            this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
 
 
@@ -440,140 +431,6 @@ namespace motionRecovery
         }
 
 
-        /// <summary>
-        /// Draws a body
-        /// </summary>
-        /// <param name="joints">joints to draw</param>
-        /// <param name="jointPoints">translated positions of joints to draw</param>
-        /// <param name="drawingContext">drawing context to draw to</param>
-        /// <param name="drawingPen">specifies color to draw a specific body</param>
-        private void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, DrawingContext drawingContext, Pen drawingPen)
-        {
-            // Draw the bones
-            foreach (var bone in this.bones)
-            {
-                this.DrawBone(joints, jointPoints, bone.Item1, bone.Item2, drawingContext, drawingPen);
-            }
-
-            // Draw the joints
-            foreach (JointType jointType in joints.Keys)
-            {
-                Brush drawBrush = null;
-
-                TrackingState trackingState = joints[jointType].TrackingState;
-
-                if (trackingState == TrackingState.Tracked)
-                {
-                    drawBrush = this.trackedJointBrush;
-                }
-                else if (trackingState == TrackingState.Inferred)
-                {
-                    drawBrush = this.inferredJointBrush;
-                }
-
-                if (drawBrush != null)
-                {
-                    drawingContext.DrawEllipse(drawBrush, null, jointPoints[jointType], JointThickness, JointThickness);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Draws one bone of a body (joint to joint)
-        /// </summary>
-        /// <param name="joints">joints to draw</param>
-        /// <param name="jointPoints">translated positions of joints to draw</param>
-        /// <param name="jointType0">first joint of bone to draw</param>
-        /// <param name="jointType1">second joint of bone to draw</param>
-        /// <param name="drawingContext">drawing context to draw to</param>
-        /// /// <param name="drawingPen">specifies color to draw a specific bone</param>
-        private void DrawBone(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, JointType jointType0, JointType jointType1, DrawingContext drawingContext, Pen drawingPen)
-        {
-            Joint joint0 = joints[jointType0];
-            Joint joint1 = joints[jointType1];
-
-            // If we can't find either of these joints, exit
-            if (joint0.TrackingState == TrackingState.NotTracked ||
-                joint1.TrackingState == TrackingState.NotTracked)
-            {
-                return;
-            }
-
-            // We assume all drawn bones are inferred unless BOTH joints are tracked
-            Pen drawPen = this.inferredBonePen;
-            if ((joint0.TrackingState == TrackingState.Tracked) && (joint1.TrackingState == TrackingState.Tracked))
-            {
-                drawPen = drawingPen;
-            }
-
-            drawingContext.DrawLine(drawPen, jointPoints[jointType0], jointPoints[jointType1]);
-        }
-
-        /// <summary>
-        /// Draws a hand symbol if the hand is tracked: red circle = closed, green circle = opened; blue circle = lasso
-        /// </summary>
-        /// <param name="handState">state of the hand</param>
-        /// <param name="handPosition">position of the hand</param>
-        /// <param name="drawingContext">drawing context to draw to</param>
-        private void DrawHand(HandState handState, Point handPosition, DrawingContext drawingContext)
-        {
-            switch (handState)
-            {
-                case HandState.Closed:
-                    drawingContext.DrawEllipse(this.handClosedBrush, null, handPosition, HandSize, HandSize);
-                    break;
-
-                case HandState.Open:
-                    drawingContext.DrawEllipse(this.handOpenBrush, null, handPosition, HandSize, HandSize);
-                    break;
-
-                case HandState.Lasso:
-                    drawingContext.DrawEllipse(this.handLassoBrush, null, handPosition, HandSize, HandSize);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// Draws indicators to show which edges are clipping body data
-        /// </summary>
-        /// <param name="body">body to draw clipping information for</param>
-        /// <param name="drawingContext">drawing context to draw to</param>
-        private void DrawClippedEdges(Body body, DrawingContext drawingContext)
-        {
-            FrameEdges clippedEdges = body.ClippedEdges;
-
-            if (clippedEdges.HasFlag(FrameEdges.Bottom))
-            {
-                drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(0, this.displayHeight - ClipBoundsThickness, this.displayWidth, ClipBoundsThickness));
-            }
-
-            if (clippedEdges.HasFlag(FrameEdges.Top))
-            {
-                drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(0, 0, this.displayWidth, ClipBoundsThickness));
-            }
-
-            if (clippedEdges.HasFlag(FrameEdges.Left))
-            {
-                drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(0, 0, ClipBoundsThickness, this.displayHeight));
-            }
-
-            if (clippedEdges.HasFlag(FrameEdges.Right))
-            {
-                drawingContext.DrawRectangle(
-                    Brushes.Red,
-                    null,
-                    new Rect(this.displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, this.displayHeight));
-            }
-        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
