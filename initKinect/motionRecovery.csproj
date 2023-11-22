@@ -69,6 +69,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SkeletonGraphicInterface.cs" />
     <Page Include="ExerciseList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
