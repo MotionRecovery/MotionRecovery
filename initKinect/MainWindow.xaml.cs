@@ -18,26 +18,15 @@
         {
         }
 
-
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (mainFrame.Content is ExerciseList exerciseList)
-            {
-                // The exercise page is already loaded, so we change the text of the button and close the page
-                mainFrame.NavigationService.Navigate(null); // Navigate to null to unload current page
-            }
-            else
-            {
-                // The exercise page is not loaded, so we open it
-                ExerciseList myExerciseList = new ExerciseList();
-                mainFrame.NavigationService.Navigate(myExerciseList);
-            }
-        }
-
         private void mainFrame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
+        }
 
+        // Used to load the page ExerciseList when MainWindows is loaded.
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            ExerciseList myExerciseList = new ExerciseList();
+            mainFrame.NavigationService.Navigate(myExerciseList);
         }
     }
 }
