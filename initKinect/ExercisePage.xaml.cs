@@ -7,6 +7,7 @@ using System.Windows.Media;
 using Microsoft.Kinect;
 using Microsoft.Win32;
 
+
 namespace motionRecovery
 {
     public partial class ExercisePage : Page, INotifyPropertyChanged
@@ -48,6 +49,9 @@ namespace motionRecovery
         // Dans votre code principal
         List<Position> positionRules = new List<Position>();
         int IndexPosition = 0;
+
+        private System.Timers.Timer ruleTimer = new System.Timers.Timer();
+        private DateTime ruleTimerStartTime;
 
         public ExercisePage()
         {
@@ -346,9 +350,10 @@ namespace motionRecovery
                                 Joint Joint2 = body.Joints[positionRules[IndexPosition].Joint2];
                                 Double AngleMin = positionRules[IndexPosition].AngleMin;
                                 Double AngleMax = positionRules[IndexPosition].AngleMax;
+                                Double PositionTime = positionRules[IndexPosition].PositionTime;
                                 String Description = positionRules[IndexPosition].Description;
 
-                                this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description);
+                                this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description, PositionTime);
                             }
 
                         }
@@ -360,24 +365,67 @@ namespace motionRecovery
             }
         }
 
+
         // Check the user position, compare with the rules
-        private void CheckUserPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description)
+        private void CheckUserPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description, double PositionTime)
         {
             // Calculate the angle between the head and neck using a custom function
             double angle = CalculateAngle(Joint1, Joint2);
 
-            if (Math.Abs(angle) > AngleMin & Math.Abs(angle) < AngleMax)
+            if (Math.Abs(angle) > AngleMin && Math.Abs(angle) < AngleMax)
             {
-                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}";
-                if (IndexPosition < positionRules.Count - 1)
+                
+
+                // Vérifiez si la minuterie existe déjà
+                if (ruleTimer == null)
                 {
-                    IndexPosition++;
+                    // La minuterie n'existe pas, créez et démarrez la minuterie
+                    ruleTimer = new System.Timers.Timer();
+                    ruleTimer.Elapsed += RuleTimerElapsed;
+                    ruleTimer.AutoReset = false; // Assurez-vous que la minuterie ne se répète pas automatiquement
+                    ruleTimer.Interval = PositionTime * 1000; // Convertir secondes en millisecondes
+                    ruleTimer.Start();
+                    ruleTimerStartTime = DateTime.Now;
                 }
+
+                // Calculez le temps restant en soustrayant le temps écoulé depuis le temps initial
+                TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
+                TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
+
+                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}, time remaining = {remaining.TotalSeconds} seconds";
             }
             else
             {
                 this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F2}, {Description}";
+
+                // Si la minuterie existe, arrêtez-la et libérez-la
+                if (ruleTimer != null)
+                {
+                    ruleTimer.Stop();
+                    ruleTimer.Dispose();
+                    ruleTimer = null;
+                }
             }
+        }
+
+
+        private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            PassToNextRule();
+            ruleTimer.Stop();
+            ruleTimer.Dispose();
+            ruleTimer = null;
+        }
+
+
+        private void PassToNextRule()
+        {
+
+            if (IndexPosition < positionRules.Count - 1)   
+            {
+                IndexPosition++;
+            }
+
         }
 
         // Calculate the angle between two points

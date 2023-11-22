@@ -29,6 +29,7 @@ namespace motionRecovery
                     myPosition.Joint2 = ParseJointType(positionNode.SelectSingleNode("Membre2").InnerText.Trim());
                     myPosition.AngleMin = Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim());
                     myPosition.AngleMax = Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim());
+                    myPosition.PositionTime = Convert.ToDouble(positionNode.SelectSingleNode("PositionTime").InnerText.Trim());
                     myPosition.Description = positionNode.SelectSingleNode("Description").InnerText.Trim();
 
                     positionList.Add(myPosition);
