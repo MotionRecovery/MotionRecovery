@@ -15,9 +15,8 @@ namespace motionRecovery
         // Variables
         private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application lifecycle
         private string statusText = null; // Used to notice if the Kinect is running or not
-        private string userPositionStatus;
-        private string exerciseNumber;
-  
+
+        private SkeletonGraphicInterface skeletonGraphicInterface; //Used to draw the skeleton
 
         private DrawingGroup drawingGroup; // Drawing group for body rendering output
         private DrawingImage imageSource; // Drawing image that we will display
@@ -32,7 +31,6 @@ namespace motionRecovery
 
         private int displayWidth; // Width of display (depth space)
         private int displayHeight; // Height of display (depth space)
-
         private List<Pen> bodyColors; // List of colors for each body tracked
 
 
@@ -43,7 +41,12 @@ namespace motionRecovery
         private System.Timers.Timer ruleTimer = new System.Timers.Timer();
         private DateTime ruleTimerStartTime;
 
-        private SkeletonGraphicInterface skeletonGraphicInterface;
+       
+
+        // Used to print a message in the frontend
+        private string userPositionStatus;
+        private string exerciseNumber;
+        private string exerciseDescription;
 
 
         public ExercisePage()
@@ -213,6 +216,22 @@ namespace motionRecovery
                     if (this.PropertyChanged != null)
                     {
                         this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseNumber"));
+                    }
+                }
+            }
+        }
+
+        public string ExerciseDescription
+        {
+            get { return $"{positionRules[IndexPosition].Description}"; }
+            set
+            {
+                if (exerciseDescription != value)
+                {
+                    exerciseDescription = value;
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseDescription"));
                     }
                 }
             }
@@ -402,11 +421,12 @@ namespace motionRecovery
                 TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
-                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F2}, {Description}, time remaining = {remaining.TotalSeconds} seconds";
+                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
+                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
             }
             else
             {
-                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F2}, {Description}";
+                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F1}";
 
                 if (ruleTimer != null)
                 {

@@ -28,7 +28,8 @@
 
         <Grid Background="LightGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,10" Width="500" Height="500">
             <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="100" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="50" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,160,20,20" Width="460" Height="300" TextWrapping="Wrap" />
         </Grid>
 
     </Grid>
