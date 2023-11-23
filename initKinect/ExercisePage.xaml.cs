@@ -15,7 +15,9 @@ namespace motionRecovery
         // Variables
         private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application lifecycle
         private string statusText = null; // Used to notice if the Kinect is running or not
-        private string userPositionStatus = "No rules detected";
+        private string userPositionStatus;
+        private string exerciseNumber;
+  
 
         private DrawingGroup drawingGroup; // Drawing group for body rendering output
         private DrawingImage imageSource; // Drawing image that we will display
@@ -35,8 +37,6 @@ namespace motionRecovery
 
 
 
-
-        // Dans votre code principal
         List<Position> positionRules = new List<Position>();
         int IndexPosition = 0;
 
@@ -44,6 +44,8 @@ namespace motionRecovery
         private DateTime ruleTimerStartTime;
 
         private SkeletonGraphicInterface skeletonGraphicInterface;
+
+
         public ExercisePage()
         {
             this.kinectSensor = KinectSensor.GetDefault(); // get the kinectSensor object
@@ -200,6 +202,22 @@ namespace motionRecovery
             }
         }
 
+        public string ExerciseNumber
+        {
+            get { return $"Exercise {IndexPosition + 1}/{positionRules.Count}"; }
+            set
+            {
+                if (exerciseNumber != value)
+                {
+                    exerciseNumber = value;
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseNumber"));
+                    }
+                }
+            }
+        }
+
 
 
         /// <summary>
@@ -232,6 +250,7 @@ namespace motionRecovery
             {
                 this.bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
+            ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
         }
 
 
@@ -367,19 +386,19 @@ namespace motionRecovery
             {
                 
 
-                // Vérifiez si la minuterie existe déjà
+                // check if ruleTime exist
                 if (ruleTimer == null)
                 {
-                    // La minuterie n'existe pas, créez et démarrez la minuterie
+                    // If rulerTimer doesn't exist, create it
                     ruleTimer = new System.Timers.Timer();
                     ruleTimer.Elapsed += RuleTimerElapsed;
-                    ruleTimer.AutoReset = false; // Assurez-vous que la minuterie ne se répète pas automatiquement
-                    ruleTimer.Interval = PositionTime * 1000; // Convertir secondes en millisecondes
+                    ruleTimer.AutoReset = false; // timer does not repeat automatically
+                    ruleTimer.Interval = PositionTime * 1000;
                     ruleTimer.Start();
                     ruleTimerStartTime = DateTime.Now;
                 }
 
-                // Calculez le temps restant en soustrayant le temps écoulé depuis le temps initial
+                // Calculate the time remaining before the end of the exercise
                 TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
@@ -389,7 +408,6 @@ namespace motionRecovery
             {
                 this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F2}, {Description}";
 
-                // Si la minuterie existe, arrêtez-la et libérez-la
                 if (ruleTimer != null)
                 {
                     ruleTimer.Stop();
@@ -411,12 +429,20 @@ namespace motionRecovery
 
         private void PassToNextRule()
         {
-
             if (IndexPosition < positionRules.Count - 1)   
             {
                 IndexPosition++;
+                ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
             }
+        }
 
+        private void PassToPreviousRule()
+        {
+            if (IndexPosition>0)
+            {
+                IndexPosition--;
+                ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+            }
         }
 
         // Calculate the angle between two points
@@ -431,14 +457,37 @@ namespace motionRecovery
         }
 
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        
+        private void Button_Click_stopExercise(object sender, RoutedEventArgs e)
         {
             if (NavigationService.CanGoBack)
             {
                 NavigationService.GoBack();
             }
         }
+
+        private void Button_Click_previousExercise(object sender, RoutedEventArgs e)
+        {
+            if (ruleTimer != null)
+            {
+                ruleTimer.Stop();
+                ruleTimer.Dispose();
+                ruleTimer = null;
+            }
+            PassToPreviousRule();
+        }
+
+        private void Button_Click_skipExercise(object sender, RoutedEventArgs e)
+        {
+            if (ruleTimer != null)
+            {
+                ruleTimer.Stop();
+                ruleTimer.Dispose();
+                ruleTimer = null;
+            }
+            PassToNextRule();
+        }
+
     }
 }
 

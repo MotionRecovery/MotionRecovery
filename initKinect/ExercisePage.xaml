@@ -16,11 +16,20 @@
             <TextBlock Text="{Binding StatusText}" FontSize="16" />
         </StackPanel>
 
-        <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="10" Margin="0,0,80,40" />
+
+        
         <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="700" Height="600" Margin="10,0,0,10">
             <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
         </Viewbox>
-        <Button Content="
-Stop exercising" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Stop exercising" HorizontalAlignment="Left" Margin="10,10,0,0" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_Click_stopExercise"/>
+        <Button Content="Skip Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,80,550" Padding="5,5,5,5" Click="Button_Click_skipExercise"/>
+        <Button Content="Previous Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,220,550" Padding="5,5,5,5" Click="Button_Click_previousExercise"/>
+
+
+        <Grid Background="LightGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,10" Width="500" Height="500">
+            <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="100" TextWrapping="Wrap" />
+        </Grid>
+
     </Grid>
 </Page>
