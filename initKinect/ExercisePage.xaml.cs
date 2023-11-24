@@ -49,7 +49,7 @@ namespace motionRecovery
         private string exerciseDescription;
 
 
-        public ExercisePage()
+        public ExercisePage(String filePath)
         {
             this.kinectSensor = KinectSensor.GetDefault(); // get the kinectSensor object
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged; // set IsAvailableChanged event notifier
@@ -57,21 +57,6 @@ namespace motionRecovery
             this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
                                                             : Properties.Resources.NoSensorStatusText;
             ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
-            // Utilisez OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";
-
-            bool? result = openFileDialog.ShowDialog();
-
-            string filePath = null;
-
-            if (result == true)
-            {
-                // L'utilisateur a sélectionné un fichier, obtenez le chemin du fichier
-                filePath = openFileDialog.FileName;
-            }
-
-
 
             positionRules = exerciseReader.ReadExerciseFile(filePath);
 
@@ -452,7 +437,8 @@ namespace motionRecovery
             if (IndexPosition < positionRules.Count - 1)   
             {
                 IndexPosition++;
-                ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
             }
         }
 
@@ -461,7 +447,8 @@ namespace motionRecovery
             if (IndexPosition>0)
             {
                 IndexPosition--;
-                ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
             }
         }
 

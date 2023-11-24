@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,9 +35,23 @@ namespace motionRecovery
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_ExercisePage(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ExercisePage());
+            ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
+            // OpenFileDialog allows to a user to select a file
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";
+
+            bool? result = openFileDialog.ShowDialog();
+
+            string filePath = null;
+
+            if (result == true)
+            {
+                // L'utilisateur a sélectionné un fichier, obtenez le chemin du fichier
+                filePath = openFileDialog.FileName;
+            }
+            NavigationService.Navigate(new ExercisePage(filePath));
         }
     }
 }

@@ -10,7 +10,7 @@
       Loaded="Page_Loaded">
     <Grid>
         <Label Content="List of Exercises" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16" />
-        <Button Content="Search for an exercise in your files" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="Button_Click" FontSize="16" />
+        <Button Content="Search for an exercise in your files" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="Button_Click_ExercisePage" FontSize="16" />
         <Button Content="Create an exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" FontSize="16" />
     </Grid>
 </Page>
