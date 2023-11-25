@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace motionRecovery
 {
@@ -42,6 +43,20 @@ namespace motionRecovery
 
             return positionList;
         }
+
+
+
+
+        public void WriteNewAttributes(string filePath, string attributes, string value)
+        {
+            XDocument doc = XDocument.Load(filePath);
+            XElement school = doc.Element("Position");
+            school.Add(new XElement("Intermidiate",
+                       new XElement(attributes, value)));
+            doc.Save(filePath);
+
+        }
+
 
         // Method to parse a string representation of JointType
         private JointType ParseJointType(string jointTypeName)

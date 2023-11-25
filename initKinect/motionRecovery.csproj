@@ -70,6 +70,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="SkeletonGraphicInterface.cs" />
+    <Compile Include="Test.cs" />
     <Page Include="ExerciseList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Exos\EXO1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Exos\Epaule.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

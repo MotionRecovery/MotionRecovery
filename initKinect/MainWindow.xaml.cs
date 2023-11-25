@@ -7,6 +7,7 @@
     using System.Windows.Media;
     using Microsoft.Kinect;
     using Microsoft.Win32;
+    using System.Xml;
 
 
     /// <summary>
@@ -14,6 +15,13 @@
     /// </summary>
     public partial class MainWindow : Window
     {
+
+
+        // Dans votre code principal
+        List<Position> positionRules = new List<Position>();
+        Test TestLevel = new Test();
+
+
         public MainWindow()
         {
         }
@@ -28,5 +36,30 @@
             ExerciseList myExerciseList = new ExerciseList();
             mainFrame.NavigationService.Navigate(myExerciseList);
         }
+
+
+        private void TestPosition(HandState handState, Point handPosition, Point ElbowPosition, Point WirstPosition)
+        {
+
+            if (handState == HandState.Open)
+            {
+                this.TestLevel.getHand = handPosition;
+                this.TestLevel.getElbow = ElbowPosition;
+                this.TestLevel.getWrist = WirstPosition;
+
+
+            }
+
+            //Définir amélioration selon niveau
+
+
+        }
+
+
+        private void DefineIntermidiateLevel()
+        {
+
+        }
+
     }
 }
