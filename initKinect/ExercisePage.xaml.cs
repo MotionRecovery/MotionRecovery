@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
 using Microsoft.Win32;
-
+using Microsoft.CognitiveServices.Speech;
 
 namespace motionRecovery
 {
