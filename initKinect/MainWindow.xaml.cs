@@ -47,7 +47,10 @@
         private int displayHeight; // Height of display (depth space)
 
         private List<Pen> bodyColors; // List of colors for each body tracked
-            
+        
+
+
+        private ExercicesReaderXML WriteAttributes = new ExercicesReaderXML();
 
         // Dans votre code principal
         List<Position> positionRules = new List<Position>();
@@ -74,6 +77,11 @@
             bool? result = openFileDialog.ShowDialog();
 
             string filePath = null;
+
+
+            
+
+
 
             if (result == true)
             {
@@ -502,8 +510,12 @@
         }
 
 
-        private void DefineIntermidiateLevel()
+        private void DefineIntermidiateLevel(string filePath)
         {
+
+            WriteAttributes.ReadExerciseFile(filePath);
+
+
 
         }
 
