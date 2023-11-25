@@ -17,5 +17,9 @@ namespace motionRecovery
         public Point getWrist { get; set; }
 
 
+
+       
+
+
     }
 }

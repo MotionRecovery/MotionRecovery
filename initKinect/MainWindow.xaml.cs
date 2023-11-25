@@ -20,6 +20,9 @@
         // Dans votre code principal
         List<Position> positionRules = new List<Position>();
         Test TestLevel = new Test();
+        ExercisesReaderXML ExercisesReaderXML = new ExercisesReaderXML();
+
+      
 
 
         public MainWindow()
@@ -38,7 +41,7 @@
         }
 
 
-        private void TestPosition(HandState handState, Point handPosition, Point ElbowPosition, Point WirstPosition)
+        private void TestPosition(HandState handState, Point handPosition, Point ElbowPosition, Point WirstPosition,string filepath)
         {
 
             if (handState == HandState.Open)
@@ -50,16 +53,22 @@
 
             }
 
-            //Définir amélioration selon niveau
+            //devise the elements per two
+
+            
+            //Write the info into the XML
+            ExercisesReaderXML.WriteNewAttributes(filepath,"hand",handPosition.ToString());
+            ExercisesReaderXML.WriteNewAttributes(filepath,"elbow",ElbowPosition.ToString());
+            ExercisesReaderXML.WriteNewAttributes(filepath, "wrist", WirstPosition.ToString());
 
 
+
+
+
+
+  
         }
 
-
-        private void DefineIntermidiateLevel()
-        {
-
-        }
 
     }
 }
