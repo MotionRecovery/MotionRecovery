@@ -53,7 +53,7 @@
 
             }
 
-            //devise the elements per two
+            //devise the elements per two (but how ?)
 
             
             //Write the info into the XML
