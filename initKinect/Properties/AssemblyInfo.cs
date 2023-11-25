@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 
-[assembly: AssemblyTitle("initKinect")]
+[assembly: AssemblyTitle("motionRecovery")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]

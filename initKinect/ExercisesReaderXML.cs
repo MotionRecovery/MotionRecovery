@@ -8,7 +8,7 @@ using System.Xml.Linq;
 namespace motionRecovery
 {
     // Class responsible for reading exercise data from an XML file
-    internal class ExercicesReaderXML
+    internal class ExercisesReaderXML
     {
         // Used to read exercise data from an XML file and return a list of positions
         public List<Position> ReadExerciseFile(string filePath)
@@ -30,6 +30,7 @@ namespace motionRecovery
                     myPosition.Joint2 = ParseJointType(positionNode.SelectSingleNode("Membre2").InnerText.Trim());
                     myPosition.AngleMin = Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim());
                     myPosition.AngleMax = Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim());
+                    myPosition.PositionTime = Convert.ToDouble(positionNode.SelectSingleNode("PositionTime").InnerText.Trim());
                     myPosition.Description = positionNode.SelectSingleNode("Description").InnerText.Trim();
 
                     positionList.Add(myPosition);
@@ -48,14 +49,49 @@ namespace motionRecovery
         {
             switch (jointTypeName)
             {
+                case "SpineBase":
+                    return JointType.SpineBase;
+                case "SpineMid":
+                    return JointType.SpineMid;
+                case "SpineShoulder":
+                    return JointType.SpineShoulder;
+                case "Neck":
+                    return JointType.Neck;
+                case "Head":
+                    return JointType.Head;
+                case "ShoulderLeft":
+                    return JointType.ShoulderLeft;
+                case "ElbowLeft":
+                    return JointType.ElbowLeft;
+                case "WristLeft":
+                    return JointType.WristLeft;
+                case "HandLeft":
+                    return JointType.HandLeft;
+                case "ShoulderRight":
+                    return JointType.ShoulderRight;
                 case "ElbowRight":
                     return JointType.ElbowRight;
                 case "WristRight":
                     return JointType.WristRight;
-                case "Head":
-                    return JointType.Head;
-                case "Neck":
-                    return JointType.Neck;
+                case "HandRight":
+                    return JointType.HandRight;
+                case "HipLeft":
+                    return JointType.HipLeft;
+                case "KneeLeft":
+                    return JointType.KneeLeft;
+                case "AnkleLeft":
+                    return JointType.AnkleLeft;
+                case "FootLeft":
+                    return JointType.FootLeft;
+                case "HipRight":
+                    return JointType.HipRight;
+                case "KneeRight":
+                    return JointType.KneeRight;
+                case "AnkleRight":
+                    return JointType.AnkleRight;
+                case "FootRight":
+                    return JointType.FootRight;
+
                 // Add more cases as needed for other joints
                 default:
                     throw new ArgumentException($"Unknown joint type: {jointTypeName}");
