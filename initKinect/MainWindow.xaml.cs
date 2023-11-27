@@ -40,7 +40,7 @@
         }
 
 
-        private void TestPositionForThreeMembers(Point handPosition, Point ElbowPosition, Point WirstPosition,string filepath)
+        private void TestPositionForThreeMembers(Point Member1, Point Member2, Point Member3,string filepath)
         {
 
 
@@ -49,8 +49,8 @@
 
 
             //get the new angle
-            angleBetweenHandAndElbow = CalculateAngleWithDouble(handPosition.Y, handPosition.X,ElbowPosition.Y,ElbowPosition.X);
-            angleBetweenElbowAndWrist = CalculateAngleWithDouble(ElbowPosition.Y, ElbowPosition.X, WirstPosition.Y, WirstPosition.X);
+            angleBetweenHandAndElbow = CalculateAngleWithDouble(Member1.Y,Member1.X,Member2.Y,Member2.X);
+            angleBetweenElbowAndWrist = CalculateAngleWithDouble(Member3.Y,Member3.X, Member2.Y, Member2.X);
 
 
             
