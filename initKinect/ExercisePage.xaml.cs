@@ -423,6 +423,52 @@ namespace motionRecovery
         }
 
 
+        private void CheckUserMultiPosition(Joint Joint1, Joint Joint2,Joint Joint3,Joint Joint4, Double AngleMinFirstMember,Double AngleMaxFirstMember,Double AngleMin ,String Description, double PositionTime)
+        {
+
+            double angleBetweenJoint1Joint2 = CalculateAngle(Joint1, Joint2);
+            double angleBetweenJoint3Joint4  = CalculateAngle(Joint3, Joint4);
+
+            if(Math.Abs(angleBetweenJoint1Joint2) > AngleMinFirstMember && Math.Abs(angleBetweenJoint1Joint2) < AngleMaxFirstMember && Math.Abs(angleBetweenJoint3Joint4) > AngleMinFirstMember && Math.Abs(angleBetweenJoint3Joint4) < AngleMaxFirstMember)
+            {
+
+                // check if ruleTime exist
+                if (ruleTimer == null)
+                {
+                    // If rulerTimer doesn't exist, create it
+                    ruleTimer = new System.Timers.Timer();
+                    ruleTimer.Elapsed += RuleTimerElapsed;
+                    ruleTimer.AutoReset = false; // timer does not repeat automatically
+                    ruleTimer.Interval = PositionTime * 1000;
+                    ruleTimer.Start();
+                    ruleTimerStartTime = DateTime.Now;
+                }
+
+                // Calculate the time remaining before the end of the exercise
+                TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
+                TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
+
+                this.UserPositionStatus = $"OK => angle: {Math.Abs(angleBetweenJoint1Joint2):F1} and for the second member : {Math.Abs(angleBetweenJoint3Joint4):F1}, time remaining = {remaining.TotalSeconds:F1} seconds ";
+                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
+            }
+            else
+            {
+                this.UserPositionStatus = $"KO => angle: {Math.Abs(angleBetweenJoint1Joint2):F1} or between this angle {Math.Abs(angleBetweenJoint3Joint4):F1}";
+
+                if (ruleTimer != null)
+                {
+                    ruleTimer.Stop();
+                    ruleTimer.Dispose();
+                    ruleTimer = null;
+                }
+            }
+
+        }
+
+
+
+
+
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             PassToNextRule();
