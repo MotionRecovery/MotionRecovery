@@ -453,7 +453,7 @@ namespace motionRecovery
         }
 
         // Calculate the angle between two points
-        private double CalculateAngle(Joint joint1, Joint joint2)
+        public double CalculateAngle(Joint joint1, Joint joint2)
         {
             double deltaY = joint2.Position.Y - joint1.Position.Y;
             double deltaX = joint2.Position.X - joint1.Position.X;

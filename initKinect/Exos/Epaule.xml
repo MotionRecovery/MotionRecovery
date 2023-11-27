@@ -7,13 +7,13 @@
 		<Membre3>HandRight</Membre3>
 		<AngleMin>75,0</AngleMin>
 		<AngleMax>100,0</AngleMax>
-		<Description>"The right wrist should be betwen 75 and 100 degrees"</Description>
+		<PositionTime>5.0</PositionTime>
+		<Description>"The right wrist, your right hand and your right elbow should be betwen 75 and 100 degrees"</Description>
+		<AnglePossibleMin>null</AnglePossibleMin>
+		<AnglePossibleMax>null</AnglePossibleMax>
 	</Position>
 	<Position>
-		<Membre1>Head</Membre1>
-		<Membre2>Neck</Membre2>
-		<AngleMin>80,0</AngleMin>
-		<AngleMax>100,0</AngleMax>
-		<Description>"The head should be at 80 and 90 degrees"</Description>
+		
+		
 	</Position>
 </ExerciseRule>

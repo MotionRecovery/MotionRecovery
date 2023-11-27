@@ -23,6 +23,6 @@
     <AngleMin>75,0</AngleMin>
     <AngleMax>100,0</AngleMax>
     <PositionTime>15,0</PositionTime>
-    <Description>"The right wrist should be betwen 75 and 100 degrees during 15 seconds"</Description>
+    <Description>"The right wrist should be betwen 75 and 100 degrees during 15 seconds"</Description>  
   </Position>
 </ExerciseRule>
