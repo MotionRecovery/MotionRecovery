@@ -15,7 +15,7 @@ namespace motionRecovery
         /// </summary>
         /// <param name="exercise">The ExerciseMultiPositon object to be written to the file.</param>
         /// <param name="filePath">The path where we wante to write the XML file.</param>
-        public static void WriteExerciseToFile(ExerciseMultiPositon exercise, string filePath)
+        public static void WriteExerciseToFile(ExerciseMultiPosition exercise, string filePath)
         {
             // Check if the exercise or file path is null
             if (exercise == null || string.IsNullOrEmpty(filePath))
@@ -26,7 +26,7 @@ namespace motionRecovery
             try
             {
                 // Use XmlSerializer to serialize the ExerciseMultiPositon object to XML
-                XmlSerializer serializer = new XmlSerializer(typeof(ExerciseMultiPositon));
+                XmlSerializer serializer = new XmlSerializer(typeof(ExerciseMultiPosition));
 
                 // Configure settings to include an XML header
                 XmlWriterSettings settings = new XmlWriterSettings
