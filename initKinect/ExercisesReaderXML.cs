@@ -8,12 +8,11 @@ namespace motionRecovery
     // Class responsible for reading exercise data from an XML file
     internal class ExercisesReaderXML
     {
-        private ParseJointType ParseJointType; // Used to parse a string to a type Joint
 
         // Used to read exercise data from an XML file and return an ExerciseMultiPositon object
-        public ExerciseMultiPositon ReadExerciseFile(string filePath)
+        public ExerciseMultiPosition ReadExerciseFile(string filePath)
         {
-            ExerciseMultiPositon exerciseMultiPositon = new ExerciseMultiPositon();
+            ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition();
             ParseJointType parseJointType = new ParseJointType();
 
             try
@@ -21,12 +20,12 @@ namespace motionRecovery
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(filePath);
 
-                XmlNodeList exerciseNodes = xmlDoc.SelectNodes("//ExerciseMultiPositon");
+                XmlNodeList exerciseNodes = xmlDoc.SelectNodes("//ExerciseMultiPosition");
 
                 foreach (XmlNode exerciseNode in exerciseNodes)
                 {
-                    exerciseMultiPositon.Name = exerciseNode.SelectSingleNode("Name").InnerText.Trim();
-                    exerciseMultiPositon.Description = exerciseNode.SelectSingleNode("Description").InnerText.Trim();
+                    exerciseMultiPosition.Name = exerciseNode.SelectSingleNode("Name").InnerText.Trim();
+                    exerciseMultiPosition.Description = exerciseNode.SelectSingleNode("Description").InnerText.Trim();
 
                     XmlNodeList ruleNodes = exerciseNode.SelectNodes("Rules/ExerciseRule");
                     foreach (XmlNode ruleNode in ruleNodes)
@@ -51,7 +50,7 @@ namespace motionRecovery
                             exerciseRule.Positions.Add(simplePosition);
                         }
 
-                        exerciseMultiPositon.Rules.Add(exerciseRule);
+                        exerciseMultiPosition.Rules.Add(exerciseRule);
                     }
                 }
             }
@@ -60,7 +59,7 @@ namespace motionRecovery
                 Console.WriteLine($"An error occurred while reading the exercise file: {ex.Message}");
             }
 
-            return exerciseMultiPositon;
+            return exerciseMultiPosition;
         }
     }
 }

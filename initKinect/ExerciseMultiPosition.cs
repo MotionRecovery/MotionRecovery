@@ -5,13 +5,13 @@ using System.Data;
 // Data Class. Used by the program to recognize positions via Kinect skeleton
 namespace motionRecovery
 {
-    public class ExerciseMultiPositon
+    public class ExerciseMultiPosition
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public List<ExerciseRule> Rules { get; set; }
 
-        public ExerciseMultiPositon()
+        public ExerciseMultiPosition()
         {
             Rules = new List<ExerciseRule>();
         }
