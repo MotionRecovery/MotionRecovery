@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExerciseRule>
+  <name>testnom</name>
+  <description>testDescr</description>
+  <rule>
+    <Position>
+      <Membre1>ElbowLeft</Membre1>
+      <Membre2>WristLeft</Membre2>
+      <AngleMin>50</AngleMin>
+      <AngleMax>100</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ElbowRight</Membre1>
+      <Membre2>WristRight</Membre2>
+      <AngleMin>50</AngleMin>
+      <AngleMax>100</AngleMax>
+    </Position>
+    <PositionTime>10</PositionTime>
+    <Description>coude poignet 50, 100</Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>Neck</Membre1>
+      <Membre2>Head</Membre2>
+      <AngleMin>50</AngleMin>
+      <AngleMax>100</AngleMax>
+    </Position>
+    <PositionTime>5</PositionTime>
+    <Description>nuque tete 50 100</Description>
+  </rule>
+</ExerciseRule>

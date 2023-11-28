@@ -211,7 +211,15 @@ namespace motionRecovery
 
         public string ExerciseDescription
         {
-            get { return $"{exerciseMultiPosition.Rules[IndexPosition].Description}"; }
+            get {
+                if (exerciseMultiPosition.Rules.Count != 0){
+                    return $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                }
+                else
+                {
+                    return "...";
+                }
+            }
             set
             {
                 if (exerciseDescription != value)

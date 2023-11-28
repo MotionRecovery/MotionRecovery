@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Navigation;
 
 namespace motionRecovery
@@ -54,6 +55,8 @@ namespace motionRecovery
 
             try
             {
+                newExercise.Name = textBoxName.Text;
+                newExercise.Description = textBoxDescription.Text;
                 // Use SaveFileDialog to let the user choose the file location and name
                 Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
                 saveFileDialog.Filter = "XML files (*.xml)|*.xml";
