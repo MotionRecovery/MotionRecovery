@@ -467,6 +467,14 @@ namespace motionRecovery
         
         private void Button_Click_stopExercise(object sender, RoutedEventArgs e)
         {
+            // If a timer exist we delete it before to go back to the menu
+            if (ruleTimer != null)
+            {
+                ruleTimer.Stop();
+                ruleTimer.Dispose();
+                ruleTimer = null;
+            }
+
             if (NavigationService.CanGoBack)
             {
                 NavigationService.GoBack();

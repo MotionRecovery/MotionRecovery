@@ -1,0 +1,83 @@
+﻿<Page x:Class="motionRecovery.CreateRuleXMLPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:motionRecovery"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1366"
+      Title="CreateRuleXMLPage">
+
+    <Grid>
+        <Button Content="Go back" HorizontalAlignment="Left" Margin="10,10,10,10" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_GoCreationPage"/>
+        <Button Content="Save the Rule" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_SaveRule" FontSize="18" />
+        <Button Content="Add a new position" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_AddANewPosition" FontSize="18" />
+
+        <!-- ListBox to add the joints-->
+        <Label Content="Joint 1" HorizontalAlignment="Left" Margin="10,55,0,200" VerticalAlignment="Top" FontSize="18"/>
+        <ListBox x:Name="listBoxJoint1" HorizontalAlignment="Left" Margin="10,90,0,200" Width="200">
+            <ListBoxItem>SpineBase</ListBoxItem>
+            <ListBoxItem>SpineMid</ListBoxItem>
+            <ListBoxItem>SpineShoulder</ListBoxItem>
+            <ListBoxItem>Neck</ListBoxItem>
+            <ListBoxItem>Head</ListBoxItem>
+            <ListBoxItem>ShoulderLeft</ListBoxItem>
+            <ListBoxItem>ElbowLeft</ListBoxItem>
+            <ListBoxItem>WristLeft</ListBoxItem>
+            <ListBoxItem>HandLeft</ListBoxItem>
+            <ListBoxItem>ShoulderRight</ListBoxItem>
+            <ListBoxItem>ElbowRight</ListBoxItem>
+            <ListBoxItem>WristRight</ListBoxItem>
+            <ListBoxItem>HandRight</ListBoxItem>
+            <ListBoxItem>HipLeft</ListBoxItem>
+            <ListBoxItem>KneeLeft</ListBoxItem>
+            <ListBoxItem>AnkleLeft</ListBoxItem>
+            <ListBoxItem>FootLeft</ListBoxItem>
+            <ListBoxItem>HipRight</ListBoxItem>
+            <ListBoxItem>KneeRight</ListBoxItem>
+            <ListBoxItem>AnkleRight</ListBoxItem>
+            <ListBoxItem>FootRight</ListBoxItem>
+        </ListBox>
+        <Label Content="Joint 2" HorizontalAlignment="Left" Margin="220,55,0,200" VerticalAlignment="Top" FontSize="18"/>
+        <ListBox x:Name="listBoxJoint2" HorizontalAlignment="Left" Margin="220,90,0,200" Width="200">
+            <ListBoxItem>SpineBase</ListBoxItem>
+            <ListBoxItem>SpineMid</ListBoxItem>
+            <ListBoxItem>SpineShoulder</ListBoxItem>
+            <ListBoxItem>Neck</ListBoxItem>
+            <ListBoxItem>Head</ListBoxItem>
+            <ListBoxItem>ShoulderLeft</ListBoxItem>
+            <ListBoxItem>ElbowLeft</ListBoxItem>
+            <ListBoxItem>WristLeft</ListBoxItem>
+            <ListBoxItem>HandLeft</ListBoxItem>
+            <ListBoxItem>ShoulderRight</ListBoxItem>
+            <ListBoxItem>ElbowRight</ListBoxItem>
+            <ListBoxItem>WristRight</ListBoxItem>
+            <ListBoxItem>HandRight</ListBoxItem>
+            <ListBoxItem>HipLeft</ListBoxItem>
+            <ListBoxItem>KneeLeft</ListBoxItem>
+            <ListBoxItem>AnkleLeft</ListBoxItem>
+            <ListBoxItem>FootLeft</ListBoxItem>
+            <ListBoxItem>HipRight</ListBoxItem>
+            <ListBoxItem>KneeRight</ListBoxItem>
+            <ListBoxItem>AnkleRight</ListBoxItem>
+            <ListBoxItem>FootRight</ListBoxItem>
+        </ListBox>
+        <!-- TextBoxes for Angles -->
+        <Label Content="Enter Min angle" HorizontalAlignment="Left" Margin="10,570,0,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBox x:Name="textBoxMinAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,600,0,0" Width="200" Height="30" FontSize="18" Text=""/>
+        <Label Content="Enter Max angle" HorizontalAlignment="Left" Margin="220,570,0,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBox x:Name="textBoxMaxAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,600,0,0" Width="200" Height="30" FontSize="18"  Text=""/>
+
+        <!-- TextBlock for Errors -->
+        <TextBlock Text="{Binding ErrorPosition}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="500,500,0,0" Width="700" Height="70" FontSize="18" TextWrapping="Wrap" Background="LightGray"/>
+
+        <!-- ListBox for Displaying Saved Positions -->
+        <ListBox x:Name="listBoxPositionList"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="500,90,0,0" Width="700" Height="400" FontSize="18" />
+
+        <!-- TextBoxes for the time and the description -->
+        <Label Content="Enter Time" HorizontalAlignment="Right" Margin="0,0,280,40" VerticalAlignment="Bottom" FontSize="18"/>
+        <TextBox x:Name="textBoxTime" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,170,10" Width="200" Height="30" FontSize="18" Text=""/>
+        <Label Content="Enter the description" HorizontalAlignment="Right" Margin="0,0,580,80" VerticalAlignment="Bottom" FontSize="18"/>
+        <TextBox x:Name="textBoxDescription" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,410,10" Width="350" Height="70" FontSize="18"  Text=""/>
+    </Grid>
+</Page>

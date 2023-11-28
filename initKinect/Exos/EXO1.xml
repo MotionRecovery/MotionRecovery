@@ -1,28 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ExerciseRule Name="EXO1">
+  <name>EXO1</name>
   <description>"The first Exercice"</description>
-  <Position>
-    <Membre1>ElbowRight</Membre1>
-    <Membre2>WristRight</Membre2>
-    <AngleMin>75,0</AngleMin>
-    <AngleMax>100,0</AngleMax>
+  <rule>
+    <Position>
+      <Membre1>ElbowRight</Membre1>
+      <Membre2>WristRight</Membre2>
+      <AngleMin>75,0</AngleMin>
+      <AngleMax>100,0</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ElbowLeft</Membre1>
+      <Membre2>WristLeft</Membre2>
+      <AngleMin>75,0</AngleMin>
+      <AngleMax>100,0</AngleMax>
+    </Position>
     <PositionTime>15,0</PositionTime>
-    <Description>"The right wrist should be betwen 75 and 100 degrees during 15 seconds"</Description>
-  </Position>
-  <Position>
-    <Membre1>Head</Membre1>
-    <Membre2>Neck</Membre2>
-    <AngleMin>80,0</AngleMin>
-    <AngleMax>100,0</AngleMax>
-    <PositionTime>15,0</PositionTime>
-    <Description>"The head should be at 80 and 90 degrees during 15 seconds"</Description>
-  </Position>
-  <Position>
-    <Membre1>ElbowRight</Membre1>
-    <Membre2>WristRight</Membre2>
-    <AngleMin>75,0</AngleMin>
-    <AngleMax>100,0</AngleMax>
-    <PositionTime>15,0</PositionTime>
-    <Description>"The right wrist should be betwen 75 and 100 degrees during 15 seconds"</Description>
-  </Position>
+    <Description>.....</Description>
+  </rule>
 </ExerciseRule>

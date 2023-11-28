@@ -69,7 +69,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CreateExerciseXMLPage.xaml.cs">
+      <DependentUpon>CreateExerciseXMLPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CreateRuleXMLPage.xaml.cs">
+      <DependentUpon>CreateRuleXMLPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExerciseMultiPosition.cs" />
+    <Compile Include="ExerciseWriterXML.cs" />
+    <Compile Include="ParseJointType.cs" />
     <Compile Include="SkeletonGraphicInterface.cs" />
+    <Page Include="CreateExerciseXMLPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CreateRuleXMLPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ExerciseList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

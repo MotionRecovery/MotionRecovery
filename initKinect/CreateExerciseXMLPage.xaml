@@ -1,0 +1,28 @@
+﻿<Page x:Class="motionRecovery.CreateExerciseXMLPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:motionRecovery"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1366"
+      Title="CreateExerciseXMLPage">
+
+    <Grid>
+        <!-- the different buttons -->
+        <Button Content="Go back to the menu" HorizontalAlignment="Left" Margin="10,10,10,10" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_GoMenu"/>
+        <Button Content="Save as XML" HorizontalAlignment="Right" VerticalAlignment="top" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_SaveXML" FontSize="18" />
+        <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_AddANewRule" FontSize="18" />
+
+        <!-- The list in which we will put all the rules -->
+        <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="10,90,0,0" Width="700" Height="400" FontSize="18" />
+        <!-- The area where we will write any errors -->
+        <TextBlock Text="{Binding ErrorXMLCreation}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="10,500,0,0" Width="700" Height="70" FontSize="18" TextWrapping="Wrap" Background="LightGray"/>
+
+        <!-- To give a name and description to our exercise -->
+        <Label Content="Enter Name" HorizontalAlignment="Right" Margin="0,70,10,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBox x:Name="textBoxName" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,100,10,0" Width="200" Height="30" FontSize="18" Text=""/>
+        <Label Content="Enter the description" HorizontalAlignment="Right" Margin="0,150,10,0" VerticalAlignment="Top" FontSize="18"/>
+        <TextBox x:Name="textBoxDescription" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,10,0" Width="350" Height="70" FontSize="18"  Text=""/>
+    </Grid>
+</Page>

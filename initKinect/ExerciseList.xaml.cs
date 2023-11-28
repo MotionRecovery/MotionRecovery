@@ -53,5 +53,11 @@ namespace motionRecovery
             }
             NavigationService.Navigate(new ExercisePage(filePath));
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new CreateExerciseXMLPage());
+
+        }
     }
 }
