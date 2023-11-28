@@ -15,14 +15,6 @@
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
-        // Dans votre code principal
-        List<Position> positionRules = new List<Position>();
-        ExercisesReaderXML ExercisesReaderXML = new ExercisesReaderXML();
-      
-
-
         public MainWindow()
         {
         }
