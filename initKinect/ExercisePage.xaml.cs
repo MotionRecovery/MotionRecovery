@@ -613,7 +613,7 @@ namespace motionRecovery
         private double CalculateAngleWithDouble(double Point1, double Point2, double Point3, double Point4)
         {
             double deltaY = Point2 - Point3;
-            double deltaX = Point2 - Point4;
+            double deltaX = Point1 - Point4;
             double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
             double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
             angleDegrees = angleDegrees * 1.5;
@@ -621,6 +621,36 @@ namespace motionRecovery
             return angleDegrees;
         }
 
+
+        private List<Double> ObjectivesPosition(Point Initpoint1,Point Initpoint2) {
+
+
+
+            double XCoordinate;
+            double YCoordinate;
+            
+            List<Double> result = new List<Double>();
+
+
+            double hypothenuse = (Initpoint1.X * Initpoint1.X) + (Initpoint2.X * Initpoint2.X);
+            
+
+
+            hypothenuse = Math.Sqrt(hypothenuse);
+
+            XCoordinate = hypothenuse * Math.Sin(Initpoint1.X) * Math.Cos(Initpoint2.X);
+
+            YCoordinate = hypothenuse * Math.Sin(Initpoint1.Y) * Math.Cos(Initpoint2.Y);
+
+
+            result.Add(XCoordinate);
+            result.Add(YCoordinate);
+
+            return result;
+
+        
+
+        }
 
 
 
