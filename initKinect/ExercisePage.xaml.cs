@@ -38,7 +38,7 @@ namespace motionRecovery
 
 
 
-        List<Position> positionRules = new List<Position>();
+        ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition();
         int IndexPosition = 0;
 
         private System.Timers.Timer ruleTimer = new System.Timers.Timer();
@@ -61,7 +61,7 @@ namespace motionRecovery
                                                             : Properties.Resources.NoSensorStatusText;
             ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
 
-            positionRules = exerciseReader.ReadExerciseFile(filePath);
+            exerciseMultiPosition = exerciseReader.ReadExerciseFile(filePath);
 
             this.skeletonGraphicInterface = new SkeletonGraphicInterface();
 
@@ -195,7 +195,7 @@ namespace motionRecovery
 
         public string ExerciseNumber
         {
-            get { return $"Exercise {IndexPosition + 1}/{positionRules.Count}"; }
+            get { return $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}"; }
             set
             {
                 if (exerciseNumber != value)
@@ -211,7 +211,7 @@ namespace motionRecovery
 
         public string ExerciseDescription
         {
-            get { return $"{positionRules[IndexPosition].Description}"; }
+            get { return $"{exerciseMultiPosition.Rules[IndexPosition].Description}"; }
             set
             {
                 if (exerciseDescription != value)
@@ -257,7 +257,7 @@ namespace motionRecovery
             {
                 this.bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
-            ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
+            ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
         }
 
 
@@ -361,16 +361,17 @@ namespace motionRecovery
 
 
                             // CHECK rules
-                            if (body != null & positionRules.Count != 0) // Check if a body is detectected and if there are some rules (positionRules)
+                            if (body != null & exerciseMultiPosition.Rules.Count != 0) // Check if a body is detectected and if there are some rules (positionRules)
                             {
-                                Joint Joint1 = body.Joints[positionRules[IndexPosition].Joint1];
-                                Joint Joint2 = body.Joints[positionRules[IndexPosition].Joint2];
-                                Double AngleMin = positionRules[IndexPosition].AngleMin;
-                                Double AngleMax = positionRules[IndexPosition].AngleMax;
-                                Double PositionTime = positionRules[IndexPosition].PositionTime;
-                                String Description = positionRules[IndexPosition].Description;
+                                Joint Joint1 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1];
+                                Joint Joint2 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2];
+                                Double AngleMin = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin;
+                                Double AngleMax = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax;
+                                Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
+                                String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
 
                                 this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description, PositionTime);
+
                             }
 
                         }
@@ -410,7 +411,7 @@ namespace motionRecovery
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
                 this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
-                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
             else
             {
@@ -426,15 +427,13 @@ namespace motionRecovery
         }
 
 
-        private void CheckUserMultiPosition(Joint Joint1, Joint Joint2,Joint Joint3,Joint Joint4, Double AngleMinFirstMember,Double AngleMaxFirstMember,Double AngleMin ,String Description, double PositionTime)
+        private void CheckUserMultiPosition(Joint Joint1, Joint Joint2, Joint Joint3, Joint Joint4, Double AngleMinFirstMember, Double AngleMaxFirstMember, Double AngleMin, Double AngleMax, String Description, double PositionTime)
         {
-
             double angleBetweenJoint1Joint2 = CalculateAngle(Joint1, Joint2);
-            double angleBetweenJoint3Joint4  = CalculateAngle(Joint3, Joint4);
+            double angleBetweenJoint3Joint4 = CalculateAngle(Joint3, Joint4);
 
-            if(Math.Abs(angleBetweenJoint1Joint2) > AngleMinFirstMember && Math.Abs(angleBetweenJoint1Joint2) < AngleMaxFirstMember && Math.Abs(angleBetweenJoint3Joint4) > AngleMinFirstMember && Math.Abs(angleBetweenJoint3Joint4) < AngleMaxFirstMember)
+            if (Math.Abs(angleBetweenJoint1Joint2) > AngleMinFirstMember && Math.Abs(angleBetweenJoint1Joint2) < AngleMaxFirstMember && Math.Abs(angleBetweenJoint3Joint4) > AngleMin && Math.Abs(angleBetweenJoint3Joint4) < AngleMax)
             {
-
                 // check if ruleTime exist
                 if (ruleTimer == null)
                 {
@@ -451,12 +450,12 @@ namespace motionRecovery
                 TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
-                this.UserPositionStatus = $"OK => angle: {Math.Abs(angleBetweenJoint1Joint2):F1} and for the second member : {Math.Abs(angleBetweenJoint3Joint4):F1}, time remaining = {remaining.TotalSeconds:F1} seconds ";
-                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
+                this.UserPositionStatus = $"OK => angle1: {Math.Abs(angleBetweenJoint1Joint2):F1}, angle2: {Math.Abs(angleBetweenJoint3Joint4):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
             else
             {
-                this.UserPositionStatus = $"KO => angle: {Math.Abs(angleBetweenJoint1Joint2):F1} or between this angle {Math.Abs(angleBetweenJoint3Joint4):F1}";
+                this.UserPositionStatus = $"KO => angle1: {Math.Abs(angleBetweenJoint1Joint2):F1} or angle2: {Math.Abs(angleBetweenJoint3Joint4):F1}";
 
                 if (ruleTimer != null)
                 {
@@ -465,7 +464,6 @@ namespace motionRecovery
                     ruleTimer = null;
                 }
             }
-
         }
 
 
@@ -483,11 +481,11 @@ namespace motionRecovery
 
         private void PassToNextRule()
         {
-            if (IndexPosition < positionRules.Count - 1)   
+            if (IndexPosition < exerciseMultiPosition.Rules.Count - 1)   
             {
                 IndexPosition++;
-                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
-                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
+                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
         }
 
@@ -496,8 +494,8 @@ namespace motionRecovery
             if (IndexPosition>0)
             {
                 IndexPosition--;
-                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{positionRules.Count}";
-                this.ExerciseDescription = $"{positionRules[IndexPosition].Description}";
+                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
         }
 
