@@ -1,8 +1,10 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace motionRecovery
 {
@@ -46,5 +48,63 @@ namespace motionRecovery
 
             return positionList;
         }
+
+
+
+
+        public void WriteNewAttributes(string filePath, string attributes, string value)
+        {
+            XDocument doc = XDocument.Load(filePath);
+            XElement school = doc.Element("Position");
+            school.Add(new XElement("Intermidiate",
+                       new XElement(attributes, value)));
+            doc.Save(filePath);
+
+        }
+
+
+        public void WriteAttributes(string filepath,string attributes, string value)
+        {
+
+            try
+            {
+                // Load the XML file
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(filepath);
+
+                // Select the node where you want to add/modify the attribute
+                XmlNode node = xmlDoc.SelectSingleNode("/Position/"); // Update the XPath accordingly
+
+                // Check if the node exists
+                if (node != null)
+                {
+                    // Add or update the attribute
+                    XmlAttribute attribute = node.Attributes[attributes];
+                    if (attribute == null)
+                    {
+                        // If the attribute doesn't exist, create it
+                        attribute = xmlDoc.CreateAttribute(attributes);
+                        node.Attributes.Append(attribute);
+                    }
+
+                    // Set the attribute value
+                    attribute.Value = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Node not found");
+                }
+
+                // Save the modified XML document
+                xmlDoc.Save(filepath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+
+
+        }
+
     }
 }
