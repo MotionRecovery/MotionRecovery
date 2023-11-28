@@ -33,6 +33,9 @@ namespace motionRecovery
         private int displayHeight; // Height of display (depth space)
         private List<Pen> bodyColors; // List of colors for each body tracked
 
+        private ExerciseWriterXML writerXML = new ExerciseWriterXML();
+
+
 
 
         List<Position> positionRules = new List<Position>();
@@ -548,6 +551,80 @@ namespace motionRecovery
             }
             PassToNextRule();
         }
+
+
+
+
+        private void TestPositionForThreeMembers(Point Member1, Point Member2, Point Member3, string filepath)
+        {
+
+
+            double angleBetweenHandAndElbow;
+            double angleBetweenElbowAndWrist;
+
+
+            //get the new angle
+            angleBetweenHandAndElbow = CalculateAngleWithDouble(Member1.Y, Member1.X, Member2.Y, Member2.X);
+            angleBetweenElbowAndWrist = CalculateAngleWithDouble(Member3.Y, Member3.X, Member2.Y, Member2.X);
+
+
+
+
+            writerXML.WriteAttributes(filepath, "AngleMinMember3Member2", angleBetweenElbowAndWrist.ToString());
+
+            angleBetweenElbowAndWrist += 10;
+
+            writerXML.WriteAttributes(filepath, "AngleMaxMember3Member2", angleBetweenElbowAndWrist.ToString());
+
+
+            writerXML.WriteAttributes(filepath, "AngleMinMember2Member1", angleBetweenHandAndElbow.ToString());
+
+            angleBetweenHandAndElbow += 10;
+
+            writerXML.WriteAttributes(filepath, "AngleMaxMember2Member1", angleBetweenHandAndElbow.ToString());
+
+
+
+
+
+
+
+        }
+
+        private void TestPositionForTwoMembers(Point Member1, Point Member2, string filepath)
+        {
+
+            double AngleMember2AndMember1;
+
+
+            AngleMember2AndMember1 = CalculateAngleWithDouble(Member2.Y, Member2.X, Member1.Y, Member1.X);
+
+
+            writerXML.WriteAttributes(filepath, "AngleMin", AngleMember2AndMember1.ToString());
+
+            AngleMember2AndMember1 += 10;
+
+            writerXML.WriteAttributes(filepath, "AngleMax", AngleMember2AndMember1.ToString());
+
+
+
+        }
+
+
+
+        private double CalculateAngleWithDouble(double Point1, double Point2, double Point3, double Point4)
+        {
+            double deltaY = Point2 - Point3;
+            double deltaX = Point2 - Point4;
+            double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
+            double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
+            angleDegrees = angleDegrees * 1.5;
+
+            return angleDegrees;
+        }
+
+
+
 
     }
 }
