@@ -48,8 +48,6 @@ namespace motionRecovery
         private string exerciseNumber;
         private string exerciseDescription;
         private string statusText = null;
-        private string exerciseMainDescription;
-        private string exerciseName;
 
 
         public ExercisePage(String filePath)
@@ -528,7 +526,7 @@ namespace motionRecovery
             get { return exerciseMultiPosition.Description; }
             set
             {
-                if (this.exerciseMainDescription != value)
+                if (this.exerciseMultiPosition.Description != value)
                 {
                     this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseMainDescription"));
                 }
@@ -540,7 +538,7 @@ namespace motionRecovery
             get { return exerciseMultiPosition.Name; }
             set
             {
-                if (this.exerciseName != value)
+                if (this.exerciseMultiPosition.Name != value)
                 {
                     this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseName"));
                 }
