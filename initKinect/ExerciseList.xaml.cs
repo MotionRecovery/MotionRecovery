@@ -66,7 +66,7 @@ namespace motionRecovery
         }
 
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_CreateExercise(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new CreateExerciseXMLPage());
 
