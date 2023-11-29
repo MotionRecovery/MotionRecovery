@@ -622,7 +622,7 @@ namespace motionRecovery
         }
 
 
-        private List<Double> ObjectivesPosition(Point Initpoint1,Point Initpoint2) {
+        public List<Double> ObjectivesPosition(Point Initpoint1,Point Initpoint2) {
 
 
 
@@ -651,6 +651,8 @@ namespace motionRecovery
         
 
         }
+
+
 
 
 
