@@ -37,22 +37,34 @@ namespace motionRecovery
 
         private void Button_Click_ExercisePage(object sender, RoutedEventArgs e)
         {
+            // Create an instance of ExercisesReaderXML to handle reading exercises
             ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
-            // OpenFileDialog allows to a user to select a file
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Fichiers XML (*.xml)|*.xml|Tous les fichiers (*.*)|*.*";
 
+            // OpenFileDialog allows the user to select a file
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
+
+            // Show the dialog and get the result
             bool? result = openFileDialog.ShowDialog();
 
             string filePath = null;
 
+            // Check if the user selected a file
             if (result == true)
             {
-                // L'utilisateur a sélectionné un fichier, obtenez le chemin du fichier
+                // Get the selected file path
                 filePath = openFileDialog.FileName;
             }
+            else
+            {
+                // No file selected, stay on the current page
+                return;
+            }
+
+            // Navigate to the ExercisePage with the selected file path
             NavigationService.Navigate(new ExercisePage(filePath));
         }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
