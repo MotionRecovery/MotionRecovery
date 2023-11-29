@@ -17,7 +17,19 @@
     </Position>
     <PositionTime>15,0</PositionTime>
     <Description>
-      Keep the right wrist in relation to the right elbow between 75 and 100 degrees
+      [Right and left] Keep the wrist in relation to the elbow between 75 and 100 degrees
+    </Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>Neck</Membre1>
+      <Membre2>Head</Membre2>
+      <AngleMin>75,0</AngleMin>
+      <AngleMax>100,0</AngleMax>
+    </Position>
+    <PositionTime>15,0</PositionTime>
+    <Description>
+      Neck and Head, 75-100°
     </Description>
   </rule>
 </ExerciseRule>

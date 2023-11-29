@@ -27,7 +27,7 @@ namespace motionRecovery
                     exerciseMultiPosition.Name = exerciseNode.SelectSingleNode("name").InnerText.Trim();
                     exerciseMultiPosition.Description = exerciseNode.SelectSingleNode("description").InnerText.Trim();
 
-                    XmlNodeList ruleNodes = exerciseNode.SelectNodes("//rule");
+                    XmlNodeList ruleNodes = exerciseNode.SelectNodes(".//rule");
                     foreach (XmlNode ruleNode in ruleNodes)
                     {
                         ExerciseRule exerciseRule = new ExerciseRule
@@ -36,7 +36,7 @@ namespace motionRecovery
                             Description = ruleNode.SelectSingleNode("Description").InnerText.Trim()
                         };
 
-                        XmlNodeList positionNodes = ruleNode.SelectNodes("//Position");
+                        XmlNodeList positionNodes = ruleNode.SelectNodes(".//Position");
                         foreach (XmlNode positionNode in positionNodes)
                         {
                             SimplePosition simplePosition = new SimplePosition
