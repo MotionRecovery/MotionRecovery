@@ -9,8 +9,8 @@
       Title="ExerciseList"
       Loaded="Page_Loaded">
     <Grid>
-        <Label Content="List of Exercises" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="16" />
-        <Button Content="Search for an exercise in your files" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Click="Button_Click_ExercisePage" FontSize="16" />
-        <Button Content="Create an exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" FontSize="16" Click="Button_Click" />
+        <Label Content="Motion Recovery" HorizontalAlignment="Center" Margin="0,0,0,340" VerticalAlignment="Center" FontSize="56" />
+        <Button Content="Choose an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,0,0,120" Padding="10,10,10,10" Click="Button_Click_ExercisePage" />
+        <Button Content="Create an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,120,0,0" Padding="10,10,10,10" Click="Button_Click" />
     </Grid>
 </Page>
