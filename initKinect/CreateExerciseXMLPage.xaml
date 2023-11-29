@@ -10,19 +10,33 @@
 
     <Grid>
         <!-- the different buttons -->
-        <Button Content="Go back to the menu" HorizontalAlignment="Left" Margin="10,10,10,10" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_GoMenu"/>
-        <Button Content="Save as XML" HorizontalAlignment="Right" VerticalAlignment="top" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_SaveXML" FontSize="18" />
-        <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,10,10" Padding="5,5,5,5" Click="Button_Click_AddANewRule" FontSize="18" />
+        <Button Content="Go back to the menu" HorizontalAlignment="Left" Margin="30,20,0,0" VerticalAlignment="Top" Click="Button_GoMenu" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+        
 
-        <!-- The list in which we will put all the rules -->
-        <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="10,90,0,0" Width="700" Height="400" FontSize="18" />
+        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="1290" Height="580" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#777"/>
+            </Border.Effect>
+            <Grid>
+                <!-- The list in which we will put all the rules -->
+                <Label Content="The differents rules" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,30,0,0" FontSize="22"/>
+                <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,90,0,0" Width="700" Height="400" FontSize="18" />
+
+                <!-- To give a name and description to our exercise -->
+                <Label Content="Enter Name" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <TextBox x:Name="textBoxName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,120,0,0" Width="200" Height="30" FontSize="18" Text=""/>
+                <Label Content="Enter the description" HorizontalAlignment="Left" Margin="750,150,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,180,0,0" Width="350" Height="70" FontSize="18"  Text=""/>
+
+                <Button Content="Save as XML" HorizontalAlignment="Left" VerticalAlignment="top" Margin="750,260,0,0" Click="Button_Click_SaveXML"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+                <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+            </Grid>
+        </Border>
+
+        
         <!-- The area where we will write any errors -->
-        <TextBlock Text="{Binding ErrorXMLCreation}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="10,500,0,0" Width="700" Height="70" FontSize="18" TextWrapping="Wrap" Background="LightGray"/>
-
-        <!-- To give a name and description to our exercise -->
-        <Label Content="Enter Name" HorizontalAlignment="Right" Margin="0,70,10,0" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox x:Name="textBoxName" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,100,10,0" Width="200" Height="30" FontSize="18" Text=""/>
-        <Label Content="Enter the description" HorizontalAlignment="Right" Margin="0,150,10,0" VerticalAlignment="Top" FontSize="18"/>
-        <TextBox x:Name="textBoxDescription" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,10,0" Width="350" Height="70" FontSize="18"  Text=""/>
+        
+        <TextBlock Text="{Binding ErrorXMLCreation}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="30,680,0,0" Width="1280" Height="70" FontSize="22" TextWrapping="Wrap" Foreground="Red" FontWeight="Bold" Padding="10,10,10,10"/>
+        
     </Grid>
 </Page>
