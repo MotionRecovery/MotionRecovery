@@ -164,5 +164,49 @@ namespace motionRecovery
                     new Rect(displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, displayHeight));
             }
         }
+
+        public void DrawObjectives(DrawingContext dc,Point InitPoint1,Point InitPoint2)
+        {
+
+            List<Double> coordinates = new List<Double>();
+
+            coordinates = ObjectivesPosition(InitPoint1, InitPoint2); 
+
+            dc.DrawRectangle(Brushes.Green, null, new Rect(coordinates[0], coordinates[1],20,20));
+
+        }
+
+        private List<Double> ObjectivesPosition(Point Initpoint1, Point Initpoint2)
+        {
+
+
+
+            double XCoordinate;
+            double YCoordinate;
+
+            List<Double> result = new List<Double>();
+
+
+            double hypothenuse = (Initpoint1.X * Initpoint1.X) + (Initpoint2.X * Initpoint2.X);
+
+
+
+            hypothenuse = Math.Sqrt(hypothenuse);
+
+            XCoordinate = hypothenuse * Math.Sin(Initpoint1.X) * Math.Cos(Initpoint2.X);
+
+            YCoordinate = hypothenuse * Math.Sin(Initpoint1.Y) * Math.Cos(Initpoint2.Y);
+
+
+            result.Add(XCoordinate);
+            result.Add(YCoordinate);
+
+            return result;
+
+
+
+        }
+
+
     }
 }
