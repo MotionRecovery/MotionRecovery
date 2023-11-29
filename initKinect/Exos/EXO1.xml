@@ -16,6 +16,8 @@
       <AngleMax>100,0</AngleMax>
     </Position>
     <PositionTime>15,0</PositionTime>
-    <Description>.....</Description>
+    <Description>
+      Keep the right wrist in relation to the right elbow between 75 and 100 degrees
+    </Description>
   </rule>
 </ExerciseRule>
