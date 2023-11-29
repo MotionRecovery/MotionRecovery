@@ -13,7 +13,6 @@ namespace motionRecovery
 
     public partial class CreateRuleXMLPage : Page, INotifyPropertyChanged
     {
-        private ParseJointType ParseJointType; // Used to parse a string to a type Joint
         public event PropertyChangedEventHandler PropertyChanged;// INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         private string errorPosition = null; // To display an error when we entre a new position
         private List<SimplePosition> positions = new List<SimplePosition>();

@@ -10,7 +10,7 @@
       Loaded="Page_Loaded">
     <Grid>
         <Label Content="Motion Recovery" HorizontalAlignment="Center" Margin="0,0,0,340" VerticalAlignment="Center" FontSize="56" />
-        <Button Content="Choose an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,0,0,120" Padding="10,10,10,10" Click="Button_Click_ExercisePage" />
-        <Button Content="Create an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,120,0,0" Padding="10,10,10,10" Click="Button_Click" />
+        <Button Content="Choose an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,0,0,120" Padding="15,10,15,10" Click="Button_Click_ExercisePage" BorderThickness="2,2,2,6" Background="#FFF" BorderBrush="#D6D6D6"/>
+        <Button Content="Create an exercise" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="0,120,0,0" Padding="15,10,15,10" Click="Button_Click_CreateExercise" BorderThickness="2,2,2,6" Background="#FFF" BorderBrush="#D6D6D6" />
     </Grid>
 </Page>
