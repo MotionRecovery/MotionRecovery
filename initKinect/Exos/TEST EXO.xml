@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExerciseRule>
+  <name>Exo Name Test</name>
+  <description>Exo Descritpion Test</description>
+  <rule>
+    <Position>
+      <Membre1>ElbowLeft</Membre1>
+      <Membre2>WristLeft</Membre2>
+      <AngleMin>50</AngleMin>
+      <AngleMax>90</AngleMax>
+    </Position>
+    <PositionTime>10</PositionTime>
+    <Description>Keep the left wrist in relation to the left elbow between 50 and 90 degrees</Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>Neck</Membre1>
+      <Membre2>Head</Membre2>
+      <AngleMin>70</AngleMin>
+      <AngleMax>100</AngleMax>
+    </Position>
+    <PositionTime>10</PositionTime>
+    <Description>Neck-Head 70-90°</Description>
+  </rule>
+</ExerciseRule>

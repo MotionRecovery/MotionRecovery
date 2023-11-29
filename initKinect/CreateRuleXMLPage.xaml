@@ -15,7 +15,7 @@
 
         <!-- ListBox to add the joints-->
         <Label Content="Joint 1" HorizontalAlignment="Left" Margin="10,55,0,200" VerticalAlignment="Top" FontSize="18"/>
-        <ListBox x:Name="listBoxJoint1" HorizontalAlignment="Left" Margin="10,90,0,200" Width="200">
+        <ListBox x:Name="listBoxJoint1" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="10,90,0,200" Width="200" Height="450">
             <ListBoxItem>SpineBase</ListBoxItem>
             <ListBoxItem>SpineMid</ListBoxItem>
             <ListBoxItem>SpineShoulder</ListBoxItem>
@@ -39,7 +39,7 @@
             <ListBoxItem>FootRight</ListBoxItem>
         </ListBox>
         <Label Content="Joint 2" HorizontalAlignment="Left" Margin="220,55,0,200" VerticalAlignment="Top" FontSize="18"/>
-        <ListBox x:Name="listBoxJoint2" HorizontalAlignment="Left" Margin="220,90,0,200" Width="200">
+        <ListBox x:Name="listBoxJoint2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,90,0,200" Width="200" Height="450">
             <ListBoxItem>SpineBase</ListBoxItem>
             <ListBoxItem>SpineMid</ListBoxItem>
             <ListBoxItem>SpineShoulder</ListBoxItem>

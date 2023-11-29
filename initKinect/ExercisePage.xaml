@@ -11,26 +11,41 @@
       Unloaded="ExercisePage_Unloaded">
 
     <Grid>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,10,0">
-            <TextBlock Text="Kinect Status: " FontSize="16" />
-            <TextBlock Text="{Binding StatusText}" FontSize="16" />
-        </StackPanel>
-
-
         
-        <Viewbox Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="700" Height="600" Margin="10,0,0,10">
-            <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
-        </Viewbox>
-        <Button Content="Stop exercising" HorizontalAlignment="Left" Margin="10,10,0,0" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_Click_stopExercise"/>
-        <Button Content="Skip Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,80,550" Padding="5,5,5,5" Click="Button_Click_skipExercise"/>
-        <Button Content="Previous Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,220,550" Padding="5,5,5,5" Click="Button_Click_previousExercise"/>
+        <!-- Kinect connected? -->
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,25,0">
+            <TextBlock Text="Kinect Status: " FontSize="22" />
+            <TextBlock Text="{Binding StatusText}" FontSize="22" />
+        </StackPanel>
+        
+        <!-- Name and Description of the exo -->
+        <TextBlock Text="{Binding ExerciseName}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="26" FontWeight="Bold" Margin="270,20,0,0" Width="900" Height="30" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding ExerciseMainDescription}" HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Top" Margin="270,55,0,0"  Width="900" Height="55" TextWrapping="Wrap"/>
 
+        <!-- Stop excercise Btn-->
+        <Button Content="Stop exercising" Click="Button_Click_stopExercise" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,25,0,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
 
-        <Grid Background="LightGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,10" Width="500" Height="500">
-            <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="50" TextWrapping="Wrap" />
-            <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,160,20,20" Width="460" Height="300" TextWrapping="Wrap" />
-        </Grid>
+        <!-- Previous and skip cercise Btn-->
+        <Button Content="Skip Exercise" Click="Button_Click_skipExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,45,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+        <Button Content="Previous Exercise" Click="Button_Click_previousExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,350,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+        
+        <!-- Exercise Description -->
+        <Border Background="#FFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,40,0" Width="500" Height="530" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+            <Grid>
+                <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="50" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,160,20,20" Width="460" Height="300" TextWrapping="Wrap" />
+            </Grid>
+        </Border>
+
+        <!-- Kinect skeleton -->
+        <Border Background="#000" HorizontalAlignment="Left" VerticalAlignment="Top" Width="700" Height="600" Margin="40,120,0,0">
+            <Grid>
+                <Viewbox Grid.Row="1">
+                    <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                </Viewbox>
+            </Grid>
+        </Border>
 
     </Grid>
 </Page>

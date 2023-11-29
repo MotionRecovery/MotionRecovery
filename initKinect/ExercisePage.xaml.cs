@@ -5,16 +5,13 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
-using Microsoft.Win32;
-
 
 namespace motionRecovery
 {
     public partial class ExercisePage : Page, INotifyPropertyChanged
     {
         // Variables
-        private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application lifecycle
-        private string statusText = null; // Used to notice if the Kinect is running or not
+        private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application 
 
         private SkeletonGraphicInterface skeletonGraphicInterface; //Used to draw the skeleton
 
@@ -50,6 +47,9 @@ namespace motionRecovery
         private string userPositionStatus;
         private string exerciseNumber;
         private string exerciseDescription;
+        private string statusText = null;
+        private string exerciseMainDescription;
+        private string exerciseName;
 
 
         public ExercisePage(String filePath)
@@ -149,91 +149,6 @@ namespace motionRecovery
                 return this.imageSource;
             }
         }
-
-
-
-
-        // Gets or sets the current status text to display
-        public string StatusText
-        {
-            get
-            {
-                return this.statusText;
-            }
-
-            set
-            {
-                if (this.statusText != value)
-                {
-                    this.statusText = value;
-
-                    // notify any bound elements that the text has changed
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
-                    }
-                }
-            }
-        }
-
-        public string UserPositionStatus
-        {
-            get { return this.userPositionStatus; }
-            set
-            {
-                if (this.userPositionStatus != value)
-                {
-                    this.userPositionStatus = value;
-
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("UserPositionStatus"));
-                    }
-                }
-            }
-        }
-
-        public string ExerciseNumber
-        {
-            get { return $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}"; }
-            set
-            {
-                if (exerciseNumber != value)
-                {
-                    exerciseNumber = value;
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseNumber"));
-                    }
-                }
-            }
-        }
-
-        public string ExerciseDescription
-        {
-            get {
-                if (exerciseMultiPosition.Rules.Count != 0){
-                    return $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
-                }
-                else
-                {
-                    return "...";
-                }
-            }
-            set
-            {
-                if (exerciseDescription != value)
-                {
-                    exerciseDescription = value;
-                    if (this.PropertyChanged != null)
-                    {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseDescription"));
-                    }
-                }
-            }
-        }
-
-
 
         /// <summary>
         /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
@@ -434,50 +349,6 @@ namespace motionRecovery
             }
         }
 
-
-        private void CheckUserMultiPosition(Joint Joint1, Joint Joint2, Joint Joint3, Joint Joint4, Double AngleMinFirstMember, Double AngleMaxFirstMember, Double AngleMin, Double AngleMax, String Description, double PositionTime)
-        {
-            double angleBetweenJoint1Joint2 = CalculateAngle(Joint1, Joint2);
-            double angleBetweenJoint3Joint4 = CalculateAngle(Joint3, Joint4);
-
-            if (Math.Abs(angleBetweenJoint1Joint2) > AngleMinFirstMember && Math.Abs(angleBetweenJoint1Joint2) < AngleMaxFirstMember && Math.Abs(angleBetweenJoint3Joint4) > AngleMin && Math.Abs(angleBetweenJoint3Joint4) < AngleMax)
-            {
-                // check if ruleTime exist
-                if (ruleTimer == null)
-                {
-                    // If rulerTimer doesn't exist, create it
-                    ruleTimer = new System.Timers.Timer();
-                    ruleTimer.Elapsed += RuleTimerElapsed;
-                    ruleTimer.AutoReset = false; // timer does not repeat automatically
-                    ruleTimer.Interval = PositionTime * 1000;
-                    ruleTimer.Start();
-                    ruleTimerStartTime = DateTime.Now;
-                }
-
-                // Calculate the time remaining before the end of the exercise
-                TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
-                TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
-
-                this.UserPositionStatus = $"OK => angle1: {Math.Abs(angleBetweenJoint1Joint2):F1}, angle2: {Math.Abs(angleBetweenJoint3Joint4):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
-                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
-            }
-            else
-            {
-                this.UserPositionStatus = $"KO => angle1: {Math.Abs(angleBetweenJoint1Joint2):F1} or angle2: {Math.Abs(angleBetweenJoint3Joint4):F1}";
-
-                if (ruleTimer != null)
-                {
-                    ruleTimer.Stop();
-                    ruleTimer.Dispose();
-                    ruleTimer = null;
-                }
-            }
-        }
-
-
-
-
-
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             PassToNextRule();
@@ -485,7 +356,6 @@ namespace motionRecovery
             ruleTimer.Dispose();
             ruleTimer = null;
         }
-
 
         private void PassToNextRule()
         {
@@ -558,66 +428,6 @@ namespace motionRecovery
             PassToNextRule();
         }
 
-
-
-
-        private void TestPositionForThreeMembers(Point Member1, Point Member2, Point Member3, string filepath)
-        {
-
-
-            double angleBetweenHandAndElbow;
-            double angleBetweenElbowAndWrist;
-
-
-            //get the new angle
-            angleBetweenHandAndElbow = CalculateAngleWithDouble(Member1.Y, Member1.X, Member2.Y, Member2.X);
-            angleBetweenElbowAndWrist = CalculateAngleWithDouble(Member3.Y, Member3.X, Member2.Y, Member2.X);
-
-
-
-
-            writerXML.WriteAttributes(filepath, "AngleMinMember3Member2", angleBetweenElbowAndWrist.ToString());
-
-            angleBetweenElbowAndWrist += 10;
-
-            writerXML.WriteAttributes(filepath, "AngleMaxMember3Member2", angleBetweenElbowAndWrist.ToString());
-
-
-            writerXML.WriteAttributes(filepath, "AngleMinMember2Member1", angleBetweenHandAndElbow.ToString());
-
-            angleBetweenHandAndElbow += 10;
-
-            writerXML.WriteAttributes(filepath, "AngleMaxMember2Member1", angleBetweenHandAndElbow.ToString());
-
-
-
-
-
-
-
-        }
-
-        private void TestPositionForTwoMembers(Point Member1, Point Member2, string filepath)
-        {
-
-            double AngleMember2AndMember1;
-
-
-            AngleMember2AndMember1 = CalculateAngleWithDouble(Member2.Y, Member2.X, Member1.Y, Member1.X);
-
-
-            writerXML.WriteAttributes(filepath, "AngleMin", AngleMember2AndMember1.ToString());
-
-            AngleMember2AndMember1 += 10;
-
-            writerXML.WriteAttributes(filepath, "AngleMax", AngleMember2AndMember1.ToString());
-
-
-
-        }
-
-
-
         private double CalculateAngleWithDouble(double Point1, double Point2, double Point3, double Point4)
         {
             double deltaY = Point2 - Point3;
@@ -631,7 +441,111 @@ namespace motionRecovery
 
 
 
+        // SECTION TO PRINT TEST IN THE GRAPHICAL INTERFACE //
+        public string StatusText
+        {
+            get
+            {
+                return this.statusText;
+            }
 
+            set
+            {
+                if (this.statusText != value)
+                {
+                    this.statusText = value;
+
+                    // notify any bound elements that the text has changed
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("StatusText"));
+                    }
+                }
+            }
+        }
+
+        public string UserPositionStatus
+        {
+            get { return this.userPositionStatus; }
+            set
+            {
+                if (this.userPositionStatus != value)
+                {
+                    this.userPositionStatus = value;
+
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("UserPositionStatus"));
+                    }
+                }
+            }
+        }
+
+        public string ExerciseNumber
+        {
+            get { return $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}"; }
+            set
+            {
+                if (exerciseNumber != value)
+                {
+                    exerciseNumber = value;
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseNumber"));
+                    }
+                }
+            }
+        }
+
+        public string ExerciseDescription
+        {
+            get
+            {
+                if (exerciseMultiPosition.Rules.Count != 0)
+                {
+                    return $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                }
+                else
+                {
+                    return "...";
+                }
+            }
+            set
+            {
+                if (exerciseDescription != value)
+                {
+                    exerciseDescription = value;
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseDescription"));
+                    }
+                }
+            }
+        }
+
+        public string ExerciseMainDescription
+        {
+            get { return exerciseMultiPosition.Description; }
+            set
+            {
+                if (this.exerciseMainDescription != value)
+                {
+                    this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseMainDescription"));
+                }
+            }
+        }
+
+        public string ExerciseName
+        {
+            get { return exerciseMultiPosition.Name; }
+            set
+            {
+                if (this.exerciseName != value)
+                {
+                    this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseName"));
+                }
+            }
+        }
     }
 }
 

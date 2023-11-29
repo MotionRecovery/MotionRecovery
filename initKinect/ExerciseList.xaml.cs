@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,6 +36,7 @@ namespace motionRecovery
             }
         }
 
+        // Asks the user to choose an exo file, if done launches the exo page, otherwise stays on this page
         private void Button_Click_ExercisePage(object sender, RoutedEventArgs e)
         {
             // Create an instance of ExercisesReaderXML to handle reading exercises
@@ -49,15 +51,13 @@ namespace motionRecovery
 
             string filePath = null;
 
-            // Check if the user selected a file
+            // Check if the user selected a file,then get the selected file path, else stay on the current page
             if (result == true)
             {
-                // Get the selected file path
                 filePath = openFileDialog.FileName;
             }
             else
             {
-                // No file selected, stay on the current page
                 return;
             }
 
