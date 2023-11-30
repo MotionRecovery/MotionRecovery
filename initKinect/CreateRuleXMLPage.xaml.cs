@@ -1,12 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Security.Policy;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-
 
 namespace motionRecovery
 {
@@ -17,10 +15,14 @@ namespace motionRecovery
         private string errorPosition = null; // To display an error when we entre a new position
         private List<SimplePosition> positions = new List<SimplePosition>();
         public event EventHandler<ExerciseRule> CreatedRule;
+        private int positionNumber = 0;
         public CreateRuleXMLPage()
         {
             InitializeComponent();
             this.DataContext = this;
+
+            // Attach the event handler for the selection changed event
+            listBoxPositionList.SelectionChanged += listBoxPositionList_SelectionChanged;
         }
 
         private void Button_GoCreationPage(object sender, RoutedEventArgs e)
@@ -133,7 +135,8 @@ namespace motionRecovery
             };
 
             // add a new position to the list
-            listBoxPositionList.Items.Add($"{joint1}, {joint2}; with the MinAngle: {minAngle}, and the MaxAngle: {maxAngle}");
+            positionNumber++;
+            listBoxPositionList.Items.Add($"Number:{positionNumber}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}");
             positions.Add(newPosition);
 
 
@@ -163,6 +166,27 @@ namespace motionRecovery
             return double.TryParse(angleText, out angle) && angle >= 0 && angle <= 360;
         }
 
+        private void listBoxPositionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxPositionList.SelectedItem != null)
+            {
+                string selectedPositionDescription = listBoxPositionList.SelectedItem.ToString();
+                string[] positionParts = selectedPositionDescription.Split(';');
+                string[] numberPart = positionParts[0].Split(':');
+                int positionSelected = int.Parse(numberPart[1])-1; // we decrease by 1 because our table starts in position 0
+
+                if (positionSelected >= 0 && positionSelected < positions.Count)
+                {
+                    SimplePosition selectedPosition = positions[positionSelected];
+
+                    listBoxJoint1.SelectedItem = listBoxJoint1.Items.OfType<ListBoxItem>().FirstOrDefault(item => item.Content.ToString() == selectedPosition.Joint1.ToString());
+                    listBoxJoint2.SelectedItem = listBoxJoint2.Items.OfType<ListBoxItem>().FirstOrDefault(item => item.Content.ToString() == selectedPosition.Joint2.ToString());
+                    textBoxMinAngle.Text = selectedPosition.AngleMin.ToString();
+                    textBoxMaxAngle.Text = selectedPosition.AngleMax.ToString();
+                }
+
+            }
+        }
         public string ErrorPosition
         {
             get
