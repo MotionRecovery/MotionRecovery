@@ -19,6 +19,8 @@ namespace motionRecovery
         private int positionNumber = 0;
         private bool isPositionSelected = false;
         private int selectedPositionIndex = -1;
+
+        public static readonly DependencyProperty IsDeleteButtonEnabledProperty = DependencyProperty.Register("IsDeleteButtonEnabled", typeof(bool), typeof(CreateRuleXMLPage), new PropertyMetadata(false));
         public CreateRuleXMLPage()
         {
             InitializeComponent();
@@ -177,14 +179,26 @@ namespace motionRecovery
             return double.TryParse(angleText, out angle) && angle >= 0 && angle <= 360;
         }
 
-        private void listBoxPositionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // Get the position in the position in the list position of the selected item
+        private int GetSelectedPositionIndex()
         {
             if (listBoxPositionList.SelectedItem != null)
             {
                 string selectedPositionDescription = listBoxPositionList.SelectedItem.ToString();
                 string[] positionParts = selectedPositionDescription.Split(';');
                 string[] numberPart = positionParts[0].Split(':');
-                int positionSelected = int.Parse(numberPart[1]) - 1;
+                return int.Parse(numberPart[1]) - 1;
+            }
+
+            return -1;
+        }
+
+        // Activated when a item in the listBoxPositionList is selected. 
+        private void listBoxPositionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxPositionList.SelectedItem != null)
+            {
+                int positionSelected = GetSelectedPositionIndex();
 
                 if (positionSelected >= 0 && positionSelected < positions.Count)
                 {
@@ -198,11 +212,14 @@ namespace motionRecovery
                     isPositionSelected = true;
                     selectedPositionIndex = positionSelected;
                 }
+
+                UpdateDeleteButtonState();
             }
             else
             {
                 isPositionSelected = false;
                 selectedPositionIndex = -1;
+                UpdateDeleteButtonState();
             }
         }
 
@@ -226,6 +243,37 @@ namespace motionRecovery
                     }
                 }
             }
+        }
+
+        // Used to delete a selected position in the listbox
+        private void Button_Click_DeletePosition(object sender, RoutedEventArgs e)
+        {
+            if (listBoxPositionList.SelectedItem != null)
+            {
+                int positionSelected = GetSelectedPositionIndex();
+
+                if (positionSelected >= 0 && positionSelected < positions.Count)
+                {
+                    positions.RemoveAt(positionSelected);
+                    listBoxPositionList.Items.RemoveAt(positionSelected);
+
+                    ClearFields();
+                    UpdateDeleteButtonState();
+                }
+            }
+        }
+
+        // used to define or not the state "enabled" of the btn, only if one item is selected in the listBoxPositionList
+        private void UpdateDeleteButtonState()
+        {
+            IsDeleteButtonEnabled = listBoxPositionList.SelectedItem != null;
+        }
+
+        // used to enabled or not a btn, only if one item is selected in the listBoxPositionList
+        public bool IsDeleteButtonEnabled
+        {
+            get { return (bool)GetValue(IsDeleteButtonEnabledProperty); }
+            set { SetValue(IsDeleteButtonEnabledProperty, value); }
         }
     }
 }
