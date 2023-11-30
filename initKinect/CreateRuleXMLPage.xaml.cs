@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Navigation;
 
 namespace motionRecovery
@@ -16,6 +17,8 @@ namespace motionRecovery
         private List<SimplePosition> positions = new List<SimplePosition>();
         public event EventHandler<ExerciseRule> CreatedRule;
         private int positionNumber = 0;
+        private bool isPositionSelected = false;
+        private int selectedPositionIndex = -1;
         public CreateRuleXMLPage()
         {
             InitializeComponent();
@@ -97,7 +100,6 @@ namespace motionRecovery
             string minAngleText = textBoxMinAngle.Text;
             string maxAngleText = textBoxMaxAngle.Text;
 
-
             if (string.IsNullOrEmpty(joint1) || string.IsNullOrEmpty(joint2) || string.IsNullOrEmpty(minAngleText) || string.IsNullOrEmpty(maxAngleText))
             {
                 DisplayError("All fields must be completed.");
@@ -125,7 +127,6 @@ namespace motionRecovery
                 return;
             }
 
-            // Create an new position
             SimplePosition newPosition = new SimplePosition
             {
                 Joint1 = parseJointType.ParseToJoint(joint1),
@@ -134,15 +135,25 @@ namespace motionRecovery
                 AngleMax = maxAngle
             };
 
-            // add a new position to the list
-            positionNumber++;
-            listBoxPositionList.Items.Add($"Number:{positionNumber}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}");
-            positions.Add(newPosition);
-
+            // If a position is selected, then update the existing position, else add a new position
+            if (isPositionSelected)
+            {
+                positions[selectedPositionIndex] = newPosition;
+                listBoxPositionList.Items[selectedPositionIndex] = $"Number:{selectedPositionIndex + 1}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}";
+                isPositionSelected = false;
+                selectedPositionIndex = -1;
+            }
+            else
+            {
+                positionNumber++;
+                listBoxPositionList.Items.Add($"Number:{positionNumber}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}");
+                positions.Add(newPosition);
+            }
 
             // Clear fields
             ClearFields();
         }
+
 
         // Method to display errors
         private void DisplayError(string error)
@@ -173,7 +184,7 @@ namespace motionRecovery
                 string selectedPositionDescription = listBoxPositionList.SelectedItem.ToString();
                 string[] positionParts = selectedPositionDescription.Split(';');
                 string[] numberPart = positionParts[0].Split(':');
-                int positionSelected = int.Parse(numberPart[1])-1; // we decrease by 1 because our table starts in position 0
+                int positionSelected = int.Parse(numberPart[1]) - 1;
 
                 if (positionSelected >= 0 && positionSelected < positions.Count)
                 {
@@ -183,10 +194,18 @@ namespace motionRecovery
                     listBoxJoint2.SelectedItem = listBoxJoint2.Items.OfType<ListBoxItem>().FirstOrDefault(item => item.Content.ToString() == selectedPosition.Joint2.ToString());
                     textBoxMinAngle.Text = selectedPosition.AngleMin.ToString();
                     textBoxMaxAngle.Text = selectedPosition.AngleMax.ToString();
-                }
 
+                    isPositionSelected = true;
+                    selectedPositionIndex = positionSelected;
+                }
+            }
+            else
+            {
+                isPositionSelected = false;
+                selectedPositionIndex = -1;
             }
         }
+
         public string ErrorPosition
         {
             get
