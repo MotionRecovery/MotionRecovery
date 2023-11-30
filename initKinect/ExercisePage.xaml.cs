@@ -205,72 +205,50 @@ namespace motionRecovery
         }
 
 
-
-        /// <summary>
-        /// Handles the body frame data arriving from the sensor.
-        /// Processes body data, updates joint positions, and draws the skeleton of tracked users.
-        /// Also visualizes the state of left and right hands.
-        /// </summary>
-        /// <param name="sender">Object sending the event (Kinect sensor)</param>
-        /// <param name="e">Event arguments containing the body frame data</param>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
-            bool dataReceived = false;  // "Flag"indicating whether valid body frame data has been received
+            bool dataReceived = false;
 
-            // Using statement ensures proper disposal of resources after the block
             using (BodyFrame bodyFrame = e.FrameReference.AcquireFrame())
             {
-                // Check if the body frame is not null
                 if (bodyFrame != null)
                 {
-                    // Initialize or resize the array to hold body data
                     if (this.bodies == null)
                     {
                         this.bodies = new Body[bodyFrame.BodyCount];
                     }
 
-                    // Get and refresh body data
                     bodyFrame.GetAndRefreshBodyData(this.bodies);
                     dataReceived = true;
                 }
             }
 
-            // If valid body frame data has been received, proceed with visualization
             if (dataReceived)
             {
-                // Using statement ensures proper disposal of resources after the block
                 using (DrawingContext dc = this.drawingGroup.Open())
                 {
-                    // Draw a transparent background to set the render size
                     dc.DrawRectangle(Brushes.Black, null, new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
 
                     int penIndex = 0;
 
-                    // Iterate through each tracked body
                     foreach (Body body in this.bodies)
                     {
                         Pen drawPen = this.bodyColors[penIndex++];
 
-                        // Check if the body is tracked
                         if (body.IsTracked)
                         {
-                            // Draw clipped edges and obtain joint positions in depth space
                             this.skeletonGraphicInterface.DrawClippedEdges(body, dc, this.displayWidth, this.displayHeight);
                             IReadOnlyDictionary<JointType, Joint> joints = body.Joints;
-
-                            // Convert joint positions to depth (display) space
                             Dictionary<JointType, Point> jointPoints = new Dictionary<JointType, Point>();
 
                             foreach (JointType jointType in joints.Keys)
                             {
-                                // Ensure joint depth is non-negative
                                 CameraSpacePoint position = joints[jointType].Position;
                                 if (position.Z < 0)
                                 {
                                     position.Z = InferredZPositionClamp;
                                 }
 
-                                // Map camera point to depth space
                                 DepthSpacePoint depthSpacePoint = this.coordinateMapper.MapCameraPointToDepthSpace(position);
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
@@ -280,40 +258,95 @@ namespace motionRecovery
                             this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
 
-
-                            // CHECK rules
-                            if (body != null & exerciseMultiPosition.Rules.Count != 0) // Check if a body is detectected and if there are some rules (positionRules)
+                            // CHECK RULES
+                            if (body != null && exerciseMultiPosition.Rules.Count != 0)
                             {
-                                Joint Joint1 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1];
-                                Joint Joint2 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2];
-                                Double AngleMin = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin;
-                                Double AngleMax = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax;
-                                Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
-                                String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
-
-                                this.CheckUserPosition(Joint1, Joint2, AngleMin, AngleMax, Description, PositionTime);
-
+                                // If there are one position in the rule or not
+                                if (exerciseMultiPosition.Rules[IndexPosition].Positions.Count > 1)
+                                {
+                                    checkMultiplePosition(body);
+                                } else
+                                {
+                                    CheckOnePosition(body);
+                                }
                             }
+                                    
+
 
                         }
                     }
 
-                    // Prevent drawing outside of our render area
                     this.drawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, this.displayWidth, this.displayHeight));
                 }
             }
         }
 
-
-        // Check the user position, compare with the rules
-        private void CheckUserPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description, double PositionTime)
+        private void checkMultiplePosition(Body body)
         {
+            bool CheckPos = true; // Used to check if all the positions are respected
+
+            foreach (SimplePosition Positions in exerciseMultiPosition.Rules[IndexPosition].Positions)
+            {
+                Joint Joint1 = body.Joints[Positions.Joint1];
+                Joint Joint2 = body.Joints[Positions.Joint2];
+                Double AngleMin = Positions.AngleMin;
+                Double AngleMax = Positions.AngleMax;
+                Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
+                String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
+
+                if (CheckPosition(Joint1, Joint2, AngleMin, AngleMax, Description, PositionTime) == false)
+                {
+                    CheckPos = false;
+                }
+
+                if (CheckPos)
+                {
+                    // check if ruleTime exist
+                    if (ruleTimer == null)
+                    {
+                        // If rulerTimer doesn't exist, create it
+                        ruleTimer = new System.Timers.Timer();
+                        ruleTimer.Elapsed += RuleTimerElapsed;
+                        ruleTimer.AutoReset = false; // timer does not repeat automatically
+                        ruleTimer.Interval = PositionTime * 1000;
+                        ruleTimer.Start();
+                        ruleTimerStartTime = DateTime.Now;
+                    }
+
+                    // Calculate the time remaining before the end of the exercise
+                    TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
+                    TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
+
+                    this.UserPositionStatus = $"OK => MultiPosition, time remaining = {remaining.TotalSeconds:F1} seconds";
+                    this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                }
+                else
+                {
+                    this.UserPositionStatus = $"KO => MultiPosition,";
+
+                    if (ruleTimer != null)
+                    {
+                        ruleTimer.Stop();
+                        ruleTimer.Dispose();
+                        ruleTimer = null;
+                    }
+                }
+            }
+        }
+
+        private void CheckOnePosition(Body body)
+        {
+            Joint Joint1 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1];
+            Joint Joint2 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2];
+            Double AngleMin = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin;
+            Double AngleMax = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax;
+            Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
+            String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
+
             // Calculate the angle between the head and neck using a custom function
             double angle = CalculateAngle(Joint1, Joint2);
-
             if (Math.Abs(angle) > AngleMin && Math.Abs(angle) < AngleMax)
             {
-                
 
                 // check if ruleTime exist
                 if (ruleTimer == null)
@@ -326,24 +359,39 @@ namespace motionRecovery
                     ruleTimer.Start();
                     ruleTimerStartTime = DateTime.Now;
                 }
-
                 // Calculate the time remaining before the end of the exercise
                 TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
-
                 this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
                 this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
             else
             {
                 this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F1}";
-
                 if (ruleTimer != null)
                 {
                     ruleTimer.Stop();
                     ruleTimer.Dispose();
                     ruleTimer = null;
                 }
+            }
+        }
+
+        
+
+        // Check the user position, compare with the rules
+        private bool CheckPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description, double PositionTime)
+        {
+            // Calculate the angle between the head and neck using a custom function
+            double angle = CalculateAngle(Joint1, Joint2);
+
+            if (Math.Abs(angle) > AngleMin && Math.Abs(angle) < AngleMax)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
