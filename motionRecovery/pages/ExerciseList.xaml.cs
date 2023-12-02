@@ -1,19 +1,8 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace motionRecovery
 {
@@ -36,20 +25,16 @@ namespace motionRecovery
             }
         }
 
-        // Asks the user to choose an exo file, if done launches the exo page, otherwise stays on this page
+        // Asks the user to choose an exo file, if done launches the exo page with the exercise in parameter, otherwise stays on this page
         private void Button_Click_ExercisePage(object sender, RoutedEventArgs e)
         {
-            // Create an instance of ExercisesReaderXML to handle reading exercises
-            ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
 
-            // OpenFileDialog allows the user to select a file
+            // OpenFileDialog allows the user to select a file. Show the dialog and get the result
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-
-            // Show the dialog and get the result
             bool? result = openFileDialog.ShowDialog();
 
-            string filePath = null;
+            string filePath = null; 
 
             // Check if the user selected a file,then get the selected file path, else stay on the current page
             if (result == true)
@@ -60,9 +45,13 @@ namespace motionRecovery
             {
                 return;
             }
+            ExercisesReaderXML exerciseReader = new ExercisesReaderXML(); // Class that reads the XML file to convert it into our data structure "exerciseMultiPosition"
+            ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition();
 
-            // Navigate to the ExercisePage with the selected file path
-            NavigationService.Navigate(new ExercisePage(filePath));
+            exerciseMultiPosition = exerciseReader.ReadExerciseFile(filePath);
+
+            // Navigate to the ExercisePage with the selected exerciseMultiPosition
+            NavigationService.Navigate(new ExercisePage(exerciseMultiPosition));
         }
 
 

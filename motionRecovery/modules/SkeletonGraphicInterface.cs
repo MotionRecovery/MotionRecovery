@@ -19,11 +19,48 @@ namespace motionRecovery
         private readonly Brush inferredJointBrush = Brushes.Yellow;
         private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
 
-        private readonly List<Pen> bodyColors;
+        private List<Tuple<JointType, JointType>> bones; // List of bones for body rendering
 
         public SkeletonGraphicInterface()
         {
-            bodyColors = new List<Pen>();
+
+            // Define bones as lines between two joints using collection initializer syntax
+            this.bones = new List<Tuple<JointType, JointType>>
+            {
+                // Torso
+                Tuple.Create(JointType.Head, JointType.Neck),
+                Tuple.Create(JointType.Neck, JointType.SpineShoulder),
+                Tuple.Create(JointType.SpineShoulder, JointType.SpineMid),
+                Tuple.Create(JointType.SpineMid, JointType.SpineBase),
+                Tuple.Create(JointType.SpineShoulder, JointType.ShoulderRight),
+                Tuple.Create(JointType.SpineShoulder, JointType.ShoulderLeft),
+                Tuple.Create(JointType.SpineBase, JointType.HipRight),
+                Tuple.Create(JointType.SpineBase, JointType.HipLeft),
+
+                // Right Arm
+                Tuple.Create(JointType.ShoulderRight, JointType.ElbowRight),
+                Tuple.Create(JointType.ElbowRight, JointType.WristRight),
+                Tuple.Create(JointType.WristRight, JointType.HandRight),
+                Tuple.Create(JointType.HandRight, JointType.HandTipRight),
+                Tuple.Create(JointType.WristRight, JointType.ThumbRight),
+
+                // Left Arm
+                Tuple.Create(JointType.ShoulderLeft, JointType.ElbowLeft),
+                Tuple.Create(JointType.ElbowLeft, JointType.WristLeft),
+                Tuple.Create(JointType.WristLeft, JointType.HandLeft),
+                Tuple.Create(JointType.HandLeft, JointType.HandTipLeft),
+                Tuple.Create(JointType.WristLeft, JointType.ThumbLeft),
+
+                // Right Leg
+                Tuple.Create(JointType.HipRight, JointType.KneeRight),
+                Tuple.Create(JointType.KneeRight, JointType.AnkleRight),
+                Tuple.Create(JointType.AnkleRight, JointType.FootRight),
+
+                // Left Leg
+                Tuple.Create(JointType.HipLeft, JointType.KneeLeft),
+                Tuple.Create(JointType.KneeLeft, JointType.AnkleLeft),
+                Tuple.Create(JointType.AnkleLeft, JointType.FootLeft)
+            };
         }
 
 
@@ -35,7 +72,7 @@ namespace motionRecovery
         /// <param name="drawingPen">specifies color to draw a specific body</param>
         /// /// <param name="bones">specifies the list of bones</param>
         /// <param name="dc">drawing context to draw to</param>
-        public void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, Pen drawingPen, List<Tuple<JointType, JointType>>  bones, DrawingContext dc)
+        public void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, Pen drawingPen, DrawingContext dc)
         {
             // Draw the bones
             foreach (var bone in bones)

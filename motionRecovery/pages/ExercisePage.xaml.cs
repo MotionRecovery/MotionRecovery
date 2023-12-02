@@ -5,139 +5,98 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace motionRecovery
 {
+    /// <summary>
+    /// Receives an exercise as input, and asks the user to perform it via Kinect motion recognition.
+    /// The user will have to do this series of positions, and ExercisePage will analyze if the user does this series of positions.
+    /// </summary>
     public partial class ExercisePage : Page, INotifyPropertyChanged
     {
-        // Variables
-        private KinectSensor kinectSensor = null; // Variable is used to interact with the Kinect sensor throughout the application 
+        // Used to print a message in the frontend
+        private string userPositionStatus = null;
+        private string exerciseNumber = null;
+        private string exerciseDescription = null;
+        private string statusText = null;
 
-        private SkeletonGraphicInterface skeletonGraphicInterface; //Used to draw the skeleton
+        // Kinect variables
+        private KinectSensor kinectSensor = null; // Used to interact with the Kinect sensor throughout the application
 
+        // Drawing variables
+        private SkeletonGraphicInterface skeletonGraphicInterface; // Used to draw the skeleton
         private DrawingGroup drawingGroup; // Drawing group for body rendering output
         private DrawingImage imageSource; // Drawing image that we will display
-        private CoordinateMapper coordinateMapper = null; // Coordinate mapper to map one type of point to another
+        private CoordinateMapper coordinateMapper = null; // Coordinate mapper to map one type of point to another, such as mapping depth points to color points or skeletal joint positions to depth points.
 
-        private const float InferredZPositionClamp = 0.1f; //Constant for clamping Z values of camera space points from being negative
+        // Constants
+        private const float InferredZPositionClamp = 0.1f; // Constant for clamping Z values of camera space points from being negative
 
+        // Body tracking variables
         private BodyFrameReader bodyFrameReader = null; // Reader for body frames
         private Body[] bodies = null; // Array for the bodies
-        private readonly List<Tuple<JointType, JointType>> bones;
 
-
+        // Display properties
         private int displayWidth; // Width of display (depth space)
         private int displayHeight; // Height of display (depth space)
         private List<Pen> bodyColors; // List of colors for each body tracked
 
-        private ExerciseWriterXML writerXML = new ExerciseWriterXML();
+        // Exercise tracking variables
+        private ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition(); // Keeps track of exercise positions
+        private int IndexPosition = 0; // Index to identify the current exercise position
+
+        // Timer variables
+        private System.Timers.Timer ruleTimer = new System.Timers.Timer(); // Timer for controlling exercise rules
+        private DateTime ruleTimerStartTime; // Start time for the rule timer
 
 
 
-
-        ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition();
-        int IndexPosition = 0;
-
-        private System.Timers.Timer ruleTimer = new System.Timers.Timer();
-        private DateTime ruleTimerStartTime;
-
-       
-
-        // Used to print a message in the frontend
-        private string userPositionStatus;
-        private string exerciseNumber;
-        private string exerciseDescription;
-        private string statusText = null;
-
-
-        public ExercisePage(String filePath)
+        // Constructor for ExercisePage that takes an ExerciseMultiPosition parameter
+        public ExercisePage(ExerciseMultiPosition exerciseMultiPosition)
         {
-            this.kinectSensor = KinectSensor.GetDefault(); // get the kinectSensor object
-            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged; // set IsAvailableChanged event notifier
+            this.exerciseMultiPosition = exerciseMultiPosition;
+
+            this.kinectSensor = KinectSensor.GetDefault(); // get the default Kinect sensor
+            this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged; // Attach an event handler for changes in sensor availability
             this.kinectSensor.Open();
-            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
+            this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText // Set the initial status text based on sensor availability
                                                             : Properties.Resources.NoSensorStatusText;
-            ExercisesReaderXML exerciseReader = new ExercisesReaderXML();
 
-            exerciseMultiPosition = exerciseReader.ReadExerciseFile(filePath);
-
+            // Initialize the SkeletonGraphicInterface for drawing skeletons
             this.skeletonGraphicInterface = new SkeletonGraphicInterface();
 
             // Skeleton Camera
-            // get the coordinate mapper
-            this.coordinateMapper = this.kinectSensor.CoordinateMapper;
-            // get the depth (display) extents
-            FrameDescription frameDescription = this.kinectSensor.DepthFrameSource.FrameDescription;
+            this.coordinateMapper = this.kinectSensor.CoordinateMapper; // Retrieve the coordinate mapper
+            FrameDescription frameDescription = this.kinectSensor.DepthFrameSource.FrameDescription; // Retrieve the depth frame source
 
-            // get size of joint space
+            // Retrieve the size of the joint space
             this.displayWidth = frameDescription.Width;
             this.displayHeight = frameDescription.Height;
 
-            // open the reader for the body frames
+            // Open the reader for body frames
             this.bodyFrameReader = this.kinectSensor.BodyFrameSource.OpenReader();
 
-            // a bone defined as a line between two joints
-            this.bones = new List<Tuple<JointType, JointType>>();
+            // Populate body colors, one for each BodyIndex. Each color corresponds to a different tracked body
+            this.bodyColors = new List<Pen>
+            {
+                new Pen(Brushes.Red, 6),
+                new Pen(Brushes.Orange, 6),
+                new Pen(Brushes.Green, 6),
+                new Pen(Brushes.Blue, 6),
+                new Pen(Brushes.Indigo, 6),
+                new Pen(Brushes.Violet, 6)
+            };
 
-            // Torso
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Head, JointType.Neck));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.Neck, JointType.SpineShoulder));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.SpineMid));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineMid, JointType.SpineBase));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineShoulder, JointType.ShoulderLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.SpineBase, JointType.HipLeft));
+            this.drawingGroup = new DrawingGroup(); // Create the drawing group used for rendering
+            this.imageSource = new DrawingImage(this.drawingGroup); // Create an image source for use in the image control
 
-            // Right Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderRight, JointType.ElbowRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowRight, JointType.WristRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.HandRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandRight, JointType.HandTipRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristRight, JointType.ThumbRight));
-
-            // Left Arm
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ShoulderLeft, JointType.ElbowLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.ElbowLeft, JointType.WristLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.HandLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HandLeft, JointType.HandTipLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.WristLeft, JointType.ThumbLeft));
-
-            // Right Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipRight, JointType.KneeRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeRight, JointType.AnkleRight));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleRight, JointType.FootRight));
-
-            // Left Leg
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.HipLeft, JointType.KneeLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.KneeLeft, JointType.AnkleLeft));
-            this.bones.Add(new Tuple<JointType, JointType>(JointType.AnkleLeft, JointType.FootLeft));
-
-            // populate body colors, one for each BodyIndex
-            this.bodyColors = new List<Pen>();
-
-            this.bodyColors.Add(new Pen(Brushes.Red, 6));
-            this.bodyColors.Add(new Pen(Brushes.Orange, 6));
-            this.bodyColors.Add(new Pen(Brushes.Green, 6));
-            this.bodyColors.Add(new Pen(Brushes.Blue, 6));
-            this.bodyColors.Add(new Pen(Brushes.Indigo, 6));
-            this.bodyColors.Add(new Pen(Brushes.Violet, 6));
-
-            // Create the drawing group we'll use for drawing
-            this.drawingGroup = new DrawingGroup();
-
-            // Create an image source that we can use in our image control
-            this.imageSource = new DrawingImage(this.drawingGroup);
-
-
-            this.DataContext = this; // use the window object as the view model in this simple example
-            this.InitializeComponent();  // initialize the components (controls) of the window
+            this.DataContext = this; // Set the window object as the view model
+            this.InitializeComponent(); // Initialize the window components (controls)
         }
-
 
         // INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         public event PropertyChangedEventHandler PropertyChanged;
-
 
         // Gets the bitmap to display
         public ImageSource ImageSource
@@ -145,25 +104,6 @@ namespace motionRecovery
             get
             {
                 return this.imageSource;
-            }
-        }
-
-        /// <summary>
-        /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
-        /// </summary>
-        /// <param name="sender">object sending the event</param>
-        /// <param name="e">event arguments</param>
-        private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
-        {
-            if (this.kinectSensor != null)
-            {
-                this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
-                                                                : Properties.Resources.SensorNotAvailableStatusText;
-            }
-            else
-            {
-                // Gérer le cas où le capteur Kinect n'est pas disponible
-                this.StatusText = "Kinect sensor not available";
             }
         }
 
@@ -180,7 +120,6 @@ namespace motionRecovery
             }
             ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
         }
-
 
         /// <summary>
         /// Execute shutdown tasks
@@ -203,7 +142,6 @@ namespace motionRecovery
                 this.kinectSensor = null;
             }
         }
-
 
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
@@ -253,7 +191,7 @@ namespace motionRecovery
                                 jointPoints[jointType] = new Point(depthSpacePoint.X, depthSpacePoint.Y);
                             }
 
-                            this.skeletonGraphicInterface.DrawBody(joints, jointPoints, drawPen, bones, dc);
+                            this.skeletonGraphicInterface.DrawBody(joints, jointPoints, drawPen, dc);
                             this.skeletonGraphicInterface.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
@@ -434,8 +372,25 @@ namespace motionRecovery
             return angleDegrees;
         }
 
+        /// <summary>
+        /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void Sensor_IsAvailableChanged(object sender, IsAvailableChangedEventArgs e)
+        {
+            if (this.kinectSensor != null)
+            {
+                this.StatusText = this.kinectSensor.IsAvailable ? Properties.Resources.RunningStatusText
+                                                                : Properties.Resources.SensorNotAvailableStatusText;
+            }
+            else
+            {
+                // Gérer le cas où le capteur Kinect n'est pas disponible
+                this.StatusText = "Kinect sensor not available";
+            }
+        }
 
-        
         private void Button_Click_stopExercise(object sender, RoutedEventArgs e)
         {
             // If a timer exist we delete it before to go back to the menu
@@ -475,7 +430,8 @@ namespace motionRecovery
         }
 
 
-        // SECTION TO PRINT TEST IN THE GRAPHICAL INTERFACE //
+
+        // SECTION TO PRINT TEXT IN THE GRAPHICAL INTERFACE //
         public string StatusText
         {
             get
