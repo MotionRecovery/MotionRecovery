@@ -474,18 +474,6 @@ namespace motionRecovery
             PassToNextRule();
         }
 
-        private double CalculateAngleWithDouble(double Point1, double Point2, double Point3, double Point4)
-        {
-            double deltaY = Point2 - Point3;
-            double deltaX = Point2 - Point4;
-            double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
-            double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
-            angleDegrees = angleDegrees * 1.5;
-
-            return angleDegrees;
-        }
-
-
 
         // SECTION TO PRINT TEST IN THE GRAPHICAL INTERFACE //
         public string StatusText
