@@ -1,6 +1,6 @@
 ﻿using Microsoft.Kinect;
 
-// Data Class. Used by the program to recognize positions via Kinect skeleton
+// Data Class. Used by the program to recognize positions via Kinect skeleton (old version, class no longer used today)
 namespace motionRecovery
 {
     internal class Position

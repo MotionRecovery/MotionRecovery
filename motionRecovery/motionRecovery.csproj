@@ -69,25 +69,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CreateExerciseXMLPage.xaml.cs">
+    <Compile Include="pages\CreateExerciseXMLPage.xaml.cs">
       <DependentUpon>CreateExerciseXMLPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateRuleXMLPage.xaml.cs">
+    <Compile Include="pages\CreateRuleXMLPage.xaml.cs">
       <DependentUpon>CreateRuleXMLPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ExerciseMultiPosition.cs" />
-    <Compile Include="ExerciseWriterXML.cs" />
-    <Compile Include="ParseJointType.cs" />
-    <Compile Include="SkeletonGraphicInterface.cs" />
-    <Page Include="CreateExerciseXMLPage.xaml">
+    <Compile Include="modules\ExerciseMultiPosition.cs" />
+    <Compile Include="modules\ExerciseWriterXML.cs" />
+    <Compile Include="modules\ParseJointType.cs" />
+    <Compile Include="modules\SkeletonGraphicInterface.cs" />
+    <Page Include="pages\CreateExerciseXMLPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateRuleXMLPage.xaml">
+    <Page Include="pages\CreateRuleXMLPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExerciseList.xaml">
+    <Page Include="pages\ExerciseList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,24 +99,24 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExercisesReaderXML.cs" />
-    <Compile Include="ExerciseList.xaml.cs">
+    <Compile Include="modules\ExercisesReaderXML.cs" />
+    <Compile Include="pages\ExerciseList.xaml.cs">
       <DependentUpon>ExerciseList.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ExercisePage.xaml">
+    <Page Include="pages\ExercisePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExercisePage.xaml.cs">
+    <Compile Include="pages\ExercisePage.xaml.cs">
       <DependentUpon>ExercisePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Position.cs" />
+    <Compile Include="modules\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
