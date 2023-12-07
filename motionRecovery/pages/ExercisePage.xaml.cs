@@ -195,9 +195,15 @@ namespace motionRecovery
                             this.skeletonGraphicInterface.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
+                            foreach (SimplePosition Positions in exerciseMultiPosition.Rules[IndexPosition].Positions)
+                            {
+                                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
+                                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
+                            }
 
-                            // CHECK RULES
-                            if (body != null && exerciseMultiPosition.Rules.Count != 0)
+
+                                // CHECK RULES
+                                if (body != null && exerciseMultiPosition.Rules.Count != 0)
                             {
                                 // If there are one position in the rule or not
                                 if (exerciseMultiPosition.Rules[IndexPosition].Positions.Count > 1)

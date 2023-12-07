@@ -70,7 +70,6 @@ namespace motionRecovery
         /// <param name="joints">joints to draw</param>
         /// <param name="jointPoints">translated positions of joints to draw</param>
         /// <param name="drawingPen">specifies color to draw a specific body</param>
-        /// /// <param name="bones">specifies the list of bones</param>
         /// <param name="dc">drawing context to draw to</param>
         public void DrawBody(IReadOnlyDictionary<JointType, Joint> joints, IDictionary<JointType, Point> jointPoints, Pen drawingPen, DrawingContext dc)
         {
@@ -199,6 +198,33 @@ namespace motionRecovery
                     Brushes.Red,
                     null,
                     new Rect(displayWidth - ClipBoundsThickness, 0, ClipBoundsThickness, displayHeight));
+            }
+        }
+
+        /// <summary>
+        /// Enlarges the specified joint and changes its color.
+        /// </summary>
+        /// <param name="jointType">The type of joint to enlarge and change color.</param>
+        /// <param name="dc">drawing context to draw to</param>
+        /// <param name="jointPoints">the differents positions of joints</param>
+        public void SelectJointGraphical(JointType jointType, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        {
+
+            // Increase the size of the joint
+            double enlargedJointSize = JointThickness * 2.5; 
+
+            // Define a new color for the enlarged joint
+            Brush enlargedJointColor = new SolidColorBrush(Colors.Red);
+
+            // Check if the jointType exists in the jointPoints dictionary
+            if (jointPoints.TryGetValue(jointType, out Point jointPosition))
+            {
+                // Update the joint size and color of the specified joint
+                dc.DrawEllipse(enlargedJointColor, null, jointPosition, enlargedJointSize, enlargedJointSize);
+            }
+            else
+            {
+                Console.WriteLine("Joint not found in the jointPoints dictionary.");
             }
         }
     }
