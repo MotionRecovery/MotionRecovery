@@ -195,23 +195,17 @@ namespace motionRecovery
                             this.skeletonGraphicInterface.DrawHand(body.HandLeftState, jointPoints[JointType.HandLeft], dc);
                             this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
-                            foreach (SimplePosition Positions in exerciseMultiPosition.Rules[IndexPosition].Positions)
-                            {
-                                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
-                                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
-                            }
-
 
                                 // CHECK RULES
-                                if (body != null && exerciseMultiPosition.Rules.Count != 0)
+                            if (body != null && exerciseMultiPosition.Rules.Count != 0)
                             {
                                 // If there are one position in the rule or not
                                 if (exerciseMultiPosition.Rules[IndexPosition].Positions.Count > 1)
                                 {
-                                    checkMultiplePosition(body);
+                                    checkMultiplePosition(body, jointPoints, dc);
                                 } else
                                 {
-                                    CheckOnePosition(body);
+                                    CheckOnePosition(body, jointPoints, dc);
                                 }
                             }
                                     
@@ -225,7 +219,7 @@ namespace motionRecovery
             }
         }
 
-        private void checkMultiplePosition(Body body)
+        private void checkMultiplePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
         {
             bool CheckPos = true; // Used to check if all the positions are respected
 
@@ -238,7 +232,14 @@ namespace motionRecovery
                 Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
                 String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
 
-                if (CheckPosition(Joint1, Joint2, AngleMin, AngleMax, Description, PositionTime) == false)
+                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
+                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
+                this.skeletonGraphicInterface.DisplayWantedAngle(Positions.Joint1, Positions.AngleMin, Positions.AngleMax, jointPoints, dc);
+                double currentAngle = CalculateAngle(body.Joints[Positions.Joint1], body.Joints[Positions.Joint2]);
+                this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc);
+
+
+                if (CheckAngle(Joint1, Joint2, AngleMin, AngleMax, currentAngle, Description, PositionTime) == false)
                 {
                     CheckPos = false;
                 }
@@ -278,7 +279,8 @@ namespace motionRecovery
             }
         }
 
-        private void CheckOnePosition(Body body)
+
+        private void CheckOnePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
         {
             Joint Joint1 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1];
             Joint Joint2 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2];
@@ -287,9 +289,16 @@ namespace motionRecovery
             Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
             String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
 
+            this.skeletonGraphicInterface.SelectJointGraphical(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, jointPoints, dc);
+            this.skeletonGraphicInterface.SelectJointGraphical(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2, jointPoints, dc);
+            this.skeletonGraphicInterface.DisplayWantedAngle(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin, exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax, jointPoints, dc);
+            double currentAngle = CalculateAngle(body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1], body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2]);
+            this.skeletonGraphicInterface.DisplayCurrentAngle(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, currentAngle, jointPoints, dc);
+
             // Calculate the angle between the head and neck using a custom function
             double angle = CalculateAngle(Joint1, Joint2);
-            if (Math.Abs(angle) > AngleMin && Math.Abs(angle) < AngleMax)
+
+            if (CheckAngle(Joint1, Joint2, AngleMin, AngleMax, currentAngle, Description, PositionTime))
             {
 
                 // check if ruleTime exist
@@ -306,12 +315,12 @@ namespace motionRecovery
                 // Calculate the time remaining before the end of the exercise
                 TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                 TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
-                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
+                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle%360):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
                 this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
             }
             else
             {
-                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle):F1}";
+                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle%360):F1}";
                 if (ruleTimer != null)
                 {
                     ruleTimer.Stop();
@@ -319,17 +328,20 @@ namespace motionRecovery
                     ruleTimer = null;
                 }
             }
+
         }
 
-        
 
-        // Check the user position, compare with the rules
-        private bool CheckPosition(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, String Description, double PositionTime)
+
+        // Check the user position, compare with the rules.
+        // Check if the current angle is within the specified range, considering cases where the angle range crosses 360 degrees.
+        // If AngleMax is greater than AngleMin, verify if angle is between AngleMin and AngleMax.
+        // If AngleMin is greater than AngleMax, consider two sub-cases:
+        //   - If angle is greater than AngleMin and less than or equal to 360.
+        //   - If angle is less than or equal to AngleMax.
+        private bool CheckAngle(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, double angle, String Description, double PositionTime)
         {
-            // Calculate the angle between the head and neck using a custom function
-            double angle = CalculateAngle(Joint1, Joint2);
-
-            if (Math.Abs(angle) > AngleMin && Math.Abs(angle) < AngleMax)
+            if ((AngleMax > AngleMin && angle >= AngleMin && angle <= AngleMax) || (AngleMin > AngleMax && ((angle > AngleMin && angle <= 360) || (angle <= AngleMax))))
             {
                 return true;
             }
@@ -372,11 +384,19 @@ namespace motionRecovery
         {
             double deltaY = joint2.Position.Y - joint1.Position.Y;
             double deltaX = joint2.Position.X - joint1.Position.X;
+
             double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
             double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
 
+            // Ensure the angle is in the range [0, 360)
+            if (angleDegrees < 0)
+            {
+                angleDegrees += 360;
+            }
+
             return angleDegrees;
         }
+
 
         /// <summary>
         /// Handles the event which the sensor becomes unavailable (E.g. paused, closed, unplugged).

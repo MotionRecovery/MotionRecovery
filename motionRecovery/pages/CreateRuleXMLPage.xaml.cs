@@ -122,11 +122,6 @@ namespace motionRecovery
             double minAngle = double.Parse(minAngleText);
             double maxAngle = double.Parse(maxAngleText);
 
-            if (minAngle > maxAngle)
-            {
-                DisplayError("\r\nThe MinAngle must be less than or equal to the MaxAngle.");
-                return;
-            }
 
             SimplePosition newPosition = new SimplePosition
             {

@@ -1,6 +1,4 @@
-﻿using Microsoft.Kinect;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Xml;
 
 namespace motionRecovery
@@ -43,8 +41,8 @@ namespace motionRecovery
                             {
                                 Joint1 = parseJointType.ParseToJoint(positionNode.SelectSingleNode("Membre1").InnerText.Trim()),
                                 Joint2 = parseJointType.ParseToJoint(positionNode.SelectSingleNode("Membre2").InnerText.Trim()),
-                                AngleMin = Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim()),
-                                AngleMax = Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim())
+                                AngleMin = (Convert.ToDouble(positionNode.SelectSingleNode("AngleMin").InnerText.Trim()) + 360) % 360,
+                                AngleMax = (Convert.ToDouble(positionNode.SelectSingleNode("AngleMax").InnerText.Trim()) + 360) % 360
                             };
 
                             exerciseRule.Positions.Add(simplePosition);

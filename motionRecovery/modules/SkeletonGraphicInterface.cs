@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
@@ -211,7 +212,7 @@ namespace motionRecovery
         {
 
             // Increase the size of the joint
-            double enlargedJointSize = JointThickness * 2.5; 
+            double enlargedJointSize = JointThickness * 2; 
 
             // Define a new color for the enlarged joint
             Brush enlargedJointColor = new SolidColorBrush(Colors.Red);
@@ -227,5 +228,82 @@ namespace motionRecovery
                 Console.WriteLine("Joint not found in the jointPoints dictionary.");
             }
         }
+
+        /// <summary>
+        /// Display lines representing the wanted angle range from joint.
+        /// </summary>
+        /// <param name="jointType">The type of joint to display the angle for.</param>
+        /// <param name="angleMin">The minimum angle of the wanted range.</param>
+        /// <param name="angleMax">The maximum angle of the wanted range.</param>
+        /// <param name="jointPoints">Translated positions of joints to draw.</param>
+        /// <param name="dc">Drawing context to draw to.</param>
+        public void DisplayWantedAngle(JointType jointType, double angleMin, double angleMax, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        {
+            int lineLength = 60;
+            if (jointPoints.TryGetValue(jointType, out Point jointPosition))
+            {
+                // Calculate the positions of the lines based on the angles
+                Point lineStartMin = CalculatePointFromAngle(jointPosition, angleMin, lineLength); 
+                Point lineStartMax = CalculatePointFromAngle(jointPosition, angleMax, lineLength);
+
+                // Draw lines representing the angle range
+                dc.DrawLine(new Pen(Brushes.Red, 2), jointPosition, lineStartMin);
+                dc.DrawLine(new Pen(Brushes.Red, 2), jointPosition, lineStartMax);
+
+                // Calculate the midpoint between the lines
+                Point midPointMin = new Point((lineStartMin.X + jointPosition.X) / 2, (lineStartMin.Y + jointPosition.Y) / 2);
+                Point midPointMax = new Point((jointPosition.X + lineStartMax.X) / 2, (jointPosition.Y + lineStartMax.Y) / 2);
+
+
+            }
+            else
+            {
+                Console.WriteLine($"Joint not found in the jointPoints dictionary: {jointType}");
+            }
+        }
+
+        /// <summary>
+        /// Display the current angle value next to a joint.
+        /// </summary>
+        /// <param name="jointType">The type of joint to display the current angle for.</param>
+        /// <param name="currentAngle">The current angle to display.</param>
+        /// <param name="jointPoints">Translated positions of joints to draw.</param>
+        /// <param name="dc">Drawing context to draw to.</param>
+        public void DisplayCurrentAngle(JointType jointType, double currentAngle, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        {
+            if (jointPoints.TryGetValue(jointType, out Point jointPosition))
+            {
+                // Draw text displaying the current angle next to the joint
+                FormattedText formattedText = new FormattedText(
+                    $"{currentAngle:F1}°",
+                    CultureInfo.InvariantCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface("Arial"),
+                    12,
+                    Brushes.Red);
+
+                dc.DrawText(formattedText, new Point(jointPosition.X + 20, jointPosition.Y));
+            }
+            else
+            {
+                Console.WriteLine($"Joint not found in the jointPoints dictionary: {jointType}");
+            }
+        }
+
+
+        // With a point, a angle and a distance we calculate a new point.
+        private Point CalculatePointFromAngle(Point origin, double angleDegrees, double distance)
+        {
+            // Ensure the angle is in the range [0, 360)
+            double normalizedAngle = angleDegrees % 360;
+
+            double angleRadians = normalizedAngle * (Math.PI / 180);
+            double cos = Math.Cos(angleRadians);
+            double sin = Math.Sin(angleRadians);
+            double x = origin.X + distance * cos;
+            double y = origin.Y - distance * sin; // I don't know whyyy, but we must use - the distance and not + (otherwise it gives a point in the other direction from a Y axis point of view)
+            return new Point(x, y);
+        }
+
     }
 }
