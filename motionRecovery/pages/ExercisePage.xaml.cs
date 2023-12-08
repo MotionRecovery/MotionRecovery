@@ -143,6 +143,29 @@ namespace motionRecovery
             }
         }
 
+        /// <summary>
+        /// Event handler called when a body frame is received from the sensor.
+        /// Processes the body frame data, draws the skeletal tracking data, and checks exercise rules.
+        /// </summary>
+        /// <param name="sender">The object sending the event.</param>
+        /// <param name="e">Event arguments containing the body frame data.</param>
+        /// <remarks>
+        /// This method processes the body frame data, including drawing skeletal tracking data on the display.
+        /// It checks for the presence of tracked bodies, extracts joint positions, and renders the bodies and hands.
+        /// Additionally, it invokes the <see cref="CheckMultiplePosition"/> method to validate the user's position against
+        /// multiple joint positions and angles specified in the exercise rules.
+        /// 
+        /// Environment:
+        /// - <see cref="bodies"/> (global Body[]): Represents an array of tracked bodies in the current frame.
+        /// - <see cref="drawingGroup"/> (global DrawingGroup): Represents the drawing group used for rendering.
+        /// - <see cref="bodyColors"/> (global Pen[]): Represents an array of pens used for drawing body outlines.
+        /// - <see cref="displayWidth"/> (global double): Represents the width of the display.
+        /// - <see cref="displayHeight"/> (global double): Represents the height of the display.
+        /// - <see cref="coordinateMapper"/> (global CoordinateMapper): Represents the coordinate mapper for mapping joint positions.
+        /// - <see cref="skeletonGraphicInterface"/> (global SkeletonGraphicInterface): Represents the graphic interface for skeleton rendering.
+        /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
+        /// - <see cref="checkMultiplePosition"/> (global method): Represents the method to check multiple joint positions and angles.
+        /// </remarks>
         private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e)
         {
             bool dataReceived = false;
@@ -196,21 +219,11 @@ namespace motionRecovery
                             this.skeletonGraphicInterface.DrawHand(body.HandRightState, jointPoints[JointType.HandRight], dc);
 
 
-                                // CHECK RULES
+                            // CHECK RULES
                             if (body != null && exerciseMultiPosition.Rules.Count != 0)
                             {
-                                // If there are one position in the rule or not
-                                if (exerciseMultiPosition.Rules[IndexPosition].Positions.Count > 1)
-                                {
-                                    checkMultiplePosition(body, jointPoints, dc);
-                                } else
-                                {
-                                    CheckOnePosition(body, jointPoints, dc);
-                                }
+                                checkMultiplePosition(body, jointPoints, dc);
                             }
-                                    
-
-
                         }
                     }
 
@@ -219,6 +232,31 @@ namespace motionRecovery
             }
         }
 
+        /// <summary>
+        /// Checks if the user's body complies to different joint positions and angles for a specified period.
+        /// Upadate the userPositionStatus.
+        /// It visually displays the joint positions, wanted angles, and current angles.
+        /// </summary>
+        /// <param name="body">The body data representing the user's skeletal information.</param>
+        /// <param name="jointPoints">A dictionary containing joint points for graphical rendering.</param>
+        /// <param name="dc">The DrawingContext used for graphical rendering.</param>
+        /// <remarks>
+        /// This method iterates over multiple joint positions and associated angle constraints specified in the
+        /// current exercise rule. It visually displays the joint positions, wanted angles, and current angles.
+        /// The method checks if the user's current angles for each position are within the specified range.
+        /// If all positions are respected, it initiates a timer for the next rule, and the user position status
+        /// is updated accordingly. If the positions are not respected, the timer is stopped, and the user position
+        /// status reflects a failure.
+        /// 
+        /// Environment:
+        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current exercise rule.
+        /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
+        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
+        /// - <see cref="UserPositionStatus"/> (global string): Represents the status of the user's position.
+        /// - <see cref="ruleTimer"/> (global System.Timers.Timer): Represents the timer used for rule transition.
+        /// - <see cref="ruleTimerStartTime"/> (global DateTime): Represents the start time of the rule timer.
+        /// </remarks>
         private void checkMultiplePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
         {
             bool CheckPos = true; // Used to check if all the positions are respected
@@ -239,7 +277,7 @@ namespace motionRecovery
                 this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc);
 
 
-                if (CheckAngle(Joint1, Joint2, AngleMin, AngleMax, currentAngle, Description, PositionTime) == false)
+                if (CheckAngle(AngleMin, AngleMax, currentAngle) == false)
                 {
                     CheckPos = false;
                 }
@@ -263,7 +301,6 @@ namespace motionRecovery
                     TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
                     this.UserPositionStatus = $"OK => MultiPosition, time remaining = {remaining.TotalSeconds:F1} seconds";
-                    this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
                 }
                 else
                 {
@@ -280,66 +317,25 @@ namespace motionRecovery
         }
 
 
-        private void CheckOnePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
-        {
-            Joint Joint1 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1];
-            Joint Joint2 = body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2];
-            Double AngleMin = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin;
-            Double AngleMax = exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax;
-            Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
-            String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
-
-            this.skeletonGraphicInterface.SelectJointGraphical(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, jointPoints, dc);
-            this.skeletonGraphicInterface.SelectJointGraphical(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2, jointPoints, dc);
-            this.skeletonGraphicInterface.DisplayWantedAngle(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMin, exerciseMultiPosition.Rules[IndexPosition].Positions[0].AngleMax, jointPoints, dc);
-            double currentAngle = CalculateAngle(body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1], body.Joints[exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint2]);
-            this.skeletonGraphicInterface.DisplayCurrentAngle(exerciseMultiPosition.Rules[IndexPosition].Positions[0].Joint1, currentAngle, jointPoints, dc);
-
-            // Calculate the angle between the head and neck using a custom function
-            double angle = CalculateAngle(Joint1, Joint2);
-
-            if (CheckAngle(Joint1, Joint2, AngleMin, AngleMax, currentAngle, Description, PositionTime))
-            {
-
-                // check if ruleTime exist
-                if (ruleTimer == null)
-                {
-                    // If rulerTimer doesn't exist, create it
-                    ruleTimer = new System.Timers.Timer();
-                    ruleTimer.Elapsed += RuleTimerElapsed;
-                    ruleTimer.AutoReset = false; // timer does not repeat automatically
-                    ruleTimer.Interval = PositionTime * 1000;
-                    ruleTimer.Start();
-                    ruleTimerStartTime = DateTime.Now;
-                }
-                // Calculate the time remaining before the end of the exercise
-                TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
-                TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
-                this.UserPositionStatus = $"OK => angle: {Math.Abs(angle%360):F1}, time remaining = {remaining.TotalSeconds:F1} seconds";
-                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
-            }
-            else
-            {
-                this.UserPositionStatus = $"KO => angle: {Math.Abs(angle%360):F1}";
-                if (ruleTimer != null)
-                {
-                    ruleTimer.Stop();
-                    ruleTimer.Dispose();
-                    ruleTimer = null;
-                }
-            }
-
-        }
 
 
-
-        // Check the user position, compare with the rules.
-        // Check if the current angle is within the specified range, considering cases where the angle range crosses 360 degrees.
-        // If AngleMax is greater than AngleMin, verify if angle is between AngleMin and AngleMax.
-        // If AngleMin is greater than AngleMax, consider two sub-cases:
-        //   - If angle is greater than AngleMin and less than or equal to 360.
-        //   - If angle is less than or equal to AngleMax.
-        private bool CheckAngle(Joint Joint1, Joint Joint2, Double AngleMin, Double AngleMax, double angle, String Description, double PositionTime)
+        /// <summary>
+        /// Checks if the provided angle falls within a specified range, considering cases where the range crosses 360 degrees.
+        /// </summary>
+        /// <param name="angleMin">The minimum angle of the specified range.</param>
+        /// <param name="angleMax">The maximum angle of the specified range.</param>
+        /// <param name="angle">The angle to be checked.</param>
+        /// <returns>
+        /// True if the angle is within the specified range; otherwise, false.
+        /// </returns>
+        /// <remarks>
+        ///  Check if the current angle is within the specified range, considering cases where the angle range crosses 360 degrees.
+        /// If AngleMax is greater than AngleMin, verify if angle is between AngleMin and AngleMax.
+        /// If AngleMin is greater than AngleMax, consider two sub-cases:
+        ///   - If angle is greater than AngleMin and less than or equal to 360.
+        ///   - If angle is less than or equal to AngleMax.
+        /// </remarks>
+        private bool CheckAngle(Double AngleMin, Double AngleMax, double angle)
         {
             if ((AngleMax > AngleMin && angle >= AngleMin && angle <= AngleMax) || (AngleMin > AngleMax && ((angle > AngleMin && angle <= 360) || (angle <= AngleMax))))
             {
@@ -351,6 +347,18 @@ namespace motionRecovery
             }
         }
 
+        /// <summary>
+        /// Event handler called when the rule timer elapses. Pass to the next Rule/exercise and delete the timer
+        /// </summary>
+        /// <param name="sender">The object sending the event.</param>
+        /// <param name="e">Event arguments containing information about the elapsed time.</param>
+        /// <remarks>
+        /// Environment:
+        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current rule.
+        /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
+        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
+        /// </remarks>
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             PassToNextRule();
@@ -359,6 +367,16 @@ namespace motionRecovery
             ruleTimer = null;
         }
 
+        /// <summary>
+        /// Moves to the next rule in a sequence of exercises, if available.
+        /// </summary>
+        /// <remarks>
+        /// Environment:
+        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current rule.
+        /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
+        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
+        /// </remarks>
         private void PassToNextRule()
         {
             if (IndexPosition < exerciseMultiPosition.Rules.Count - 1)   
@@ -369,6 +387,16 @@ namespace motionRecovery
             }
         }
 
+        /// <summary>
+        /// Moves to the previous rule in a sequence of exercises, if available.
+        /// <remarks>
+        /// environment :
+        /// <see cref="IndexPosition"/> global int: the index of the current rule
+        /// <see cref="exerciseMultiPosition"/> global ExerciseMultiPosition: the data structure of the exercise
+        /// <see cref="ExerciseNumber"/> global string: display to the user the number of the Exercise/Rule
+        /// <see cref="ExerciseDescription"/> global string: display to the user the description of the Exercise/Rule
+        /// </remarks>
+        /// </summary>
         private void PassToPreviousRule()
         {
             if (IndexPosition>0)
@@ -379,7 +407,12 @@ namespace motionRecovery
             }
         }
 
-        // Calculate the angle between two points
+        /// <summary>
+        /// Calculates the angle in degrees between two joints in a 2D space.
+        /// </summary>
+        /// <param name="joint1">The first joint</param>
+        /// <param name="joint2">The second joint</param>
+        /// <returns>The angle in degrees between the two joints</returns>
         public double CalculateAngle(Joint joint1, Joint joint2)
         {
             double deltaY = joint2.Position.Y - joint1.Position.Y;
@@ -388,7 +421,7 @@ namespace motionRecovery
             double angleRad = Math.Atan2(deltaY, deltaX); // Use arc tangent to calculate angle
             double angleDegrees = angleRad * (180.0 / Math.PI); // Translated from radian to degree
 
-            // Ensure the angle is in the range [0, 360)
+            // To ensure the angle is in the range [0, 360].
             if (angleDegrees < 0)
             {
                 angleDegrees += 360;
