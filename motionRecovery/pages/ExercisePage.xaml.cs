@@ -281,8 +281,7 @@ namespace motionRecovery
                 // Check if this position respect the rule.
                 Boolean AngleAccepted = CheckAngle(AngleMin, AngleMax, currentAngle);
 
-                positionDetails.AppendLine($" + {Positions.Joint1} - {Positions.Joint2}");
-                positionDetails.AppendLine($"       Current Angle: {currentAngle:F1}°");
+                positionDetails.AppendLine($" + {Positions.Joint1} - {Positions.Joint2} = {currentAngle:F1}°");
                 positionDetails.AppendLine($"       Wanted Angle: {AngleMin:F1}° - {AngleMax:F2}°");
 
 

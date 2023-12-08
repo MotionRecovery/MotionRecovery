@@ -19,7 +19,7 @@
         </StackPanel>
         
         <!-- Name and Description of the exo -->
-        <TextBlock Text="{Binding ExerciseName}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="26" FontWeight="Bold" Margin="270,20,0,0" Width="900" Height="30" TextWrapping="Wrap"/>
+        <TextBlock Text="{Binding ExerciseName}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="26" FontWeight="Bold" Margin="270,20,0,0" Width="900" Height="35" TextWrapping="Wrap"/>
         <TextBlock Text="{Binding ExerciseMainDescription}" HorizontalAlignment="Left" FontSize="16" VerticalAlignment="Top" Margin="270,55,0,0"  Width="900" Height="55" TextWrapping="Wrap"/>
 
         <!-- Stop excercise Btn-->
