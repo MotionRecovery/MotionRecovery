@@ -26,9 +26,35 @@
         <Button Content="Stop exercising" Click="Button_Click_stopExercise" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,25,0,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
 
         <!-- Previous and skip cercise Btn-->
-        <Button Content="Skip Exercise" Click="Button_Click_skipExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,45,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
-        <Button Content="Previous Exercise" Click="Button_Click_previousExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,350,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
-        
+        <Button x:Name="btnSkipExercise" Content="Skip Exercise" Click="Button_Click_skipExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,45,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsMaxRule}" Value="true">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsMaxRule}" Value="false">
+                            <Setter Property="IsEnabled" Value="true" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button Content="Previous Exercise" Click="Button_Click_previousExercise" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,120,350,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22">
+            <Button.Style>
+                <Style TargetType="Button">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFirstRule}" Value="true">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsFirstRule}" Value="false">
+                            <Setter Property="IsEnabled" Value="true" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
         <!-- Exercise Description -->
         <Border Background="#FFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,40,0" Width="500" Height="530" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Grid>

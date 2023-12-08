@@ -47,7 +47,8 @@ namespace motionRecovery
 
         // Exercise tracking variables
         private ExerciseMultiPosition exerciseMultiPosition = new ExerciseMultiPosition(); // Keeps track of exercise positions
-        private int IndexPosition = 0; // Index to identify the current exercise position
+        private int indexRule = 0; // Index to identify the current exercise position
+        private int maxRule = 0;
 
         // Timer variables
         private System.Timers.Timer ruleTimer = new System.Timers.Timer(); // Timer for controlling exercise rules
@@ -61,6 +62,8 @@ namespace motionRecovery
         public ExercisePage(ExerciseMultiPosition exerciseMultiPosition)
         {
             this.exerciseMultiPosition = exerciseMultiPosition;
+
+            maxRule = exerciseMultiPosition.Rules.Count;
 
             this.kinectSensor = KinectSensor.GetDefault(); // get the default Kinect sensor
             this.kinectSensor.IsAvailableChanged += this.Sensor_IsAvailableChanged; // Attach an event handler for changes in sensor availability
@@ -123,7 +126,7 @@ namespace motionRecovery
             {
                 this.bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
-            ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
+            ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
         }
 
         /// <summary>
@@ -254,7 +257,7 @@ namespace motionRecovery
         /// status reflects a failure.
         /// 
         /// Environment:
-        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current exercise rule.
+        /// - <see cref="indexRule"/> (global int): Represents the index of the current exercise rule.
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
         /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
@@ -268,14 +271,14 @@ namespace motionRecovery
 
             StringBuilder positionDetails = new StringBuilder();
 
-            foreach (SimplePosition Positions in exerciseMultiPosition.Rules[IndexPosition].Positions)
+            foreach (SimplePosition Positions in exerciseMultiPosition.Rules[indexRule].Positions)
             {
                 Joint Joint1 = body.Joints[Positions.Joint1];
                 Joint Joint2 = body.Joints[Positions.Joint2];
                 Double AngleMin = Positions.AngleMin;
                 Double AngleMax = Positions.AngleMax;
-                Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
-                String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
+                Double PositionTime = exerciseMultiPosition.Rules[indexRule].PositionTime;
+                String Description = exerciseMultiPosition.Rules[indexRule].Description;
                 double currentAngle = CalculateAngle(body.Joints[Positions.Joint1], body.Joints[Positions.Joint2]);
 
                 // Check if this position respect the rule.
@@ -328,13 +331,13 @@ namespace motionRecovery
 
                     this.ExerciseValidation = $"OK: time remaining = {remaining.TotalSeconds:F1} seconds";
 
-                    this.ExerciseValid = true ;
+                    this.ExerciseValid = true; // used in the frontend
                 }
                 else
                 {
                     this.ExerciseValidation = $"KO";
 
-                    this.ExerciseValid = false;
+                    this.ExerciseValid = false; // used in the frontend
 
                     if (ruleTimer != null)
                     {
@@ -386,7 +389,6 @@ namespace motionRecovery
         /// <param name="e">Event arguments containing information about the elapsed time.</param>
         /// <remarks>
         /// Environment:
-        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current rule.
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
         /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
@@ -404,26 +406,29 @@ namespace motionRecovery
         /// </summary>
         /// <remarks>
         /// Environment:
-        /// - <see cref="IndexPosition"/> (global int): Represents the index of the current rule.
+        /// - <see cref="indexRule"/> (global int): Represents the index of the current rule.
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
         /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
         /// </remarks>
         private void PassToNextRule()
         {
-            if (IndexPosition < exerciseMultiPosition.Rules.Count - 1)   
+            if (indexRule < exerciseMultiPosition.Rules.Count - 1)   
             {
-                IndexPosition++;
-                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
-                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                indexRule++;
+                this.ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[indexRule].Description}";
             }
+
+            this.IsFirstRule = (indexRule == 0); // used in the front
+            this.IsMaxRule = (maxRule == (indexRule + 1)); // used in the front
         }
 
         /// <summary>
         /// Moves to the previous rule in a sequence of exercises, if available.
         /// <remarks>
         /// environment :
-        /// <see cref="IndexPosition"/> global int: the index of the current rule
+        /// <see cref="indexRule"/> global int: the index of the current rule
         /// <see cref="exerciseMultiPosition"/> global ExerciseMultiPosition: the data structure of the exercise
         /// <see cref="ExerciseNumber"/> global string: display to the user the number of the Exercise/Rule
         /// <see cref="ExerciseDescription"/> global string: display to the user the description of the Exercise/Rule
@@ -431,12 +436,15 @@ namespace motionRecovery
         /// </summary>
         private void PassToPreviousRule()
         {
-            if (IndexPosition>0)
+            if (indexRule > 0)
             {
-                IndexPosition--;
-                this.ExerciseNumber = $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}";
-                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                indexRule--;
+                this.ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.ExerciseDescription = $"{exerciseMultiPosition.Rules[indexRule].Description}";
             }
+
+            this.IsFirstRule = (indexRule == 0); // used in the front
+            this.IsMaxRule = (maxRule == (indexRule + 1)); // used in the front
         }
 
         /// <summary>
@@ -571,6 +579,38 @@ namespace motionRecovery
             }
         }
 
+        public Boolean IsFirstRule
+        {
+            get
+            {
+                return (indexRule == 0);
+
+            }
+            set
+            {
+                if (this.PropertyChanged != null)
+                {
+                    this.PropertyChanged(this, new PropertyChangedEventArgs("IsFirstRule"));
+                }
+            }
+        }
+
+        public Boolean IsMaxRule
+        {
+            get
+            {
+                return (maxRule == (indexRule + 1));
+
+            }
+            set
+            {
+                if (this.PropertyChanged != null)
+                {
+                    this.PropertyChanged(this, new PropertyChangedEventArgs("IsMaxRule"));
+                }
+            }
+        }
+
         public string ExerciseValidation
         {
             get { return this.exerciseValidation; }
@@ -607,7 +647,7 @@ namespace motionRecovery
 
         public string ExerciseNumber
         {
-            get { return $"Exercise {IndexPosition + 1}/{exerciseMultiPosition.Rules.Count}"; }
+            get { return $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}"; }
             set
             {
                 if (exerciseNumber != value)
@@ -627,7 +667,7 @@ namespace motionRecovery
             {
                 if (exerciseMultiPosition.Rules.Count != 0)
                 {
-                    return $"{exerciseMultiPosition.Rules[IndexPosition].Description}";
+                    return $"{exerciseMultiPosition.Rules[indexRule].Description}";
                 }
                 else
                 {
