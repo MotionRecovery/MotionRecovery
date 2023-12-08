@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
+using System.Text;
 
 namespace motionRecovery
 {
@@ -19,6 +20,8 @@ namespace motionRecovery
         private string exerciseNumber = null;
         private string exerciseDescription = null;
         private string statusText = null;
+        private string exerciseValidation = null;    
+        private Boolean exerciseValid = true;
 
 
         // Kinect variables
@@ -263,6 +266,8 @@ namespace motionRecovery
         {
             bool CheckPos = true; // Used to check if all the positions are respected
 
+            StringBuilder positionDetails = new StringBuilder();
+
             foreach (SimplePosition Positions in exerciseMultiPosition.Rules[IndexPosition].Positions)
             {
                 Joint Joint1 = body.Joints[Positions.Joint1];
@@ -274,13 +279,18 @@ namespace motionRecovery
                 double currentAngle = CalculateAngle(body.Joints[Positions.Joint1], body.Joints[Positions.Joint2]);
 
                 // Check if this position respect the rule.
-                Boolean AngleAccepeted = CheckAngle(AngleMin, AngleMax, currentAngle);
+                Boolean AngleAccepted = CheckAngle(AngleMin, AngleMax, currentAngle);
+
+                positionDetails.AppendLine($" + {Positions.Joint1} - {Positions.Joint2}");
+                positionDetails.AppendLine($"       Current Angle: {currentAngle:F1}°");
+                positionDetails.AppendLine($"       Wanted Angle: {AngleMin:F1}° - {AngleMax:F2}°");
+
 
                 // Display the graphical assistance
                 if (DisplayGraphicalHelp)
                 {
                     Color positionColor;
-                    if (AngleAccepeted)
+                    if (AngleAccepted)
                     {
                         positionColor = Colors.Green;
                     } else
@@ -294,7 +304,7 @@ namespace motionRecovery
                     this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc, positionColor);
                 }
 
-                if (AngleAccepeted == false)
+                if (AngleAccepted == false)
                 {
                     CheckPos = false;
                 }
@@ -317,11 +327,15 @@ namespace motionRecovery
                     TimeSpan elapsed = DateTime.Now - ruleTimerStartTime;
                     TimeSpan remaining = TimeSpan.FromMilliseconds(ruleTimer.Interval) - elapsed;
 
-                    this.UserPositionStatus = $"OK => MultiPosition, time remaining = {remaining.TotalSeconds:F1} seconds";
+                    this.ExerciseValidation = $"OK: time remaining = {remaining.TotalSeconds:F1} seconds";
+
+                    this.ExerciseValid = true ;
                 }
                 else
                 {
-                    this.UserPositionStatus = $"KO => MultiPosition,";
+                    this.ExerciseValidation = $"KO";
+
+                    this.ExerciseValid = false;
 
                     if (ruleTimer != null)
                     {
@@ -331,6 +345,8 @@ namespace motionRecovery
                     }
                 }
             }
+
+            this.UserPositionStatus = positionDetails.ToString();
         }
 
 
@@ -551,6 +567,40 @@ namespace motionRecovery
                     if (this.PropertyChanged != null)
                     {
                         this.PropertyChanged(this, new PropertyChangedEventArgs("UserPositionStatus"));
+                    }
+                }
+            }
+        }
+
+        public string ExerciseValidation
+        {
+            get { return this.exerciseValidation; }
+            set
+            {
+                if (this.exerciseValidation != value)
+                {
+                    this.exerciseValidation = value;
+
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseValidation"));
+                    }
+                }
+            }
+        }
+
+        public Boolean ExerciseValid
+        {
+            get { return exerciseValid; }
+            set
+            {
+                if (exerciseValid != value)
+                {
+                    this.exerciseValid = value;
+
+                    if (this.PropertyChanged != null)
+                    {
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseValid"));
                     }
                 }
             }

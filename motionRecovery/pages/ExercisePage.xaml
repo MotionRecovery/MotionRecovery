@@ -32,9 +32,38 @@
         <!-- Exercise Description -->
         <Border Background="#FFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,40,0" Width="500" Height="530" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Grid>
-                <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />
-                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,90,20,20" Width="460" Height="50" TextWrapping="Wrap" />
-                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,160,20,20" Width="460" Height="300" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="30" TextWrapping="Wrap" />
+                <TextBlock Text="Rule valid?" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,70,20,20" Width="105" Height="30" TextWrapping="Wrap" FontWeight="Bold">
+                    <TextBlock.TextDecorations>
+                        <TextDecorationCollection>
+                            <TextDecoration Location="Underline"/>
+                        </TextDecorationCollection>
+                    </TextBlock.TextDecorations>
+                </TextBlock>
+                <TextBlock Text="{Binding ExerciseValidation}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="130,70,20,20" Width="360" Height="30" TextWrapping="Wrap" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ExerciseValid}" Value="false">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ExerciseValid}" Value="true">
+                                    <Setter Property="Foreground" Value="Green" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,110,20,20" Width="460" Height="285" TextWrapping="Wrap" />
+                <TextBlock Text="Rule Description:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,400,20,20" Width="460" Height="30" TextWrapping="Wrap">
+                    <TextBlock.TextDecorations>
+                        <TextDecorationCollection>
+                            <TextDecoration Location="Underline"/>
+                        </TextDecorationCollection>
+                    </TextBlock.TextDecorations>
+                </TextBlock>
+                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Margin="20,440,20,20" Width="460" Height="75" TextWrapping="Wrap" />
             </Grid>
         </Border>
 
