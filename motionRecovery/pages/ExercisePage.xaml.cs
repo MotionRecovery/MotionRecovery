@@ -20,6 +20,7 @@ namespace motionRecovery
         private string exerciseDescription = null;
         private string statusText = null;
 
+
         // Kinect variables
         private KinectSensor kinectSensor = null; // Used to interact with the Kinect sensor throughout the application
 
@@ -272,15 +273,28 @@ namespace motionRecovery
                 String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
                 double currentAngle = CalculateAngle(body.Joints[Positions.Joint1], body.Joints[Positions.Joint2]);
 
+                // Check if this position respect the rule.
+                Boolean AngleAccepeted = CheckAngle(AngleMin, AngleMax, currentAngle);
+
+                // Display the graphical assistance
                 if (DisplayGraphicalHelp)
                 {
-                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
-                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
-                    this.skeletonGraphicInterface.DisplayWantedAngle(Positions.Joint1, Positions.AngleMin, Positions.AngleMax, jointPoints, dc);
-                    this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc);
+                    Color positionColor;
+                    if (AngleAccepeted)
+                    {
+                        positionColor = Colors.Green;
+                    } else
+                    {
+                        positionColor = Colors.Red;
+                    }
+
+                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc, 6, new SolidColorBrush(positionColor));
+                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc, 6, new SolidColorBrush(positionColor));
+                    this.skeletonGraphicInterface.DisplayWantedAngle(Positions.Joint1, Positions.AngleMin, Positions.AngleMax, jointPoints, dc, positionColor);
+                    this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc, positionColor);
                 }
 
-                if (CheckAngle(AngleMin, AngleMax, currentAngle) == false)
+                if (AngleAccepeted == false)
                 {
                     CheckPos = false;
                 }

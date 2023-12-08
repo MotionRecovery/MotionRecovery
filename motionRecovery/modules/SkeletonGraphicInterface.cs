@@ -206,17 +206,12 @@ namespace motionRecovery
         /// Enlarges the specified joint and changes its color.
         /// </summary>
         /// <param name="jointType">The type of joint to enlarge and change color.</param>
-        /// <param name="dc">drawing context to draw to</param>
-        /// <param name="jointPoints">the differents positions of joints</param>
-        public void SelectJointGraphical(JointType jointType, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        /// <param name="dc">Drawing context to draw to</param>
+        /// <param name="jointPoints">The different positions of joints</param>
+        /// <param name="enlargedJointSize">The size of the enlarged joint.</param>
+        /// <param name="enlargedJointColor">The color of the enlarged joint.</param>
+        public void SelectJointGraphical(JointType jointType, IDictionary<JointType, Point> jointPoints, DrawingContext dc, double enlargedJointSize, Brush enlargedJointColor)
         {
-
-            // Increase the size of the joint
-            double enlargedJointSize = JointThickness * 2; 
-
-            // Define a new color for the enlarged joint
-            Brush enlargedJointColor = new SolidColorBrush(Colors.Red);
-
             // Check if the jointType exists in the jointPoints dictionary
             if (jointPoints.TryGetValue(jointType, out Point jointPosition))
             {
@@ -237,24 +232,23 @@ namespace motionRecovery
         /// <param name="angleMax">The maximum angle of the wanted range.</param>
         /// <param name="jointPoints">Translated positions of joints to draw.</param>
         /// <param name="dc">Drawing context to draw to.</param>
-        public void DisplayWantedAngle(JointType jointType, double angleMin, double angleMax, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        /// <param name="lineColor">The color of the lines representing the angle range.</param>
+        public void DisplayWantedAngle(JointType jointType, double angleMin, double angleMax, IDictionary<JointType, Point> jointPoints, DrawingContext dc, Color lineColor)
         {
             int lineLength = 60;
             if (jointPoints.TryGetValue(jointType, out Point jointPosition))
             {
                 // Calculate the positions of the lines based on the angles
-                Point lineStartMin = CalculatePointFromAngle(jointPosition, angleMin, lineLength); 
+                Point lineStartMin = CalculatePointFromAngle(jointPosition, angleMin, lineLength);
                 Point lineStartMax = CalculatePointFromAngle(jointPosition, angleMax, lineLength);
 
                 // Draw lines representing the angle range
-                dc.DrawLine(new Pen(Brushes.Red, 2), jointPosition, lineStartMin);
-                dc.DrawLine(new Pen(Brushes.Red, 2), jointPosition, lineStartMax);
+                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, lineStartMin);
+                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, lineStartMax);
 
                 // Calculate the midpoint between the lines
                 Point midPointMin = new Point((lineStartMin.X + jointPosition.X) / 2, (lineStartMin.Y + jointPosition.Y) / 2);
                 Point midPointMax = new Point((jointPosition.X + lineStartMax.X) / 2, (jointPosition.Y + lineStartMax.Y) / 2);
-
-
             }
             else
             {
@@ -269,7 +263,8 @@ namespace motionRecovery
         /// <param name="currentAngle">The current angle to display.</param>
         /// <param name="jointPoints">Translated positions of joints to draw.</param>
         /// <param name="dc">Drawing context to draw to.</param>
-        public void DisplayCurrentAngle(JointType jointType, double currentAngle, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        /// <param name="textColor">The color of the text displaying the current angle.</param>
+        public void DisplayCurrentAngle(JointType jointType, double currentAngle, IDictionary<JointType, Point> jointPoints, DrawingContext dc, Color textColor)
         {
             if (jointPoints.TryGetValue(jointType, out Point jointPosition))
             {
@@ -280,7 +275,7 @@ namespace motionRecovery
                     FlowDirection.LeftToRight,
                     new Typeface("Arial"),
                     12,
-                    Brushes.Red);
+                    new SolidColorBrush(textColor));
 
                 dc.DrawText(formattedText, new Point(jointPosition.X + 20, jointPosition.Y));
             }
