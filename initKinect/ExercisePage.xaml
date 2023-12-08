@@ -24,7 +24,7 @@
         <Button Content="Stop exercising" HorizontalAlignment="Left" Margin="10,10,0,0" FontSize="18" VerticalAlignment="Top" Padding="5,5,5,5" Click="Button_Click_stopExercise"/>
         <Button Content="Skip Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,80,550" Padding="5,5,5,5" Click="Button_Click_skipExercise"/>
         <Button Content="Previous Exercise" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,220,550" Padding="5,5,5,5" Click="Button_Click_previousExercise"/>
-
+        <Button Content="Make a level test" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="18" Margin="0,0,380,550" Padding="5,5,5,5"/>
 
         <Grid Background="LightGray" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,80,10" Width="500" Height="500">
             <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="50" TextWrapping="Wrap" />

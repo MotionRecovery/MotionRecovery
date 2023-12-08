@@ -608,6 +608,8 @@ namespace motionRecovery
 
         }
 
+        
+
 
 
         private double CalculateAngleWithDouble(double Point1, double Point2, double Point3, double Point4)
