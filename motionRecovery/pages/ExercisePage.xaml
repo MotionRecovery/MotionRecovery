@@ -46,6 +46,8 @@
                 </Viewbox>
             </Grid>
         </Border>
+        <CheckBox x:Name="jointCheckbox" Content="Graphical assistance for reaching the positions" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,730,0,0" FontSize="15" />
+
 
     </Grid>
 </Page>

@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace motionRecovery
 {
@@ -50,6 +49,8 @@ namespace motionRecovery
         private System.Timers.Timer ruleTimer = new System.Timers.Timer(); // Timer for controlling exercise rules
         private DateTime ruleTimerStartTime; // Start time for the rule timer
 
+        // Config Varaible
+        Boolean DisplayGraphicalHelp = false;
 
 
         // Constructor for ExercisePage that takes an ExerciseMultiPosition parameter
@@ -269,13 +270,15 @@ namespace motionRecovery
                 Double AngleMax = Positions.AngleMax;
                 Double PositionTime = exerciseMultiPosition.Rules[IndexPosition].PositionTime;
                 String Description = exerciseMultiPosition.Rules[IndexPosition].Description;
-
-                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
-                this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
-                this.skeletonGraphicInterface.DisplayWantedAngle(Positions.Joint1, Positions.AngleMin, Positions.AngleMax, jointPoints, dc);
                 double currentAngle = CalculateAngle(body.Joints[Positions.Joint1], body.Joints[Positions.Joint2]);
-                this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc);
 
+                if (DisplayGraphicalHelp)
+                {
+                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint1, jointPoints, dc);
+                    this.skeletonGraphicInterface.SelectJointGraphical(Positions.Joint2, jointPoints, dc);
+                    this.skeletonGraphicInterface.DisplayWantedAngle(Positions.Joint1, Positions.AngleMin, Positions.AngleMax, jointPoints, dc);
+                    this.skeletonGraphicInterface.DisplayCurrentAngle(Positions.Joint1, currentAngle, jointPoints, dc);
+                }
 
                 if (CheckAngle(AngleMin, AngleMax, currentAngle) == false)
                 {
@@ -488,6 +491,15 @@ namespace motionRecovery
             PassToNextRule();
         }
 
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            DisplayGraphicalHelp = true;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            DisplayGraphicalHelp = false;
+        }
 
 
         // SECTION TO PRINT TEXT IN THE GRAPHICAL INTERFACE //
