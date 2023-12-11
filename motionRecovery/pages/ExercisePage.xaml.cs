@@ -506,7 +506,7 @@ namespace motionRecovery
             }
         }
 
-        private void Button_Click_previousExercise(object sender, RoutedEventArgs e)
+        private void Button_Click_previousRule(object sender, RoutedEventArgs e)
         {
             if (ruleTimer != null)
             {
@@ -517,7 +517,7 @@ namespace motionRecovery
             PassToPreviousRule();
         }
 
-        private void Button_Click_skipExercise(object sender, RoutedEventArgs e)
+        private void Button_Click_skipRule(object sender, RoutedEventArgs e)
         {
             if (ruleTimer != null)
             {
