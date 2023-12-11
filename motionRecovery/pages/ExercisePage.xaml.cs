@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using Microsoft.Kinect;
 using System.Text;
+using System.Windows.Threading;
 
 namespace motionRecovery
 {
@@ -53,6 +54,11 @@ namespace motionRecovery
         // Timer variables
         private System.Timers.Timer ruleTimer = new System.Timers.Timer(); // Timer for controlling exercise rules
         private DateTime ruleTimerStartTime; // Start time for the rule timer
+
+        // POPUP Timer
+        private DispatcherTimer popupTimer = new DispatcherTimer();
+        private int popupTime = 6;
+        private int countdownSecondsPopup = 6;
 
         // Config Varaible
         Boolean DisplayGraphicalHelp = false;
@@ -228,9 +234,12 @@ namespace motionRecovery
 
 
                             // CHECK RULES
-                            if (body != null && exerciseMultiPosition.Rules.Count != 0)
+                            if (body != null && exerciseMultiPosition.Rules.Count != 0) // Check if a body is detected and if some rules exists
                             {
-                                checkMultiplePosition(body, jointPoints, dc);
+                                if (popupContainer.Visibility == Visibility.Collapsed) // Check if the success popup is visible, if not we can analyse the rule(s)
+                                {
+                                    checkMultiplePosition(body, jointPoints, dc);
+                                }
                             }
                         }
                     }
@@ -395,11 +404,13 @@ namespace motionRecovery
         /// </remarks>
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            PassToNextRule();
             ruleTimer.Stop();
             ruleTimer.Dispose();
             ruleTimer = null;
+
+            Show_RuleSuccessPopup();
         }
+
 
         /// <summary>
         /// Moves to the next rule in a sequence of exercises, if available.
@@ -468,6 +479,53 @@ namespace motionRecovery
             }
 
             return angleDegrees;
+        }
+
+        private void Show_RuleSuccessPopup()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                popupContainer.Visibility = Visibility.Visible;
+
+                if (popupTimer != null)
+                {
+                    popupTimer.Stop();
+                    popupTimer.Tick -= Timer_Tick; 
+                    popupTimer = null;
+                }
+
+                popupTimer = new DispatcherTimer();
+                popupTimer.Interval = TimeSpan.FromSeconds(1);
+                popupTimer.Tick += Timer_Tick;
+                popupTimer.Start();
+            });
+        }
+
+
+        private void Hide_RuleSuccessPopup()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                popupContainer.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            countdownSecondsPopup--;
+
+            if (countdownSecondsPopup <= 0)
+            {
+                popupTimer.Stop();
+                countdownSecondsPopup = popupTime;
+
+                Hide_RuleSuccessPopup();
+                PassToNextRule();
+            }
+            else
+            {
+                countdownLabel.Text = $"Next rule in {countdownSecondsPopup} seconds";
+            }
         }
 
 

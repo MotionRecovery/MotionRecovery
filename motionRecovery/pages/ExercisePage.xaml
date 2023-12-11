@@ -104,5 +104,17 @@
         <CheckBox x:Name="jointCheckbox" Content="Graphical assistance for reaching the positions" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,730,0,0" FontSize="15" IsChecked="True"/>
 
 
+
+        <!-- POPUP -->
+        <Border x:Name="popupContainer"  Background="#80000000" Visibility="Collapsed">
+            <!--Visibility="Collapsed"-->
+            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+                <Grid>
+                    <TextBlock Text="Congratulations, you have passed the rule!"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <TextBlock x:Name="countdownLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" FontSize="24"/>
+                </Grid>
+            </Border>
+        </Border>
+
     </Grid>
 </Page>
