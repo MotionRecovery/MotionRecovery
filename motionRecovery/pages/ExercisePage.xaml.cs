@@ -23,7 +23,7 @@ namespace motionRecovery
         private string statusText = null;
         private string exerciseValidation = null;    
         private Boolean exerciseValid = true;
-
+        private string keepTheEffort = null;
 
         // Kinect variables
         private KinectSensor kinectSensor = null; // Used to interact with the Kinect sensor throughout the application
@@ -274,7 +274,7 @@ namespace motionRecovery
         /// - <see cref="ruleTimer"/> (global System.Timers.Timer): Represents the timer used for rule transition.
         /// - <see cref="ruleTimerStartTime"/> (global DateTime): Represents the start time of the rule timer.
         /// </remarks>
-        private void checkMultiplePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
+        public  void checkMultiplePosition(Body body, IDictionary<JointType, Point> jointPoints, DrawingContext dc)
         {
             bool CheckPos = true; // Used to check if all the positions are respected
 
@@ -340,11 +340,19 @@ namespace motionRecovery
 
                     this.ExerciseValidation = $"OK: time remaining = {remaining.TotalSeconds:F1} seconds";
 
+
+
+                    if (remaining.TotalSeconds <= 10)
+                    {
+                        this.keepTheEffort = "$Keep the effort,it's almost finished";
+
+                    }
                     this.ExerciseValid = true; // used in the frontend
+
                 }
                 else
                 {
-                    this.ExerciseValidation = $"KO";
+                    this.ExerciseValidation = $"Please maintain the effort to reach the good angle";
 
                     this.ExerciseValid = false; // used in the frontend
 
@@ -756,6 +764,25 @@ namespace motionRecovery
                 }
             }
         }
+
+
+        public string keeptheEffort
+        {
+            get { return this.keepTheEffort; }
+
+            set
+            {
+                if (this.keepTheEffort != value)
+                {
+                    this.keepTheEffort = value;
+                }
+                if (this.PropertyChanged != null)
+                {
+                    this.PropertyChanged(this, new PropertyChangedEventArgs("keepTheEffort"));
+                }
+            }
+        }
+
 
         public string ExerciseName
         {
