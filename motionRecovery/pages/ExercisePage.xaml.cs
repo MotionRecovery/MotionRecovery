@@ -489,6 +489,27 @@ namespace motionRecovery
             return angleDegrees;
         }
 
+
+
+        private void Show_QuitPopup()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SureToQuit.Visibility = Visibility.Visible;
+
+
+            });
+        }
+
+        private void hide_QuitPopup()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                SureToQuit.Visibility = Visibility.Collapsed;
+            });
+        }
+
+
         private void Show_RuleSuccessPopup()
         {
             Dispatcher.Invoke(() =>
@@ -558,18 +579,9 @@ namespace motionRecovery
 
         private void Button_Click_stopExercise(object sender, RoutedEventArgs e)
         {
-            // If a timer exist we delete it before to go back to the menu
-            if (ruleTimer != null)
-            {
-                ruleTimer.Stop();
-                ruleTimer.Dispose();
-                ruleTimer = null;
-            }
+            Show_QuitPopup();
 
-            if (NavigationService.CanGoBack)
-            {
-                NavigationService.GoBack();
-            }
+
         }
 
         private void Button_Click_previousRule(object sender, RoutedEventArgs e)
@@ -592,6 +604,28 @@ namespace motionRecovery
                 ruleTimer = null;
             }
             PassToNextRule();
+        }
+
+        private void Button_Click_stopExercise_yes(object sender, RoutedEventArgs e)
+        {
+
+            // If a timer exist we delete it before to go back to the menu
+            if (ruleTimer != null)
+            {
+                ruleTimer.Stop();
+                ruleTimer.Dispose();
+                ruleTimer = null;
+            }
+
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+        }
+
+        private void Button_Click_stopExercise_no(object sender, RoutedEventArgs e)
+        {
+            hide_QuitPopup();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

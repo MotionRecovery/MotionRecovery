@@ -112,10 +112,28 @@
             <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
                 <Grid>
                     <TextBlock Text="Congratulations, you have passed the rule!"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
+                    
+
                     <TextBlock x:Name="countdownLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" FontSize="24"/>
                 </Grid>
             </Border>
         </Border>
+
+        <Border x:Name="SureToQuit" Background="#80000000" Visibility="Collapsed">
+
+            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+                <Grid>
+                    <TextBlock Text="Are you sure to quit ?"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <Button Content="Yes" Click="Button_Click_stopExercise_yes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,150,200,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+                    <Button Content="No"  Click="Button_Click_stopExercise_no" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,150,25,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+
+
+                </Grid>
+            </Border>
+
+        </Border>
+        
+        
 
     </Grid>
 </Page>
