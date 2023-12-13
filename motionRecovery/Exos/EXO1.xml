@@ -18,7 +18,7 @@
       <AngleMin>-60,</AngleMin>
       <AngleMax>20</AngleMax>
     </Position>
-    <PositionTime>15,0</PositionTime>
+    <PositionTime>7,0</PositionTime>
     <Description>
       Move your left elbow between 90 and 150 degrees and your right elbow between 300 and 20 degrees.
     </Description>
@@ -30,9 +30,38 @@
       <AngleMin>75,0</AngleMin>
       <AngleMax>100,0</AngleMax>
     </Position>
-    <PositionTime>15,0</PositionTime>
+    <PositionTime>7,0</PositionTime>
     <Description>
       Keep your neck and head in a position where the angle is between 75 and 100 degrees.
+    </Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ElbowRight</Membre1>
+      <Membre2>WristRight</Membre2>
+      <AngleMin>75,</AngleMin>
+      <AngleMax>105</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMax>15</AngleMax>
+    </Position>
+    <PositionTime>7,0</PositionTime>
+    <Description>
+      Move your right shoulder between -15 and 15 degrees, and your right elbow between 75 and 105 degrees.
+    </Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipLeft</Membre1>
+      <Membre2>KneeLeft</Membre2>
+      <AngleMin>180</AngleMin>
+      <AngleMax>220</AngleMax>
+    </Position>
+    <PositionTime>7,0</PositionTime>
+    <Description>
+      Perform an exercise related to the left leg by keeping the angle between the left hip and knee between 180 and 220 degrees.
     </Description>
   </rule>
 </ExerciseRule>

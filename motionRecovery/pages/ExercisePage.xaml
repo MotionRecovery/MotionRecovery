@@ -66,23 +66,25 @@
                         </TextDecorationCollection>
                     </TextBlock.TextDecorations>
                 </TextBlock>
-                <TextBlock Text="{Binding ExerciseValidation}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Margin="130,70,20,20" Width="360" Height="30" TextWrapping="Wrap" FontWeight="Bold">
+                <TextBlock Text="{Binding ExerciseValidation}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,70,20,20" Width="360" Height="60" TextWrapping="Wrap" FontWeight="Bold">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ExerciseValid}" Value="false">
                                     <Setter Property="Foreground" Value="Red" />
+                                    <Setter Property="FontSize" Value="18" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding ExerciseValid}" Value="true">
                                     <Setter Property="Foreground" Value="Green" />
+                                    <Setter Property="FontSize" Value="20" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
 
-                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,110,0,0" Width="460" Height="124" TextWrapping="Wrap" />
-                <TextBlock Text="Rule Description:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,400,20,20" Width="460" Height="30" TextWrapping="Wrap">
+                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,110,0,0" Width="460" Height="250" TextWrapping="Wrap" />
+                <TextBlock Text="Rule Description:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,400,20,20" Width="460" Height="30" TextWrapping="Wrap">
 
                     <TextBlock.TextDecorations>
                         <TextDecorationCollection>
@@ -90,7 +92,7 @@
                         </TextDecorationCollection>
                     </TextBlock.TextDecorations>
                 </TextBlock>
-                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Margin="20,440,20,20" Width="460" Height="75" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,440,20,20" Width="460" Height="75" TextWrapping="Wrap" />
             </Grid>
         </Border>
 
@@ -124,8 +126,8 @@
             <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
                 <Grid>
                     <TextBlock Text="Are you sure to quit ?"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
-                    <Button Content="Yes" Click="Button_Click_stopExercise_yes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="200,150,200,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
-                    <Button Content="No"  Click="Button_Click_stopExercise_no" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="400,150,25,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+                    <Button Content="Yes" Click="Button_Click_stopExercise_yes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,150,200,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Height="50" Width="195"/>
+                    <Button Content="No"  Click="Button_Click_stopExercise_no" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="355,150,25,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Height="50" Width="195"/>
 
 
                 </Grid>

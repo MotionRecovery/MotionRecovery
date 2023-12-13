@@ -5,6 +5,6 @@
         Height="768" Width="1366"
         Loaded="Page_Loaded">
     <Grid Background="#F9F9F9">
-        <Frame x:Name="mainFrame" Margin="0,0,0,40" Navigated="mainFrame_Navigated" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="mainFrame" Navigated="mainFrame_Navigated" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

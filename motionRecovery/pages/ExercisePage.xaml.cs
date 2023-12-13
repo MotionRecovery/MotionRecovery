@@ -94,9 +94,9 @@ namespace motionRecovery
             // Populate body colors, one for each BodyIndex. Each color corresponds to a different tracked body
             this.bodyColors = new List<Pen>
             {
-                new Pen(Brushes.Red, 6),
+                new Pen(Brushes.Pink, 6),
                 new Pen(Brushes.Orange, 6),
-                new Pen(Brushes.Green, 6),
+                new Pen(Brushes.MediumAquamarine, 6),
                 new Pen(Brushes.Blue, 6),
                 new Pen(Brushes.Indigo, 6),
                 new Pen(Brushes.Violet, 6)
@@ -293,8 +293,8 @@ namespace motionRecovery
                 // Check if this position respect the rule.
                 Boolean AngleAccepted = CheckAngle(AngleMin, AngleMax, currentAngle);
 
-                positionDetails.AppendLine($" + {Positions.Joint1} - {Positions.Joint2} = {currentAngle:F1}°");
-                positionDetails.AppendLine($"       Wanted Angle: {AngleMin:F1}° - {AngleMax:F2}°");
+                positionDetails.AppendLine($" + {Positions.Joint1} - {Positions.Joint2} => [{AngleMin:F1}° - {AngleMax:F1}°]");
+                positionDetails.AppendLine($"       Current Angle:  {currentAngle:F1}°");
 
 
                 // Display the graphical assistance
@@ -352,7 +352,7 @@ namespace motionRecovery
                 }
                 else
                 {
-                    this.ExerciseValidation = $"Please maintain the effort to reach the good angle";
+                    this.ExerciseValidation = $"Persist in achieving the correct positions";
 
                     this.ExerciseValid = false; // used in the frontend
 
