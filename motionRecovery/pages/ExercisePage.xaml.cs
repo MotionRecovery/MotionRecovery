@@ -412,11 +412,15 @@ namespace motionRecovery
         /// </remarks>
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            ruleTimer.Stop();
-            ruleTimer.Dispose();
-            ruleTimer = null;
+            if (ruleTimer != null)
+            {
+                ruleTimer.Stop();
+                ruleTimer.Dispose();
+                ruleTimer = null;
+            }
 
             Show_RuleSuccessPopup();
+
         }
 
 
@@ -580,8 +584,6 @@ namespace motionRecovery
         private void Button_Click_stopExercise(object sender, RoutedEventArgs e)
         {
             Show_QuitPopup();
-
-
         }
 
         private void Button_Click_previousRule(object sender, RoutedEventArgs e)
