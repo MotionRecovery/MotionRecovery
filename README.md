@@ -1,6 +1,9 @@
 # MotionRecovery
 Sports rehabilitation project based on Kinect for the Embodied and Augmented Interfaces course (<https://directory.unamur.be/teaching/courses/INFOM435/2023>), present in our software engineering master's degree.
 
+We used a template based on one of the projects downloadable from the Kinect development kit (sdk2.0): <https://github.com/creuther01/initKinect>.
+A demonstration video is also visible at <https://www.youtube.com/watch?v=lNAKTBAk7KE>.
+
 ## Contributors
 
 - <https://github.com/creuther01>
