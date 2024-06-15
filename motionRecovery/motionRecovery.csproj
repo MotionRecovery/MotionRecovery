@@ -145,7 +145,7 @@
     <Resource Include="Images\Kinect.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Exos\EXO1.xml" />
+    <Folder Include="Exos\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
