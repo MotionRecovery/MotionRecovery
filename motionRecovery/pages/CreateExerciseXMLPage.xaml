@@ -13,19 +13,20 @@
         <Button Content="Go back to the menu" HorizontalAlignment="Left" Margin="30,20,0,0" VerticalAlignment="Top" Click="Button_GoMenu" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
         
 
-        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="1290" Height="580" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="1290" Height="580" CornerRadius="15
+                " BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#777"/>
             </Border.Effect>
             <Grid>
                 <!-- The list in which we will put all the rules -->
-                <Label Content="The differents rules" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,30,0,0" FontSize="22"/>
+                <Label Content="Rules:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,30,0,0" FontSize="22"/>
                 <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,90,0,0" Width="700" Height="400" FontSize="18" />
 
                 <!-- To give a name and description to our exercise -->
-                <Label Content="Enter Name" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <TextBox x:Name="textBoxName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,120,0,0" Width="200" Height="30" FontSize="18" Text=""/>
-                <Label Content="Enter the description" HorizontalAlignment="Left" Margin="750,150,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <Label Content="Exercice's Name:" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <TextBox x:Name="textBoxName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,120,0,0" Width="350" Height="30" FontSize="18" Text=""/>
+                <Label Content="Exercice's Description:&#xD;&#xA;" HorizontalAlignment="Left" Margin="750,150,0,0" VerticalAlignment="Top" FontSize="18"/>
                 <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,180,0,0" Width="350" Height="70" FontSize="18"  Text=""/>
 
                 <Button Content="Save as XML" HorizontalAlignment="Left" VerticalAlignment="top" Margin="750,260,0,0" Click="Button_Click_SaveXML"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
