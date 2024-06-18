@@ -87,9 +87,9 @@
                 <ListBox x:Name="listBoxPositionList"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,50,0,0" Width="700" Height="350" FontSize="18" />
 
                 <!-- TextBoxes for the time and the description -->
-                <Label Content="Enter the description" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,400,0,0" FontSize="22"/>
+                <Label Content="Rule's Description:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,400,0,0" FontSize="22"/>
                 <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,440,0,0" Width="350" Height="90" FontSize="22"  Text=""/>
-                <Label Content="Enter Time" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="390,400,0,0"  FontSize="22"/>
+                <Label Content="Rule's Duration:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="390,400,0,0"  FontSize="22"/>
                 <TextBox x:Name="textBoxTime" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="390,440,0,0" Width="330" Height="30" FontSize="22" Text=""/>
                 
 
