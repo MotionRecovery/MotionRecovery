@@ -135,14 +135,14 @@ namespace motionRecovery
             if (isPositionSelected)
             {
                 positions[selectedPositionIndex] = newPosition;
-                listBoxPositionList.Items[selectedPositionIndex] = $"Number:{selectedPositionIndex + 1}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}";
+                listBoxPositionList.Items[selectedPositionIndex] = $"{selectedPositionIndex + 1}) {joint1} -> {joint2}: {minAngle}°-{maxAngle}°";
                 isPositionSelected = false;
                 selectedPositionIndex = -1;
             }
             else
             {
                 positionNumber++;
-                listBoxPositionList.Items.Add($"Number:{positionNumber}; Joint 1:{joint1}; Joint 2:{joint2}; MinAngle: {minAngle}; MaxAngle: {maxAngle}");
+                listBoxPositionList.Items.Add($"{positionNumber}) {joint1} -> {joint2}: {minAngle}°-{maxAngle}°");
                 positions.Add(newPosition);
             }
 
@@ -173,18 +173,17 @@ namespace motionRecovery
             return double.TryParse(angleText, out angle) && angle >= 0 && angle <= 360;
         }
 
-        // Get the position in the position in the list position of the selected item
-        private int GetSelectedPositionIndex()
+        // From the item selected in listBoxPositionList, we retrieve the number put at the beginning of it
+        private int GetNumberOfThePositionSelected()
         {
             if (listBoxPositionList.SelectedItem != null)
             {
                 string selectedPositionDescription = listBoxPositionList.SelectedItem.ToString();
-                string[] positionParts = selectedPositionDescription.Split(';');
-                string[] numberPart = positionParts[0].Split(':');
-                return int.Parse(numberPart[1]) - 1;
+                string[] numberPart = selectedPositionDescription.Split(')');
+                return int.Parse(numberPart[0]);
             }
 
-            return -1;
+            return 0;
         }
 
         // Activated when a item in the listBoxPositionList is selected. 
@@ -192,7 +191,7 @@ namespace motionRecovery
         {
             if (listBoxPositionList.SelectedItem != null)
             {
-                int positionSelected = GetSelectedPositionIndex();
+                int positionSelected = GetNumberOfThePositionSelected()-1;
 
                 if (positionSelected >= 0 && positionSelected < positions.Count)
                 {
@@ -244,7 +243,7 @@ namespace motionRecovery
         {
             if (listBoxPositionList.SelectedItem != null)
             {
-                int positionSelected = GetSelectedPositionIndex();
+                int positionSelected = GetNumberOfThePositionSelected()-1;
 
                 if (positionSelected >= 0 && positionSelected < positions.Count)
                 {
