@@ -20,13 +20,39 @@ namespace motionRecovery
         private int selectedPositionIndex = -1;
 
         public static readonly DependencyProperty IsDeleteButtonEnabledProperty = DependencyProperty.Register("IsDeleteButtonEnabled", typeof(bool), typeof(CreateRuleXMLPage), new PropertyMetadata(false));
-        public CreateRuleXMLPage()
+        public CreateRuleXMLPage(ExerciseRule existingRule = null)
         {
             InitializeComponent();
             this.DataContext = this;
 
             // Attach the event handler for the selection changed event
             listBoxPositionList.SelectionChanged += listBoxPositionList_SelectionChanged;
+
+            if (existingRule != null)
+            {
+                LoadRule(existingRule);
+            }
+        }
+
+        // Method to load an existing rule into the page controls
+        public void LoadRule(ExerciseRule rule)
+        {
+            if (rule != null)
+            {
+                textBoxTime.Text = rule.PositionTime.ToString();
+                textBoxDescription.Text = rule.Description;
+
+                listBoxPositionList.Items.Clear();
+                positions.Clear();
+                positionNumber = 0;
+
+                foreach (var position in rule.Positions)
+                {
+                    positionNumber++;
+                    listBoxPositionList.Items.Add($"{positionNumber}) {position.Joint1} -> {position.Joint2}: {position.AngleMin}°-{position.AngleMax}°");
+                    positions.Add(position);
+                }
+            }
         }
 
         private void Button_GoCreationPage(object sender, RoutedEventArgs e)

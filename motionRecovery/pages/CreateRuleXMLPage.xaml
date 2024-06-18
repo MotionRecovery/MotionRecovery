@@ -66,9 +66,9 @@
                     <ListBoxItem>FootRight</ListBoxItem>
                 </ListBox>
                 <!-- TextBoxes for Angles -->
-                <Label Content="Enter Min angle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,400,0,0"  FontSize="18"/>
+                <Label Content="Minimum Angle:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,400,0,0"  FontSize="18"/>
                 <TextBox x:Name="textBoxMinAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,430,0,0" Width="200" Height="30" FontSize="18" Text=""/>
-                <Label Content="Enter Max angle" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="230,400,0,0" FontSize="18"/>
+                <Label Content="Maximum Angle:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="230,400,0,0" FontSize="18"/>
                 <TextBox x:Name="textBoxMaxAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,430,0,0" Width="200" Height="30" FontSize="18"  Text=""/>
 
                 <Button Content="Save a position" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,15" Click="Button_Click_AddANewPosition" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="18"/>

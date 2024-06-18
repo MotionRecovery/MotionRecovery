@@ -21,7 +21,7 @@
             <Grid>
                 <!-- The list in which we will put all the rules -->
                 <Label Content="Rules:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,30,0,0" FontSize="22"/>
-                <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,90,0,0" Width="700" Height="400" FontSize="18" />
+                <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,90,0,0" Width="700" Height="400" FontSize="18" SelectionChanged="ListBoxRules_SelectionChanged"/>
 
                 <!-- To give a name and description to our exercise -->
                 <Label Content="Exercice's Name:" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
@@ -30,7 +30,8 @@
                 <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,180,0,0" Width="350" Height="70" FontSize="18"  Text=""/>
 
                 <Button Content="Save as XML" HorizontalAlignment="Left" VerticalAlignment="top" Margin="750,260,0,0" Click="Button_Click_SaveXML"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
-                <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+                <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule" Name="btnAddRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+                <Button Content="Modify a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="222,500,0,0" Click="Button_Click_ModifyRule" x:Name="btnModifyRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" IsEnabled="False"/>
             </Grid>
         </Border>
 

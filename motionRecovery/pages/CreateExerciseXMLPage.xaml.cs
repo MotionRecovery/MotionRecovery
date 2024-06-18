@@ -12,14 +12,12 @@ namespace motionRecovery
         ExerciseMultiPosition newExercise;
         public event PropertyChangedEventHandler PropertyChanged; // INotifyPropertyChangedPropertyChanged event to allow window controls to bind to changeable data
         private string errorXMLCreation = null;
+        private ExerciseRule selectedRule = null; // Property to hold the selected rule
 
         public CreateExerciseXMLPage()
         {
-            // Initialize the newExercise object
             newExercise = new ExerciseMultiPosition();
-
-            // Set the data context to this class for data binding
-            this.DataContext = this;
+            this.DataContext = this; // Set the data context to this class for data binding
             InitializeComponent();
         }
 
@@ -92,18 +90,53 @@ namespace motionRecovery
         private CreateRuleXMLPage createRulePage;
         private void Button_Click_AddANewRule(object sender, RoutedEventArgs e)
         {
-            // Create a new CreateRuleXMLPage and navigate to it
-            createRulePage = new CreateRuleXMLPage();
+            var createRulePage = new CreateRuleXMLPage();
             NavigationService.Navigate(createRulePage);
             createRulePage.CreatedRule += CreateRuleXMLPage_CreatedRule;
         }
 
+        private void Button_Click_ModifyRule(object sender, RoutedEventArgs e)
+        {
+            if (selectedRule != null)
+            {
+                var createRulePage = new CreateRuleXMLPage(selectedRule);
+                NavigationService.Navigate(createRulePage);
+                createRulePage.CreatedRule += CreateRuleXMLPage_ModifiedRule;
+            }
+        }
+
         private void CreateRuleXMLPage_CreatedRule(object sender, ExerciseRule newRule)
         {
-            // Add the new rule to the exercise and update the ListBox
             newExercise.Rules.Add(newRule);
-            String RuleNumber = $"Rule number {newExercise.Rules.Count}";
+            string RuleNumber = $"Rule number {newExercise.Rules.Count}";
             listBoxRules.Items.Add(RuleNumber);
+        }
+
+        private void CreateRuleXMLPage_ModifiedRule(object sender, ExerciseRule modifiedRule)
+        {
+            if (selectedRule != null)
+            {
+                int index = newExercise.Rules.IndexOf(selectedRule);
+                newExercise.Rules[index] = modifiedRule;
+                listBoxRules.Items[index] = $"Rule number {index + 1}";
+            }
+
+            selectedRule = null;
+            btnModifyRule.IsEnabled = false;
+        }
+
+        private void ListBoxRules_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxRules.SelectedIndex >= 0)
+            {
+                selectedRule = newExercise.Rules[listBoxRules.SelectedIndex];
+                btnModifyRule.IsEnabled = true;
+            }
+            else
+            {
+                selectedRule = null;
+                btnModifyRule.IsEnabled = false;
+            }
         }
 
         // Property for the error message, implementing INotifyPropertyChanged
