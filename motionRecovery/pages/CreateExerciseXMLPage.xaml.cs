@@ -105,6 +105,31 @@ namespace motionRecovery
             }
         }
 
+        private void Button_Click_DeleteRule(object sender, RoutedEventArgs e)
+        {
+            if (selectedRule != null)
+            {
+                int index = newExercise.Rules.IndexOf(selectedRule);
+                newExercise.Rules.RemoveAt(index);
+                listBoxRules.Items.RemoveAt(index);
+                selectedRule = null;
+                btnModifyRule.IsEnabled = false;
+                btnDeleteRule.IsEnabled = false;
+            }
+        }
+
+        private void Button_Click_Reset(object sender, RoutedEventArgs e)
+        {
+            newExercise = new ExerciseMultiPosition();
+            textBoxName.Text = string.Empty;
+            textBoxDescription.Text = string.Empty;
+            listBoxRules.Items.Clear();
+            ErrorXMLCreation = null;
+            selectedRule = null;
+            btnModifyRule.IsEnabled = false;
+            btnDeleteRule.IsEnabled = false;
+        }
+
         private void CreateRuleXMLPage_CreatedRule(object sender, ExerciseRule newRule)
         {
             newExercise.Rules.Add(newRule);
@@ -131,11 +156,13 @@ namespace motionRecovery
             {
                 selectedRule = newExercise.Rules[listBoxRules.SelectedIndex];
                 btnModifyRule.IsEnabled = true;
+                btnDeleteRule.IsEnabled = true;
             }
             else
             {
                 selectedRule = null;
                 btnModifyRule.IsEnabled = false;
+                btnDeleteRule.IsEnabled = false;
             }
         }
 

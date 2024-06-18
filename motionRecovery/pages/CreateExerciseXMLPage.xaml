@@ -11,7 +11,7 @@
     <Grid>
         <!-- the different buttons -->
         <Button Content="Go back to the menu" HorizontalAlignment="Left" Margin="30,20,0,0" VerticalAlignment="Top" Click="Button_GoMenu" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
-        
+
 
         <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="1290" Height="580" CornerRadius="15
                 " BorderBrush="#D6D6D6" BorderThickness="1.5">
@@ -30,15 +30,17 @@
                 <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,180,0,0" Width="350" Height="70" FontSize="18"  Text=""/>
 
                 <Button Content="Save as XML" HorizontalAlignment="Left" VerticalAlignment="top" Margin="750,260,0,0" Click="Button_Click_SaveXML"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
-                <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule" Name="btnAddRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
-                <Button Content="Modify a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="222,500,0,0" Click="Button_Click_ModifyRule" x:Name="btnModifyRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" IsEnabled="False"/>
+                <Button Content="Reset the exercice" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="903,260,0,0" Click="Button_Click_Reset"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+                <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule" Name="btnAddRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22"/>
+                <Button Content="Modify a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="265,500,0,0" Click="Button_Click_ModifyRule" x:Name="btnModifyRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22" IsEnabled="False"/>
+                <Button Content="Delete a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,500,0,0" Click="Button_Click_DeleteRule" x:Name="btnDeleteRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22" IsEnabled="False"/>
             </Grid>
         </Border>
 
-        
+
         <!-- The area where we will write any errors -->
-        
+
         <TextBlock Text="{Binding ErrorXMLCreation}" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="30,680,0,0" Width="1280" Height="70" FontSize="22" TextWrapping="Wrap" Foreground="Red" FontWeight="Bold" Padding="10,10,10,10"/>
-        
+
     </Grid>
 </Page>
