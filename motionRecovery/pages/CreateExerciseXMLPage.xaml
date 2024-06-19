@@ -24,13 +24,13 @@
                 <ListBox x:Name="listBoxRules"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,90,0,0" Width="700" Height="400" FontSize="18" SelectionChanged="ListBoxRules_SelectionChanged"/>
 
                 <!-- To give a name and description to our exercise -->
-                <Label Content="Exercice's Name:" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <Label Content="Exercise's Name:" HorizontalAlignment="Left" Margin="750,90,0,0" VerticalAlignment="Top" FontSize="18"/>
                 <TextBox x:Name="textBoxName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,120,0,0" Width="350" Height="30" FontSize="18" Text=""/>
-                <Label Content="Exercice's Description:&#xD;&#xA;" HorizontalAlignment="Left" Margin="750,150,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <Label Content="Exercise's Description:&#xA;" HorizontalAlignment="Left" Margin="750,150,0,0" VerticalAlignment="Top" FontSize="18"/>
                 <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="750,180,0,0" Width="350" Height="70" FontSize="18"  Text=""/>
 
                 <Button Content="Save as XML" HorizontalAlignment="Left" VerticalAlignment="top" Margin="750,260,0,0" Click="Button_Click_SaveXML"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
-                <Button Content="Reset the exercice" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="903,260,0,0" Click="Button_Click_Reset"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
+                <Button Content="Reset the exercise" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="903,260,0,0" Click="Button_Click_Reset"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
                 <Button Content="Add a new Rule" HorizontalAlignment="Left" VerticalAlignment="top" Margin="20,500,0,0" Click="Button_Click_AddANewRule" Name="btnAddRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22"/>
                 <Button Content="Modify a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="265,500,0,0" Click="Button_Click_ModifyRule" x:Name="btnModifyRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22" IsEnabled="False"/>
                 <Button Content="Delete a Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="510,500,0,0" Click="Button_Click_DeleteRule" x:Name="btnDeleteRule"  Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" Width="210" FontSize="22" IsEnabled="False"/>
