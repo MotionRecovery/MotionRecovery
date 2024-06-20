@@ -18,7 +18,7 @@ namespace motionRecovery
     {
         // Used to print a message in the frontend
         private string userPositionStatus = null;
-        private string exerciseNumber = null;
+        private string ruleNumber = null;
         private string exerciseDescription = null;
         private string statusText = null;
         private string exerciseValidation = null;    
@@ -132,7 +132,7 @@ namespace motionRecovery
             {
                 this.bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
-            ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+            RuleNumber = $"Rule {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
         }
 
         /// <summary>
@@ -268,7 +268,7 @@ namespace motionRecovery
         /// Environment:
         /// - <see cref="indexRule"/> (global int): Represents the index of the current exercise rule.
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
-        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="RuleNumber"/> (global string): Displays to the user the number of the rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
         /// - <see cref="UserPositionStatus"/> (global string): Represents the status of the user's position.
         /// - <see cref="ruleTimer"/> (global System.Timers.Timer): Represents the timer used for rule transition.
@@ -407,7 +407,7 @@ namespace motionRecovery
         /// <remarks>
         /// Environment:
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
-        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="RuleNumber"/> (global string): Displays to the user the number of the rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
         /// </remarks>
         private void RuleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -419,7 +419,14 @@ namespace motionRecovery
                 ruleTimer = null;
             }
 
-            Show_RuleSuccessPopup();
+            if (indexRule == (maxRule-1))
+            {
+                Show_EndExercisePopup();
+            }
+            else
+            {
+                Show_RuleSuccessPopup();
+            }
 
         }
 
@@ -431,7 +438,7 @@ namespace motionRecovery
         /// Environment:
         /// - <see cref="indexRule"/> (global int): Represents the index of the current rule.
         /// - <see cref="exerciseMultiPosition"/> (global ExerciseMultiPosition): Represents the data structure of the exercise.
-        /// - <see cref="ExerciseNumber"/> (global string): Displays to the user the number of the Exercise/Rule.
+        /// - <see cref="RuleNumber"/> (global string): Displays to the user the number of the rule.
         /// - <see cref="ExerciseDescription"/> (global string): Displays to the user the description of the Exercise/Rule.
         /// </remarks>
         private void PassToNextRule()
@@ -439,7 +446,7 @@ namespace motionRecovery
             if (indexRule < exerciseMultiPosition.Rules.Count - 1)   
             {
                 indexRule++;
-                this.ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.RuleNumber = $"Rule {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
                 this.ExerciseDescription = $"{exerciseMultiPosition.Rules[indexRule].Description}";
             }
 
@@ -453,7 +460,7 @@ namespace motionRecovery
         /// environment :
         /// <see cref="indexRule"/> global int: the index of the current rule
         /// <see cref="exerciseMultiPosition"/> global ExerciseMultiPosition: the data structure of the exercise
-        /// <see cref="ExerciseNumber"/> global string: display to the user the number of the Exercise/Rule
+        /// <see cref="RuleNumber"/> global string: display to the user the number of the Rule
         /// <see cref="ExerciseDescription"/> global string: display to the user the description of the Exercise/Rule
         /// </remarks>
         /// </summary>
@@ -462,7 +469,7 @@ namespace motionRecovery
             if (indexRule > 0)
             {
                 indexRule--;
-                this.ExerciseNumber = $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+                this.RuleNumber = $"Rule {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
                 this.ExerciseDescription = $"{exerciseMultiPosition.Rules[indexRule].Description}";
             }
 
@@ -493,7 +500,48 @@ namespace motionRecovery
             return angleDegrees;
         }
 
+        private void Show_EndExercisePopup()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                EndExercisePopup.Visibility = Visibility.Visible;
+            });
+        }
 
+        private void Button_RestartExercise_Click(object sender, RoutedEventArgs e)
+        {
+            EndExercisePopup.Visibility = Visibility.Collapsed;
+
+
+            // Reset exercise state variables
+            indexRule = 0;
+            ruleTimer?.Stop();  // Stop the rule timer if it's running
+            ruleTimer = null;   // Release the timer resource
+            UserPositionStatus = null;
+            ExerciseValidation = null;
+            ExerciseValid = true;
+            keepTheEffort = null;
+            this.IsFirstRule = true;
+            this.IsMaxRule = true;
+
+            // Update UI to reflect the first rule
+            RuleNumber = $"Rule {indexRule + 1}/{exerciseMultiPosition.Rules.Count}";
+            ExerciseDescription = exerciseMultiPosition.Rules[indexRule].Description;
+
+            // Restart Kinect sensor and body tracking 
+            if (kinectSensor != null && !kinectSensor.IsOpen)
+            {
+                kinectSensor.Open();
+            }
+        }
+
+        private void Button_GoToHome_Click(object sender, RoutedEventArgs e)
+        {
+            if (NavigationService.CanGoBack)
+            {
+                NavigationService.GoBack();
+            }
+        }
 
         private void Show_QuitPopup()
         {
@@ -747,17 +795,17 @@ namespace motionRecovery
             }
         }
 
-        public string ExerciseNumber
+        public string RuleNumber
         {
-            get { return $"Exercise {indexRule + 1}/{exerciseMultiPosition.Rules.Count}"; }
+            get { return $"Rule {indexRule + 1}/{exerciseMultiPosition.Rules.Count}"; }
             set
             {
-                if (exerciseNumber != value)
+                if (ruleNumber != value)
                 {
-                    exerciseNumber = value;
+                    ruleNumber = value;
                     if (this.PropertyChanged != null)
                     {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("ExerciseNumber"));
+                        this.PropertyChanged(this, new PropertyChangedEventArgs("RuleNumber"));
                     }
                 }
             }
@@ -833,4 +881,3 @@ namespace motionRecovery
         }
     }
 }
-
