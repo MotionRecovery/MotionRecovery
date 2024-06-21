@@ -57,8 +57,8 @@ namespace motionRecovery
 
         // POPUP Timer
         private DispatcherTimer popupTimer = new DispatcherTimer();
-        private int popupTime = 6;
-        private int countdownSecondsPopup = 6;
+        private int popupTime = 3;
+        private int countdownSecondsPopup = 3;
 
         // Config Varaible
         Boolean DisplayGraphicalHelp = false;
