@@ -11,14 +11,14 @@
     <Grid>
         <Button Content="Go back" HorizontalAlignment="Left" Margin="30,20,0,0" VerticalAlignment="Top" Click="Button_GoCreationPage" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22"/>
 
-        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="450" Height="550" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
+        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,90,0,0" Width="350" Height="550" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#777"/>
             </Border.Effect>
             <Grid>
                 <!-- ListBox to add the joints-->
                 <Label Content="Joint 1" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <ListBox x:Name="listBoxJoint1" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,50,0,0" Width="200" Height="350">
+                <ListBox x:Name="listBoxJoint1" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,50,0,0" Width="150" Height="350">
                     <ListBoxItem>SpineBase</ListBoxItem>
                     <ListBoxItem>SpineMid</ListBoxItem>
                     <ListBoxItem>SpineShoulder</ListBoxItem>
@@ -41,8 +41,8 @@
                     <ListBoxItem>AnkleRight</ListBoxItem>
                     <ListBoxItem>FootRight</ListBoxItem>
                 </ListBox>
-                <Label Content="Joint 2" HorizontalAlignment="Left" Margin="230,10,0,0" VerticalAlignment="Top" FontSize="18"/>
-                <ListBox x:Name="listBoxJoint2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,50,0,0" Width="200" Height="350">
+                <Label Content="Joint 2" HorizontalAlignment="Left" Margin="180,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+                <ListBox x:Name="listBoxJoint2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,50,0,0" Width="150" Height="350" >
                     <ListBoxItem>SpineBase</ListBoxItem>
                     <ListBoxItem>SpineMid</ListBoxItem>
                     <ListBoxItem>SpineShoulder</ListBoxItem>
@@ -67,33 +67,100 @@
                 </ListBox>
                 <!-- TextBoxes for Angles -->
                 <Label Content="Minimum Angle:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,400,0,0"  FontSize="18"/>
-                <TextBox x:Name="textBoxMinAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,430,0,0" Width="200" Height="30" FontSize="18" Text=""/>
-                <Label Content="Maximum Angle:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="230,400,0,0" FontSize="18"/>
-                <TextBox x:Name="textBoxMaxAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,430,0,0" Width="200" Height="30" FontSize="18"  Text=""/>
+                <TextBox x:Name="textBoxMinAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,430,0,0" Width="150" Height="30" FontSize="18" Text=""/>
+                <Label Content="Maximum Angle:" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="180,400,0,0" FontSize="18"/>
+                <TextBox x:Name="textBoxMaxAngle" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="180,430,0,0" Width="150" Height="30" FontSize="18"  Text=""/>
 
-                <Button Content="Save a position" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,15" Click="Button_Click_AddANewPosition" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="18"/>
-                <Button Content="Delete the position" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,15" Click="Button_Click_DeletePosition" Padding="10,8,10,8"  BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="18" IsEnabled="{Binding IsDeleteButtonEnabled}" />
+                <Button Content="Save a position" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="20,0,0,15" Click="Button_Click_AddANewPosition" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="17"/>
+                <Button Content="Delete the position" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,15" Click="Button_Click_DeletePosition" Padding="10,8,10,8"  BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="17" IsEnabled="{Binding IsDeleteButtonEnabled}" />
 
             </Grid>
         </Border>
 
-        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="550,90,0,0" Width="750" Height="550" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
+        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="410,90,0,0" Width="550" Height="550" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#777"/>
             </Border.Effect>
             <Grid>
                 <!-- ListBox for Displaying Saved Positions -->
                 <Label Content="Positions" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"  FontSize="22"/>
-                <ListBox x:Name="listBoxPositionList"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,50,0,0" Width="700" Height="350" FontSize="18" />
+                <ListBox x:Name="listBoxPositionList"  HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="20,50,0,0" Width="500" Height="250" FontSize="18" />
 
                 <!-- TextBoxes for the time and the description -->
-                <Label Content="Rule's Description:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,400,0,0" FontSize="22"/>
-                <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,440,0,0" Width="350" Height="90" FontSize="22"  Text=""/>
-                <Label Content="Rule's Duration:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="390,400,0,0"  FontSize="22"/>
-                <TextBox x:Name="textBoxTime" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="390,440,0,0" Width="330" Height="30" FontSize="22" Text=""/>
+                <Label Content="Rule's Description:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,300,0,0" FontSize="22"/>
+                <TextBox x:Name="textBoxDescription" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,340,0,0" Width="500" Height="90" FontSize="22"  Text=""/>
+                <Label Content="Rule's Duration:" HorizontalAlignment="Left" VerticalAlignment="Top"  Margin="20,440,0,0"  FontSize="22"/>
+                <TextBox x:Name="textBoxTime" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,480,0,0" Width="190" Height="30" FontSize="22" Text=""/>
                 
 
-                <Button Content="Save the Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="390,480,0,0" Click="Button_Click_SaveRule" Padding="10,8,10,8" Width="330" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+                <Button Content="Save the Rule" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="230,470,0,0" Click="Button_Click_SaveRule" Padding="10,8,10,8" Width="290" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" />
+            </Grid>
+        </Border>
+        
+        <!-- Right Section for Skeleton Display -->
+        <Border Background="#F9F9F9" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="980,90,0,0" Width="350" Height="550" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="3" BlurRadius="10" Color="#777"/>
+            </Border.Effect>
+            <Grid>
+                <Button Content="Check Position"  Click="Button_UpdateSkeleton" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,6,0,0" Padding="7,5,7,5" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="14"/>
+                <Canvas Name="skeletonCanvas" Width="350" Height="550" >
+                    <Ellipse Name="Head" Width="10" Height="10" Fill="Gray" Canvas.Left="170" Canvas.Top="50"/>
+                    <Ellipse Name="Neck" Width="10" Height="10" Fill="Gray" Canvas.Left="170" Canvas.Top="80"/>
+                    <Ellipse Name="ShoulderRight" Width="10" Height="10" Fill="Gray" Canvas.Left="210" Canvas.Top="110"/>
+                    <Ellipse Name="ShoulderLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="130" Canvas.Top="110"/>
+                    <Ellipse Name="SpineShoulder" Width="10" Height="10" Fill="Gray" Canvas.Left="170" Canvas.Top="110"/>
+                    <Ellipse Name="SpineMid" Width="10" Height="10" Fill="Gray" Canvas.Left="170" Canvas.Top="200"/>
+                    <Ellipse Name="SpineBase" Width="10" Height="10" Fill="Gray" Canvas.Left="170" Canvas.Top="250"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="55" X2="175" Y2="85"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="85" X2="175" Y2="115"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="115" X2="175" Y2="205"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="205" X2="175" Y2="255"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="115" X2="215" Y2="115"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="115" X2="135" Y2="115"/>
+
+                    <!-- Elbows -->
+                    <Ellipse Name="ElbowLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="120" Canvas.Top="160"/>
+                    <Ellipse Name="ElbowRight" Width="10" Height="10" Fill="Gray" Canvas.Left="220" Canvas.Top="160"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="135" Y1="115" X2="125" Y2="165"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="215" Y1="115" X2="225" Y2="165"/>
+
+                    <!-- Wrists -->
+                    <Ellipse Name="WristLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="110" Canvas.Top="210"/>
+                    <Ellipse Name="WristRight" Width="10" Height="10" Fill="Gray" Canvas.Left="230" Canvas.Top="210"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="125" Y1="165" X2="115" Y2="215"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="225" Y1="165" X2="235" Y2="215"/>
+
+                    <!-- Hands -->
+                    <Ellipse Name="HandLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="100" Canvas.Top="260"/>
+                    <Ellipse Name="HandRight" Width="10" Height="10" Fill="Gray" Canvas.Left="240" Canvas.Top="260"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="115" Y1="215" X2="105" Y2="265"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="235" Y1="215" X2="245" Y2="265"/>
+
+                    <!-- Hips -->
+                    <Ellipse Name="HipLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="130" Canvas.Top="300"/>
+                    <Ellipse Name="HipRight" Width="10" Height="10" Fill="Gray" Canvas.Left="210" Canvas.Top="300"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="255" X2="135" Y2="305"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="175" Y1="255" X2="215" Y2="305"/>
+
+                    <!-- Knees -->
+                    <Ellipse Name="KneeLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="120" Canvas.Top="350"/>
+                    <Ellipse Name="KneeRight" Width="10" Height="10" Fill="Gray" Canvas.Left="220" Canvas.Top="350"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="135" Y1="305" X2="125" Y2="355"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="215" Y1="305" X2="225" Y2="355"/>
+
+                    <!-- Ankles -->
+                    <Ellipse Name="AnkleLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="110" Canvas.Top="400"/>
+                    <Ellipse Name="AnkleRight" Width="10" Height="10" Fill="Gray" Canvas.Left="230" Canvas.Top="400"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="125" Y1="355" X2="115" Y2="405"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="225" Y1="355" X2="235" Y2="405"/>
+
+                    <!-- Feet -->
+                    <Ellipse Name="FootLeft" Width="10" Height="10" Fill="Gray" Canvas.Left="100" Canvas.Top="450"/>
+                    <Ellipse Name="FootRight" Width="10" Height="10" Fill="Gray" Canvas.Left="240" Canvas.Top="450"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="115" Y1="405" X2="105" Y2="455"/>
+                    <Line Stroke="Gray" StrokeThickness="3" X1="235" Y1="405" X2="245" Y2="455"/>
+                </Canvas>
             </Grid>
         </Border>
 

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.Kinect;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace motionRecovery
 {
@@ -293,6 +296,209 @@ namespace motionRecovery
         {
             get { return (bool)GetValue(IsDeleteButtonEnabledProperty); }
             set { SetValue(IsDeleteButtonEnabledProperty, value); }
+        }
+
+        private void Button_UpdateSkeleton(object sender, RoutedEventArgs e)
+        {
+            ResetSkeleton();
+            UpdateSkeleton();
+        }
+
+        /// <summary>
+        /// Reset the skeleton by resetting joint colors to gray and clearing angle graphics (lines and arcs).
+        /// </summary>
+        private void ResetSkeleton()
+        {
+            // Reset joint colors
+            foreach (var child in skeletonCanvas.Children)
+            {
+                if (child is Ellipse ellipse)
+                {
+                    ellipse.Fill = Brushes.Gray;
+                }
+            }
+
+            // Clear lines and arcs
+            // Remove all green lines and  green arcs from skeletonCanvas
+            List<UIElement> elementsToRemove = new List<UIElement>();
+            foreach (var child in skeletonCanvas.Children)
+            {
+                if (child is Line line)
+                {
+                    if (line.Stroke is SolidColorBrush solidColorBrush && solidColorBrush.Color == Colors.Green)
+                    {
+                        elementsToRemove.Add(line);
+                    }
+                }
+                else if (child is Path path)
+                {
+                    if (path.Stroke is SolidColorBrush solidColorBrush && solidColorBrush.Color == Colors.Green)
+                    {
+                        elementsToRemove.Add(path);
+                    }
+                }
+            }
+
+            foreach (var element in elementsToRemove)
+            {
+                skeletonCanvas.Children.Remove(element);
+            }
+        }
+
+        /// <summary>
+        /// Update the skeleton by highlighting selected joints in green and displaying the angle range between them.
+        /// </summary>
+        private void UpdateSkeleton()
+        {
+            string joint1Name = ((ListBoxItem)listBoxJoint1.SelectedItem)?.Content.ToString();
+            string joint2Name = ((ListBoxItem)listBoxJoint2.SelectedItem)?.Content.ToString();
+
+            if (joint1Name == null || joint2Name == null)
+            {
+                MessageBox.Show("Please select both joints.");
+                return;
+            }
+
+            if (!double.TryParse(textBoxMinAngle.Text, out double minAngle) ||
+                !double.TryParse(textBoxMaxAngle.Text, out double maxAngle))
+            {
+                MessageBox.Show("Please enter valid angles.");
+                return;
+            }
+
+            if (minAngle >= maxAngle)
+            {
+                MessageBox.Show("Minimum angle should be less than maximum angle.");
+                return;
+            }
+
+            // Update joint colors
+            UpdateJointColor(joint1Name, Brushes.Green);
+            UpdateJointColor(joint2Name, Brushes.Green);
+
+            // Display angle range
+            DisplayAngleRange(joint1Name, joint2Name, minAngle, maxAngle);
+        }
+
+        /// <summary>
+        /// Update the color of the joint by the color input.
+        /// </summary>
+        /// <param name="jointName">The name of the joint to update.</param>
+        /// <param name="color">The color to set for the joint.</param>
+        private void UpdateJointColor(string jointName, Brush color)
+        {
+            Ellipse joint = (Ellipse)FindName(jointName);
+            if (joint != null)
+            {
+                joint.Fill = color;
+            }
+        }
+
+        /// <summary>
+        /// Display the angle range between two joints by drawing lines and an arc on the canvas.
+        /// </summary>
+        /// <param name="joint1Name">The name of the first joint.</param>
+        /// <param name="joint2Name">The name of the second joint.</param>
+        /// <param name="minAngle">The minimum angle of the angle range to display.</param>
+        /// <param name="maxAngle">The maximum angle of the angle range to display.</param>
+        private void DisplayAngleRange(string joint1Name, string joint2Name, double minAngle, double maxAngle)
+        {
+            int lineLength = 60;
+
+            // Find the Ellipse elements based on their names
+            Ellipse joint1 = (Ellipse)FindName(joint1Name);
+            Ellipse joint2 = (Ellipse)FindName(joint2Name);
+
+            if (joint1 != null && joint2 != null)
+            {
+                // Get the positions of the ellipses (joint points)
+                Point joint1Position = new Point(Canvas.GetLeft(joint1) + joint1.Width / 2, Canvas.GetTop(joint1) + joint1.Height / 2);
+
+                // Calculate positions based on angles
+                Point startAnglePoint = CalculatePointFromAngle(joint1Position, minAngle, lineLength);
+                Point endAnglePoint = CalculatePointFromAngle(joint1Position, maxAngle, lineLength);
+
+                // Draw lines representing the angle range
+                DrawLine(joint1Position, startAnglePoint);
+                DrawLine(joint1Position, endAnglePoint);
+
+                // Calculate midpoint between startAnglePoint and endAnglePoint
+                int midlineLength = lineLength / 2;
+                Point startMidPoint = CalculatePointFromAngle(joint1Position, minAngle, midlineLength);
+                Point endMidPoint = CalculatePointFromAngle(joint1Position, maxAngle, midlineLength);
+
+                // Determine the correct order for drawing the arc
+                bool isClockwise = maxAngle > minAngle;
+
+                // Create the arc path
+                StreamGeometry arcGeometry = new StreamGeometry();
+                using (StreamGeometryContext ctx = arcGeometry.Open())
+                {
+                    ctx.BeginFigure(startMidPoint, false, false);
+                    double step = (maxAngle - minAngle) / 10; // Number of points on the arc
+                    for (double angle = minAngle + step; angle < maxAngle; angle += step)
+                    {
+                        Point arcPoint = CalculatePointFromAngle(joint1Position, angle, midlineLength);
+                        ctx.LineTo(arcPoint, true, true);
+                    }
+                    ctx.LineTo(endMidPoint, true, true);
+                }
+
+                // Draw the arc
+                DrawArc(new Pen(Brushes.Green, 1), arcGeometry);
+            }
+            else
+            {
+                MessageBox.Show("One or both joints not found.");
+            }
+        }
+
+        /// <summary>
+        /// Draw a line between two specified points on the canvas.
+        /// </summary>
+        /// <param name="startPoint">The starting point of the line.</param>
+        /// <param name="endPoint">The ending point of the line.</param>
+        private void DrawLine(Point startPoint, Point endPoint)
+        {
+            Line line = new Line();
+            line.X1 = startPoint.X;
+            line.Y1 = startPoint.Y;
+            line.X2 = endPoint.X;
+            line.Y2 = endPoint.Y;
+            line.Stroke = Brushes.Green;
+            line.StrokeThickness = 2;
+
+            skeletonCanvas.Children.Add(line);
+        }
+
+        /// <summary>
+        /// Draw an arc on the canvas using the specified pen and geometry.
+        /// </summary>
+        /// <param name="pen">The pen used to draw the arc.</param>
+        /// <param name="geometry">The geometry representing the arc to draw.</param>
+        private void DrawArc(Pen pen, StreamGeometry geometry)
+        {
+            Path path = new Path();
+            path.Stroke = pen.Brush;
+            path.StrokeThickness = pen.Thickness;
+            path.Data = geometry;
+
+            skeletonCanvas.Children.Add(path);
+        }
+
+        /// <summary>
+        /// Calculate the coordinates of a point based on an angle and distance from a specified origin point.
+        /// </summary>
+        /// <param name="origin">The origin point from which to calculate the new point.</param>
+        /// <param name="angleDegrees">The angle in degrees from the origin point.</param>
+        /// <param name="distance">The distance from the origin to the new point.</param>
+        /// <returns>The calculated point coordinates.</returns>
+        private Point CalculatePointFromAngle(Point origin, double angleDegrees, double distance)
+        {
+            double angleRadians = angleDegrees * (Math.PI / 180);
+            double x = origin.X + distance * Math.Cos(angleRadians);
+            double y = origin.Y - distance * Math.Sin(angleRadians); // Invert Y because canvas coordinates are upside down
+            return new Point(x, y);
         }
     }
 }
