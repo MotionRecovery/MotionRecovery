@@ -1,5 +1,4 @@
-﻿using Microsoft.Kinect;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -355,20 +354,20 @@ namespace motionRecovery
 
             if (joint1Name == null || joint2Name == null)
             {
-                MessageBox.Show("Please select both joints.");
+                ErrorPosition = "Please select both joints.";
                 return;
             }
 
             if (!double.TryParse(textBoxMinAngle.Text, out double minAngle) ||
                 !double.TryParse(textBoxMaxAngle.Text, out double maxAngle))
             {
-                MessageBox.Show("Please enter valid angles.");
+                ErrorPosition = "Please enter valid angles.";
                 return;
             }
 
             if (minAngle >= maxAngle)
             {
-                MessageBox.Show("Minimum angle should be less than maximum angle.");
+                ErrorPosition = "Minimum angle should be less than maximum angle.";
                 return;
             }
 
@@ -449,7 +448,7 @@ namespace motionRecovery
             }
             else
             {
-                MessageBox.Show("One or both joints not found.");
+                ErrorPosition = "One or both joints not found.";
             }
         }
 
