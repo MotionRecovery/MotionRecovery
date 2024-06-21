@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExerciseRule>
+  <name>EICS 2024 Presentation</name>
+  <description />
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>340</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>160</AngleMin>
+      <AngleMax>200</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>270</AngleMin>
+      <AngleMax>310</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>230</AngleMin>
+      <AngleMax>270</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>340</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>160</AngleMin>
+      <AngleMax>200</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>270</AngleMin>
+      <AngleMax>310</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>230</AngleMin>
+      <AngleMax>270</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>160</AngleMin>
+      <AngleMax>200</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderLeft</Membre1>
+      <Membre2>ElbowLeft</Membre2>
+      <AngleMin>340</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>340</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>160</AngleMin>
+      <AngleMax>200</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipLeft</Membre1>
+      <Membre2>KneeLeft</Membre2>
+      <AngleMin>160</AngleMin>
+      <AngleMax>200</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipLeft</Membre1>
+      <Membre2>KneeLeft</Membre2>
+      <AngleMin>290</AngleMin>
+      <AngleMax>0</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipRight</Membre1>
+      <Membre2>KneeRight</Membre2>
+      <AngleMin>340</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipRight</Membre1>
+      <Membre2>KneeRight</Membre2>
+      <AngleMin>180</AngleMin>
+      <AngleMax>250</AngleMax>
+    </Position>
+    <PositionTime>3</PositionTime>
+    <Description />
+  </rule>
+</ExerciseRule>
