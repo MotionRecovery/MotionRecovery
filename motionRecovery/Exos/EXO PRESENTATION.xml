@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExerciseRule>
+  <name>EXO PRESENTATION</name>
+  <description>Exercise 1 : Easy sports rehabilitation</description>
+  <rule>
+    <Position>
+      <Membre1>ElbowLeft</Membre1>
+      <Membre2>WristLeft</Membre2>
+      <AngleMin>90</AngleMin>
+      <AngleMax>150</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ElbowRight</Membre1>
+      <Membre2>WristRight</Membre2>
+      <AngleMin>300</AngleMin>
+      <AngleMax>20</AngleMax>
+    </Position>
+    <PositionTime>7</PositionTime>
+    <Description>Move your left elbow between 90 and 150 degrees and your right elbow between 300 and 20 degrees.</Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>Neck</Membre1>
+      <Membre2>Head</Membre2>
+      <AngleMin>75</AngleMin>
+      <AngleMax>90</AngleMax>
+    </Position>
+    <PositionTime>7</PositionTime>
+    <Description>Keep your neck and head in a position where the angle is between 75 and 100 degrees.</Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>ShoulderRight</Membre1>
+      <Membre2>ElbowRight</Membre2>
+      <AngleMin>345</AngleMin>
+      <AngleMax>15</AngleMax>
+    </Position>
+    <Position>
+      <Membre1>ElbowRight</Membre1>
+      <Membre2>WristRight</Membre2>
+      <AngleMin>75</AngleMin>
+      <AngleMax>105</AngleMax>
+    </Position>
+    <PositionTime>7</PositionTime>
+    <Description>Move your right shoulder between -15 and 15 degrees, and your right elbow between 75 and 105 degrees.</Description>
+  </rule>
+  <rule>
+    <Position>
+      <Membre1>HipLeft</Membre1>
+      <Membre2>KneeLeft</Membre2>
+      <AngleMin>180</AngleMin>
+      <AngleMax>220</AngleMax>
+    </Position>
+    <PositionTime>7</PositionTime>
+    <Description>Perform an exercise related to the left leg by keeping the angle between the left hip and knee between 180 and 220 degrees.</Description>
+  </rule>
+</ExerciseRule>

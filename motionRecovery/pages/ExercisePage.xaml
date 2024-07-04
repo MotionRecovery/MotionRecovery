@@ -56,17 +56,21 @@
         </Button>
 
         <!-- Exercise Description -->
-        <Border Background="#FFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,40,0" Width="500" Height="530" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+        <Border Background="#FFF" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,190,40,0" Width="500" Height="530" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
             <Grid>
-                <TextBlock Text="{Binding ExerciseNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,20,20" Width="460" Height="30" TextWrapping="Wrap" />
-                <TextBlock Text="Rule valid?" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,70,20,20" Width="105" Height="30" TextWrapping="Wrap" FontWeight="Bold">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="25*"/>
+                    <ColumnDefinition Width="472*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding RuleNumber}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Margin="20,20,0,0" Width="460" Height="30" TextWrapping="Wrap" Grid.ColumnSpan="2" />
+                <TextBlock Text="Rule valid?" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,70,0,0" Width="105" Height="30" TextWrapping="Wrap" FontWeight="Bold" Grid.ColumnSpan="2">
                     <TextBlock.TextDecorations>
                         <TextDecorationCollection>
                             <TextDecoration Location="Underline"/>
                         </TextDecorationCollection>
                     </TextBlock.TextDecorations>
                 </TextBlock>
-                <TextBlock Text="{Binding ExerciseValidation}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="130,70,20,20" Width="360" Height="60" TextWrapping="Wrap" FontWeight="Bold">
+                <TextBlock Text="{Binding ExerciseValidation}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="105,70,0,0" Width="360" Height="60" TextWrapping="Wrap" FontWeight="Bold" Grid.Column="1">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -83,8 +87,8 @@
                     </TextBlock.Style>
                 </TextBlock>
 
-                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,110,0,0" Width="460" Height="250" TextWrapping="Wrap" />
-                <TextBlock Text="Rule Description:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,400,20,20" Width="460" Height="30" TextWrapping="Wrap">
+                <TextBlock Text="{Binding UserPositionStatus}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,110,0,0" Width="460" Height="250" TextWrapping="Wrap" Grid.ColumnSpan="2" />
+                <TextBlock Text="Rule Description:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="22" Margin="20,400,0,0" Width="460" Height="30" TextWrapping="Wrap" Grid.ColumnSpan="2">
 
                     <TextBlock.TextDecorations>
                         <TextDecorationCollection>
@@ -92,7 +96,7 @@
                         </TextDecorationCollection>
                     </TextBlock.TextDecorations>
                 </TextBlock>
-                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,440,20,20" Width="460" Height="75" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding ExerciseDescription}" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="20,440,0,0" Width="460" Height="75" TextWrapping="Wrap" Grid.ColumnSpan="2" />
             </Grid>
         </Border>
 
@@ -108,34 +112,36 @@
 
 
 
-        <!-- POPUP -->
+        <!-- POPUP : Next Rule -->
         <Border x:Name="popupContainer"  Background="#80000000" Visibility="Collapsed">
-            <!--Visibility="Collapsed"-->
-            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
                 <Grid>
                     <TextBlock Text="Congratulations, you have passed the rule!"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
-                    
-
                     <TextBlock x:Name="countdownLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,60,0,0" FontSize="24"/>
                 </Grid>
             </Border>
         </Border>
 
-        <Border x:Name="SureToQuit" Background="#80000000" Visibility="Collapsed">
+        <!-- POPUP : End Exercise -->
+        <Border x:Name="EndExercisePopup" Background="#80000000" Visibility="Collapsed">
+            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
+                <Grid>
+                    <TextBlock Text="Congratulations! You completed the exercise!"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <Button Content="Restart Exercise" Click="Button_RestartExercise_Click" VerticalAlignment="Center" Padding="10,8,10,8"  Margin="210,90,0,0" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Width="190" Height="50"/>
+                    <Button Content="Go to Home" Click="Button_GoToHome_Click" VerticalAlignment="Center" Padding="10,8,10,8"  Margin="0,90,210,0" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Width="190" Height="50"/>
+                </Grid>
+            </Border>
+        </Border>
 
-            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="30" BorderBrush="#D6D6D6" BorderThickness="1.5">
+        <Border x:Name="SureToQuit" Background="#80000000" Visibility="Collapsed">
+            <Border  Background="#FFF" HorizontalAlignment="Center" VerticalAlignment="Center" Width="700" Height="300" CornerRadius="15" BorderBrush="#D6D6D6" BorderThickness="1.5">
                 <Grid>
                     <TextBlock Text="Are you sure to quit ?"  HorizontalAlignment="Center" Margin="0,0,0,120" VerticalAlignment="Center" FontSize="38" TextWrapping="Wrap" TextAlignment="Center"/>
                     <Button Content="Yes" Click="Button_Click_stopExercise_yes" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,150,200,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Height="50" Width="195"/>
                     <Button Content="No"  Click="Button_Click_stopExercise_no" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="355,150,25,0" Padding="10,8,10,8" BorderThickness="1.5,1.5,1.5,3" Background="#FFF" BorderBrush="#D6D6D6" FontSize="22" Height="50" Width="195"/>
-
-
                 </Grid>
             </Border>
-
         </Border>
-        
-        
 
     </Grid>
 </Page>

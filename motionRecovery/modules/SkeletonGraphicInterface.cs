@@ -238,17 +238,54 @@ namespace motionRecovery
             int lineLength = 60;
             if (jointPoints.TryGetValue(jointType, out Point jointPosition))
             {
-                // Calculate the positions of the lines based on the angles
-                Point lineStartMin = CalculatePointFromAngle(jointPosition, angleMin, lineLength);
-                Point lineStartMax = CalculatePointFromAngle(jointPosition, angleMax, lineLength);
+                // Calculate the positions of the end of the lines based on the angles
+                Point startAnglePoint = CalculatePointFromAngle(jointPosition, angleMin, lineLength);
+                Point endAnglePoint = CalculatePointFromAngle(jointPosition, angleMax, lineLength);
 
                 // Draw lines representing the angle range
-                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, lineStartMin);
-                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, lineStartMax);
+                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, startAnglePoint);
+                dc.DrawLine(new Pen(new SolidColorBrush(lineColor), 2), jointPosition, endAnglePoint);
 
-                // Calculate the midpoint between the lines
-                Point midPointMin = new Point((lineStartMin.X + jointPosition.X) / 2, (lineStartMin.Y + jointPosition.Y) / 2);
-                Point midPointMax = new Point((jointPosition.X + lineStartMax.X) / 2, (jointPosition.Y + lineStartMax.Y) / 2);
+                // Calculate the midpoint between startAnglePoint and endAnglePoint
+                int midlineLength = lineLength / 2;
+                Point startmidPoint = CalculatePointFromAngle(jointPosition, angleMin, midlineLength);
+                Point endmidPoint = CalculatePointFromAngle(jointPosition, angleMax, midlineLength);
+
+                // Determine the correct order for drawing the arc
+                bool isClockwise = angleMax > angleMin; // Check if angleMax is greater than angleMin
+
+                // Create the arc path
+                StreamGeometry arcGeometry = new StreamGeometry();
+                using (StreamGeometryContext ctx = arcGeometry.Open())
+                {
+                    if (isClockwise)
+                    {
+                        ctx.BeginFigure(startmidPoint, false, false);
+                        double step = (angleMax - angleMin) / 10; // Number of points on the arc
+                        for (double angle = angleMin + step; angle < angleMax; angle += step)
+                        {
+                            Point arcPoint = CalculatePointFromAngle(jointPosition, angle, midlineLength);
+                            ctx.LineTo(arcPoint, true, true);
+                        }
+                        ctx.LineTo(endmidPoint, true, true);
+                    }
+                    else // Counter-clockwise (angleMin>angleMax)
+                    {
+                        ctx.BeginFigure(startmidPoint, false, false);
+                        double angleMinTranslation = -(360 - angleMin); // Transfrom an positive angle in a negative angle to obtain angleMin<angleMax
+                        double step = (angleMax - angleMinTranslation) / 10; // Number of points on the arc
+
+                        for (double angle = angleMinTranslation + step; angle < angleMax; angle += step)
+                        {
+                            Point arcPoint = CalculatePointFromAngle(jointPosition, angle, midlineLength);
+                            ctx.LineTo(arcPoint, true, true);
+                        }
+                        ctx.LineTo(endmidPoint, true, true);
+                    }
+                }
+
+                // Draw the arc
+                dc.DrawGeometry(null, new Pen(new SolidColorBrush(lineColor), 1), arcGeometry);
             }
             else
             {
