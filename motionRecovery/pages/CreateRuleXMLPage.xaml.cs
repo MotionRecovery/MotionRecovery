@@ -365,12 +365,6 @@ namespace motionRecovery
                 return;
             }
 
-            if (minAngle >= maxAngle)
-            {
-                ErrorPosition = "Minimum angle should be less than maximum angle.";
-                return;
-            }
-
             // Update joint colors
             UpdateJointColor(joint1Name, Brushes.Green);
             UpdateJointColor(joint2Name, Brushes.Green);
@@ -435,11 +429,28 @@ namespace motionRecovery
                 {
                     ctx.BeginFigure(startMidPoint, false, false);
                     double step = (maxAngle - minAngle) / 10; // Number of points on the arc
-                    for (double angle = minAngle + step; angle < maxAngle; angle += step)
+
+                    if (isClockwise)
                     {
-                        Point arcPoint = CalculatePointFromAngle(joint1Position, angle, midlineLength);
-                        ctx.LineTo(arcPoint, true, true);
+                        for (double angle = minAngle + step; angle < maxAngle; angle += step)
+                        {
+                            Point arcPoint = CalculatePointFromAngle(joint1Position, angle, midlineLength);
+                            ctx.LineTo(arcPoint, true, true);
+                        }
                     }
+                    else
+                    {
+                        // If minAngle > maxAngle, it means the arc goes counter-clockwise through 0 degrees
+                        double angleMinTranslation = -(360 - minAngle); // Transform a positive angle to a negative one to obtain angleMin < angleMax
+                        step = (maxAngle - angleMinTranslation) / 10; // Number of points on the arc
+
+                        for (double angle = angleMinTranslation + step; angle < maxAngle; angle += step)
+                        {
+                            Point arcPoint = CalculatePointFromAngle(joint1Position, angle, midlineLength);
+                            ctx.LineTo(arcPoint, true, true);
+                        }
+                    }
+
                     ctx.LineTo(endMidPoint, true, true);
                 }
 
